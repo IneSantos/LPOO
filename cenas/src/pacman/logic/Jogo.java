@@ -3,7 +3,7 @@ package pacman.logic;
 import java.util.Scanner;
 
 public class Jogo {
-	//20x24
+	//21x26
 	static char labDefault[][] =  {
 		{ ' ', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , 'X' , 'X', ' '},
 		{ ' ', 'X', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'X', 'p' , 'p' , 'p', 'p', 'p' , 'p' , 'p' , 'p' , 'X', ' '},
@@ -33,7 +33,7 @@ public class Jogo {
 		{ ' ', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , 'X' , 'X', ' '}};
 
 	static Pacman pac = new Pacman();	
-	static Monster monster = new Monster();
+	static RedMonster monster = new RedMonster();
 
 
 	public static void main(String[] args) {
@@ -88,9 +88,13 @@ public class Jogo {
 			}
 		}
 		if(tecla == 'a'){
+			if(pac.posicao.y == 10 && pac.posicao.x == 0){
+				System.out.print("passou");
+				pac.posicao.x = 20;
+			}			
 			if(verificaParede(pac.posicao.y, pac.posicao.x-1)){
 				pac.movPacman(tecla);
-			}
+			}			
 		}
 		if(tecla == 'd'){
 			if(verificaParede(pac.posicao.y, pac.posicao.x+1)){
