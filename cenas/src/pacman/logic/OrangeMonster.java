@@ -7,7 +7,7 @@ public class OrangeMonster {
 	public char letra;
 	
 	public OrangeMonster(){
-		posicao = new Coordenada(10,8);
+		posicao = new Coordenada(11,12);
 		adormecido = false;
 		letra = 'L';
 	}

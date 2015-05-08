@@ -7,7 +7,7 @@ public class BlueMonster {
 	public char letra;
 	
 	public BlueMonster(){
-		posicao = new Coordenada(10,8);
+		posicao = new Coordenada(9,12);
 		adormecido = false;
 		letra = 'A';
 	}

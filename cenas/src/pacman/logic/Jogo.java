@@ -33,7 +33,12 @@ public class Jogo {
 		{ ' ', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , 'X' , 'X', ' '}};
 
 	static Pacman pac = new Pacman();	
-	static RedMonster monster = new RedMonster();
+	
+	
+	static RedMonster redmonster = new RedMonster();
+	static PinkMonster pinkmonster = new PinkMonster();
+	static OrangeMonster orangemonster = new OrangeMonster();
+	static BlueMonster bluemonster = new BlueMonster();
 
 
 	public static void main(String[] args) {
@@ -49,16 +54,26 @@ public class Jogo {
 					if(i == pac.posicao.y && j ==pac.posicao.x){
 						System.out.print(pac.man);
 						System.out.print(' ');
-					}
-					if(i == monster.posicao.y && j == monster.posicao.x){
-						System.out.print(monster.letra);
+					}else
+					if(i == redmonster.posicao.y && j == redmonster.posicao.x){
+						System.out.print(redmonster.letra);
+						System.out.print(' ');
+					}else
+					if(i == pinkmonster.posicao.y && j == pinkmonster.posicao.x){
+						System.out.print(pinkmonster.letra);
+						System.out.print(' ');
+					}else
+					if(i == orangemonster.posicao.y && j == orangemonster.posicao.x){
+						System.out.print(orangemonster.letra);
+						System.out.print(' ');
+					}else
+					if(i == bluemonster.posicao.y && j == bluemonster.posicao.x){
+						System.out.print(bluemonster.letra);
 						System.out.print(' ');
 					}else{
 						System.out.print(labDefault[i][j]);
-						//System.out.print(' ');
+						System.out.print(' ');
 					}
-
-					System.out.print(' ');
 				}
 				System.out.println();
 			}
@@ -88,7 +103,7 @@ public class Jogo {
 			}
 		}
 		if(tecla == 'a'){
-			if(pac.posicao.y == 10 && pac.posicao.x == 0){
+			if(pac.posicao.y == 12 && (pac.posicao.x-1) == 0){
 				System.out.print("passou");
 				pac.posicao.x = 20;
 			}			
@@ -115,7 +130,7 @@ public class Jogo {
 		}
 		
 
-		if(width == monster.posicao.y && hight == monster.posicao.x){
+		if(width == redmonster.posicao.y && hight == redmonster.posicao.x){
 			pac.vivo = false;
 		}
 
