@@ -40,12 +40,12 @@ public class Jogo {
 	static OrangeMonster orangemonster = new OrangeMonster();
 	static BlueMonster bluemonster = new BlueMonster();
 
-/*
+
 	public static void main(String[] args) {
 
 		deslocaPacman();
 	}
-*/
+
 	public static void deslocaPacman(){
 
 		while(pac.vivo)
