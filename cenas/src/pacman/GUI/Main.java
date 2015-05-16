@@ -1,0 +1,21 @@
+package pacman.GUI;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JFrame;
+
+public class Main
+{
+	static JFrame frame;
+	static Images images = new Images();
+	
+	public static void main(String[] args) 
+	{
+		frame = new JFrame("PacMano, m'putz");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(new BorderLayout());
+		
+		new PacMan();
+		return;
+	}
+}

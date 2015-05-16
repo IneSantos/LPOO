@@ -40,37 +40,51 @@ public class Jogo {
 	static OrangeMonster orangemonster = new OrangeMonster();
 	static BlueMonster bluemonster = new BlueMonster();
 
-
+/*
 	public static void main(String[] args) {
 
 		deslocaPacman();
 	}
-
+*/
 	public static void deslocaPacman(){
 
-		while(pac.vivo){
-			for(int i=0; i<26; ++i){
-				for(int j=0; j<21 ; ++j){
-					if (i == pac.posicao.y && j == pac.posicao.x) {
+		while(pac.vivo)
+		{
+			for(int i=0; i<26; ++i)
+			{
+				for(int j=0; j<21 ; ++j)
+				{
+					if (i == pac.posicao.y && j == pac.posicao.x) 
+					{
 						System.out.print(pac.man);
 						System.out.print(' ');
-					} else if (i == redmonster.posicao.y
-							&& j == redmonster.posicao.x) {
+					} 
+					else if (i == redmonster.posicao.y
+							&& j == redmonster.posicao.x) 
+					{
 						System.out.print(redmonster.letra);
 						System.out.print(' ');
-					} else if (i == pinkmonster.posicao.y
-							&& j == pinkmonster.posicao.x) {
+					} 
+					else if (i == pinkmonster.posicao.y
+							&& j == pinkmonster.posicao.x) 
+					{
 						System.out.print(pinkmonster.letra);
 						System.out.print(' ');
-					} else if (i == orangemonster.posicao.y
-							&& j == orangemonster.posicao.x) {
+					} 
+					else if (i == orangemonster.posicao.y
+							&& j == orangemonster.posicao.x) 
+					{
 						System.out.print(orangemonster.letra);
 						System.out.print(' ');
-					} else if (i == bluemonster.posicao.y
-							&& j == bluemonster.posicao.x) {
+					} 
+					else if (i == bluemonster.posicao.y
+							&& j == bluemonster.posicao.x) 
+					{
 						System.out.print(bluemonster.letra);
 						System.out.print(' ');
-					} else {
+					} 
+					else
+					{
 						System.out.print(labDefault[i][j]);
 						System.out.print(' ');
 					}
@@ -92,8 +106,10 @@ public class Jogo {
 
 
 	public static void movPacman(char tecla){
-		if(tecla == 'w'){
-			if(verificaParede(pac.posicao.y-1, pac.posicao.x)){
+		if(tecla == 'w' )
+		{
+			if(verificaParede(pac.posicao.y-1, pac.posicao.x))
+			{
 				pac.movPacman(tecla);
 			}
 		}
