@@ -13,17 +13,19 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 @SuppressWarnings("serial")
-public class PacMan extends JPanel implements ActionListener, KeyListener{
+public class PacMan extends JPanel implements ActionListener, KeyListener
+{
 	final int MILISSECONDS_TO_REFRESH = 45;
 	
 	Timer  timer;
 	
 	// 408x96 - 24x24
 	BufferedImage sprites = Main.images.sprites;
+	
 	BufferedImage background = Main.images.background;
 	
 	int x = 0;
-	int y = 0;	
+	int y = 0;
 	int orientation = 0;
 	int animation = 0;
 	int vel = 7;
