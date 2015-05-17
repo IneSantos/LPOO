@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 public class Application
 {
-	static JFrame frame;
+	public static JFrame frame;
 	static Images images = new Images();
 	
 	public static void main(String[] args) 

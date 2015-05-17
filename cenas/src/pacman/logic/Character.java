@@ -1,5 +1,7 @@
 package pacman.logic;
 
+import pacman.GUI.Application;
+
 public class Character {
 	
 	Position position;
@@ -49,12 +51,61 @@ public class Character {
 	
 	public boolean moveUp(int width, int height, Maze maze)
 	{
-		Position p = getTilePosition(width, height - 1);
+		Position p = getTilePosition(width, height);
+		
+		p.y--;
 		
 		if(maze.isWall(p))
 			return false;
 		
 		position.y -= velocity;
+		return true;
+	}
+	
+	public boolean moveDown(int width, int height, Maze maze)
+	{
+		Position p = getTilePosition(width, height);
+		
+		p.y++;
+		
+		if(maze.isWall(p))
+			return false;
+		
+		position.y += velocity;
+		return true;
+	}
+	
+	public boolean moveLeft(int width, int height, Maze maze)
+	{		
+		Position p = getTilePosition(width, height);
+		
+		p.x--;
+		
+		if(maze.isWall(p))
+			return false;
+		
+		if(position.x <= -24)
+			position.x = Application.frame.getContentPane().getWidth();
+
+		position.x -= velocity;
+		
+		return true;
+	}
+	
+	public boolean moveRight(int width, int height, Maze maze)
+	{		
+		Position p = getTilePosition(width, height);
+		
+		p.x++;
+		
+		if(maze.isWall(p))
+			return false;
+		
+		if(position.x >= Application.frame.getContentPane().getWidth())
+			position.x = -width;
+
+		position.x += velocity;
+		
 		return true;
 	}
 	

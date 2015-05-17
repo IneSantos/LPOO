@@ -1,5 +1,7 @@
 package pacman.logic;
 
+import pacman.GUI.Application;
+
 
 public class Pacman extends Character {
 	
@@ -27,29 +29,17 @@ public class Pacman extends Character {
 		return animation;
 	}
 
-	public void updateMovement(int Pwidth, int Pheight, Maze maze) 
-	{
-		int width = Pwidth/maze.maze[0].length;
-		int height = Pheight/maze.maze.length;
-		
+	public void updateMovement(int tileWidth, int tileHeight, Maze maze) 
+	{		
 		if(orientation == 0 && position.y >= 0)
-			moveUp(width, height, maze);
+			moveUp(tileWidth, tileHeight, maze);
 		else if (orientation == 1)
-		{
-			if(position.x >= width)
-				position.x = -24;
-	
-			position.x += velocity;
-		}
-		else if(orientation == 2 && position.y <= height - 24)
-			position.y += velocity;
+			moveRight(tileWidth, tileHeight, maze);
+		else if(orientation == 2 && position.y <= Application.frame.getContentPane().getHeight() - 24)
+			moveDown(tileWidth, tileHeight, maze);
 		else if(orientation == 3)
-		{
-			if(position.x <= -24)
-				position.x = width;
-	
-			position.x -= velocity;
-		}
+			moveLeft(tileWidth, tileHeight, maze);
+
 	}
 	
 	public int getAnimation()

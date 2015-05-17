@@ -21,6 +21,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	Timer  timer;
 	
 	int inputKey = 0;
+	int tileWidth = 25;
+	int tileHeight = 25;
 	
 	Game game = new Game();
 	
@@ -30,10 +32,10 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
 		timer.start();
 		
-		this.setPreferredSize(new Dimension(game.getMaze().maze[0].length*25, game.getMaze().maze.length*25));
+		this.setPreferredSize(new Dimension(game.getMaze().maze[0].length*tileWidth, game.getMaze().maze.length*tileHeight));
 		Application.frame.getContentPane().add(this, BorderLayout.CENTER);
 
-		game.getPacman().setPosition(new Position(13*25, 17*25));
+		game.getPacman().setPosition(new Position(13*tileWidth, 17*tileHeight));
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -49,7 +51,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	{
 		game.getPacman().updateAnimation();
 				
-		game.getPacman().updateMovement(Application.frame.getContentPane().getWidth(), Application.frame.getContentPane().getHeight(), game.getMaze());
+		game.getPacman().updateMovement(tileWidth, tileHeight, game.getMaze());
 		
 		repaint();
 	}
@@ -60,8 +62,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		int mazeWidth = game.getMaze().maze[0].length;
 		int mazeHeight = game.getMaze().maze.length;
 		
-		int tileWidth = Application.frame.getContentPane().getWidth() / mazeWidth;
-		int tileHeight = Application.frame.getContentPane().getHeight() / mazeHeight;
+		tileWidth = Application.frame.getContentPane().getWidth() / mazeWidth;
+		tileHeight = Application.frame.getContentPane().getHeight() / mazeHeight;
 		
 		for(int h = 0; h < mazeHeight; h++)
 			for(int w = 0; w < mazeWidth; w++)
@@ -72,9 +74,11 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 				else if(game.getMaze().isPowerPoint(new Position(w, h)))
 					g.drawImage(Application.images.powerPointTile, tileWidth*w, tileHeight*h, tileWidth, tileHeight, null, null);
 				else g.drawImage(Application.images.backgroundTile, tileWidth*w, tileHeight*h, tileWidth, tileHeight, null, null);
+		
 				
-		g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * 24, 
-					game.getPacman().getOrientation() * 24, 24, 24), game.getPacman().getX(), game.getPacman().getY(), null);
+		g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * 24, game.getPacman().getOrientation() * 24, 24, 24), 
+					game.getPacman().getX(), game.getPacman().getY(), tileWidth, tileHeight, null, null);
+		
 		
 		Application.frame.getContentPane().setPreferredSize(new Dimension(tileWidth*mazeWidth, tileHeight*mazeHeight));
 		Application.frame.pack();
@@ -84,14 +88,6 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		int mazeWidth = game.getMaze().maze[0].length;
-		int mazeHeight = game.getMaze().maze.length;
-		
-		int tileWidth = Application.frame.getContentPane().getWidth() / mazeWidth;
-		int tileHeight = Application.frame.getContentPane().getHeight() / mazeHeight;
-		
-		Position p = game.getPacman().getTilePosition(tileWidth, tileHeight);
-		
 		if(e.getKeyCode() == KeyEvent.VK_UP && game.getPacman().moveUp(tileWidth, tileHeight, game.getMaze()))
 			game.getPacman().setOrientation(0);
 		else if(e.getKeyCode() == KeyEvent.VK_RIGHT && !game.getMaze().isWall(game.getPacman().getTilePosition(tileHeight, tileHeight)))
@@ -108,6 +104,14 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void keyTyped(KeyEvent e) {}
 	
+	public int getTileWidth()
+	{
+		return tileWidth;
+	}
 	
+	public int getTileHeight()
+	{
+		return tileHeight;
+	}
 
 }
