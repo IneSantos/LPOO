@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Game {
 	//21x26
 	
-	private static Pacman pac = new Pacman();	
+	static Pacman pacman = new Pacman();	
 	static RedGhost redmonster = new RedGhost();
 	static PinkGhost pinkmonster = new PinkGhost();
 	static OrangeGhost orangemonster = new OrangeGhost();
@@ -13,6 +13,17 @@ public class Game {
 	
 	private int level;
 
+	public Game()
+	{
+		
+	}
+	
+	public Pacman getPacman()
+	{
+		return pacman;
+	}
+	
+	
 	
 /*
 	public static void main(String[] args) {

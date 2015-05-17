@@ -7,6 +7,13 @@ public class Character {
 	int orientation;
 	boolean alive;
 	
+	public Character()
+	{
+		position = new Position(100, 100);
+		velocity = 7;
+		orientation = 0;
+		alive = true;
+	}
 	
 
 }

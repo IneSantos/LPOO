@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
-public class Main
+public class Application
 {
 	static JFrame frame;
 	static Images images = new Images();
@@ -15,7 +15,7 @@ public class Main
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
 		
-		new PacMan();
+		new GameEngine();
 		return;
 	}
 }

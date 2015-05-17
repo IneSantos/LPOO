@@ -12,41 +12,34 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import pacman.logic.Game;
+
 @SuppressWarnings("serial")
-public class PacMan extends JPanel implements ActionListener, KeyListener
+public class GameEngine extends JPanel implements ActionListener, KeyListener
 {
 	final int MILISSECONDS_TO_REFRESH = 45;
-	
 	Timer  timer;
 	
-	// 408x96 - 24x24
-	BufferedImage sprites = Main.images.sprites;
-	
-	BufferedImage background = Main.images.background;
-	
-	int x = 0;
-	int y = 0;
-	int orientation = 0;
-	int animation = 0;
-	int vel = 7;
+	Game game = new Game();
 	
 	
 	
-	public PacMan()
+	
+	public GameEngine()
 	{
 		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
 		timer.start();
 		
 		this.setPreferredSize(new Dimension(500, 500));
-		Main.frame.getContentPane().add(this, BorderLayout.CENTER);
+		Application.frame.getContentPane().add(this, BorderLayout.CENTER);
 	
 		
 		addKeyListener(this);
 		setFocusable(true);
 		requestFocus();
 		
-		Main.frame.pack();
-		Main.frame.setVisible(true);
+		Application.frame.pack();
+		Application.frame.setVisible(true);
 	}
 
 
@@ -54,11 +47,8 @@ public class PacMan extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		animation++;
-		
-		if (animation > 3)
-			animation = 0;
-		
+		game.getPacman().updateAnimation();
+				
 		if(orientation == 0 && y >= 0)
 			y -= vel;
 		else if (orientation == 1)
