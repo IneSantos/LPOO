@@ -8,7 +8,7 @@ import java.io.Serializable;
 * integer precision.
 */
 
-public class Coordenada implements Serializable
+public class Position implements Serializable
 {
 	/**
 	 * 
@@ -19,7 +19,7 @@ public class Coordenada implements Serializable
 	@Override
 	public boolean equals(Object o) 
 	{
-		return (o != null) && (o instanceof Coordenada) && ((Coordenada)o).x == x && ((Coordenada)o).y == y;
+		return (o != null) && (o instanceof Position) && ((Position)o).x == x && ((Position)o).y == y;
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class Coordenada implements Serializable
 	 * @param second
 	 *            the Y coordinate of the newly constructed Coordenada.
 	 */
-	public Coordenada (int first, int second) 
+	public Position (int first, int second) 
 	{ 
 		this.x = first;
 		this.y = second;
