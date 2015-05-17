@@ -10,20 +10,20 @@ public class Game {
 	static PinkGhost pinkmonster = new PinkGhost();
 	static OrangeGhost orangemonster = new OrangeGhost();
 	static BlueGhost bluemonster = new BlueGhost();
+	static Maze maze = new Maze();
 	
-	private int level;
+	int level;
 
-	public Game()
-	{
-		
-	}
 	
 	public Pacman getPacman()
 	{
 		return pacman;
 	}
 	
-	
+	public Maze getMaze()
+	{
+		return maze;
+	}
 	
 /*
 	public static void main(String[] args) {
