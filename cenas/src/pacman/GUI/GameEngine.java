@@ -88,13 +88,13 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		if(e.getKeyCode() == KeyEvent.VK_UP && game.getPacman().setOrientation(0))
-			game.getPacman().moveUp(tileWidth, tileHeight, game.getMaze());
-		else if(e.getKeyCode() == KeyEvent.VK_RIGHT && !game.getMaze().isWall(game.getPacman().getTilePosition(tileHeight, tileHeight)))
+		if(e.getKeyCode() == KeyEvent.VK_UP )
+			game.getPacman().setOrientation(0);
+		else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
 			game.getPacman().setOrientation(1);
-		else if(e.getKeyCode() == KeyEvent.VK_DOWN && !game.getMaze().isWall(game.getPacman().getTilePosition(tileHeight, tileHeight)))
+		else if(e.getKeyCode() == KeyEvent.VK_DOWN)
 			game.getPacman().setOrientation(2);
-		else if(e.getKeyCode() == KeyEvent.VK_LEFT && !game.getMaze().isWall(game.getPacman().getTilePosition(tileHeight, tileHeight)))
+		else if(e.getKeyCode() == KeyEvent.VK_LEFT)
 			game.getPacman().setOrientation(3);
 	}
 

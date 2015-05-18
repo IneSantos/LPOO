@@ -39,7 +39,10 @@ public class Pacman extends Character {
 			moveDown(tileWidth, tileHeight, maze);
 		else if(orientation == 3)
 			moveLeft(tileWidth, tileHeight, maze);
-
+		
+		 //TODO
+		if(maze.isPoint(new Position(position.x / tileWidth, position.y / tileHeight)) ||maze.isPowerPoint(new Position(position.x / tileWidth, position.y / tileHeight)))
+			maze.maze[position.y / tileHeight][position.x / tileWidth] = ' ';
 	}
 	
 	public int getAnimation()
