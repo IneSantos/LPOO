@@ -21,8 +21,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	Timer  timer;
 	
 	int inputKey = 0;
-	int tileWidth = 25;
-	int tileHeight = 25;
+	int tileWidth = 20;
+	int tileHeight = 20;
 	
 	Game game = new Game();
 	
@@ -88,8 +88,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		if(e.getKeyCode() == KeyEvent.VK_UP && game.getPacman().moveUp(tileWidth, tileHeight, game.getMaze()))
-			game.getPacman().setOrientation(0);
+		if(e.getKeyCode() == KeyEvent.VK_UP && game.getPacman().setOrientation(0))
+			game.getPacman().moveUp(tileWidth, tileHeight, game.getMaze());
 		else if(e.getKeyCode() == KeyEvent.VK_RIGHT && !game.getMaze().isWall(game.getPacman().getTilePosition(tileHeight, tileHeight)))
 			game.getPacman().setOrientation(1);
 		else if(e.getKeyCode() == KeyEvent.VK_DOWN && !game.getMaze().isWall(game.getPacman().getTilePosition(tileHeight, tileHeight)))

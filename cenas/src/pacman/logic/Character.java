@@ -32,19 +32,46 @@ public class Character {
 		return position.y;
 	}
 	
-	public boolean setOrientation(int o)
+	public boolean setOrientation(int o, int tileWidth, int tileHeight, Maze maze)
 	{
 		if(o == orientation)
+			return false;
+		
+		Position p1 = null;
+		Position p2 = null;
+		
+		if(o == 0)
+		{
+			p1 = getTilePosition(position.x - tileHeight, position.y - tileHeight, tileWidth, tileHeight);
+			p2 = getTilePosition(position.x + tileWidth - tileHeight - 1, position.y + tileWidth - tileHeight - 1, tileWidth, tileHeight);		
+		}
+		else if(o == 1)
+		{
+			p1 = getTilePosition(position.x + tileWidth, position.y + tileWidth, tileWidth, tileHeight);
+			p2 = getTilePosition(position.x + tileWidth + tileWidth - 1, position.y + tileHeight + tileWidth - 1, tileWidth, tileHeight);
+		}
+		else if(o == 2)
+		{
+			p1 = getTilePosition(position.x + tileHeight, position.y + tileHeight, tileWidth, tileHeight);
+			p2 = getTilePosition(position.x + tileWidth + tileHeight - 1, position.y + tileHeight + tileWidth - 1, tileWidth, tileHeight);
+		}
+		else if(o == 3)
+		{
+			p1 = getTilePosition(position.x, position.y, tileWidth, tileHeight);
+			p2 = getTilePosition(position.x + tileWidth - 1, position.y + tileHeight - 1, tileWidth, tileHeight);
+		}
+		
+		if(!(maze.isWall(p1) && maze.isWall(p2)))
 			return false;
 		
 		orientation = o;
 		return true;
 	}
 	
-	public Position getTilePosition(int width, int height) 
+	public Position getTilePosition(int width, int height, int tileWidth, int tileHeight) 
 	{
-		int x = position.x / width;
-		int y = position.y / height;
+		int x = width / tileWidth;
+		int y = height / tileHeight;
 				
 		return new Position(x, y);
 	}
