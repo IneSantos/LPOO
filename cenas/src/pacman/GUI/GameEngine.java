@@ -53,6 +53,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 				
 		game.getPacman().updateMovement(tileWidth, tileHeight, game.getMaze());
 		
+		
+		
 		repaint();
 	}
 	

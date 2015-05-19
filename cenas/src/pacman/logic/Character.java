@@ -56,7 +56,7 @@ public class Character {
 
 		if(maze.isWall(p1) || maze.isWall(p2))
 		{
-			position.x = p1.x * tileWidth;
+			//position.x = p1.x * tileWidth;
 			position.y = (p1.y  + 1) * tileHeight;
 			
 			return false;
@@ -71,16 +71,19 @@ public class Character {
 		Position p1 = getTilePosition(position.x + tileWidth - 1 + velocity , position.y, tileWidth, tileHeight);
 		Position p2 = getTilePosition(position.x + tileWidth - 1 + velocity , position.y + tileHeight - 1, tileWidth, tileHeight);
 		
-		if(maze.isWall(p1) || maze.isWall(p2))
+		if(p1.x >= maze.maze[0].length)
+		{
+			if(position.x >= Application.frame.getContentPane().getWidth())
+				position.x = -tileWidth;
+		}
+		else if(maze.isWall(p1) || maze.isWall(p2))
 		{
 			position.x = (p1.x - 1) * tileWidth;
-			position.y = p1.y * tileHeight;
+			//position.y = p1.y * tileHeight;
 			
 			return false;
 		}
 
-		if(position.x >= Application.frame.getContentPane().getWidth())
-			position.x = -tileWidth;
 		
 		position.x += velocity;
 		return true;
@@ -91,16 +94,20 @@ public class Character {
 		Position p1 = getTilePosition(position.x - velocity, position.y, tileWidth, tileHeight);
 		Position p2 = getTilePosition(position.x - velocity, position.y + tileHeight - 1, tileWidth, tileHeight);
 				
-		if(maze.isWall(p1) || maze.isWall(p2))
+		
+		if(p1.x < 0)
+		{
+			if(position.x <= -24)
+				position.x = Application.frame.getContentPane().getWidth();
+		}
+		else if(maze.isWall(p1) || maze.isWall(p2))
 		{
 			position.x = (p1.x  + 1) * tileWidth;
-			position.y = p1.y * tileHeight;
+			//position.y = p1.y * tileHeight;
 			
 			return false;
 		}
 		
-		if(position.x <= -24)
-			position.x = Application.frame.getContentPane().getWidth();
 
 		position.x -= velocity;
 		
@@ -113,9 +120,10 @@ public class Character {
 		Position p2 = getTilePosition(position.x + tileWidth - 1, position.y + tileHeight - 1 + velocity, tileWidth, tileHeight);	
 		
 
-		if(maze.isWall(p1) || maze.isWall(p2))
+		
+		if(maze.isWall(p1) && maze.isWall(p2))
 		{
-			position.x = p1.x * tileWidth;
+			//position.x = p1.x * tileWidth;
 			position.y = (p1.y - 1) * tileHeight;
 			
 			return false;

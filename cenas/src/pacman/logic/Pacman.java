@@ -41,8 +41,9 @@ public class Pacman extends Character {
 			moveLeft(tileWidth, tileHeight, maze);
 		
 		 //TODO
-		if(maze.isPoint(new Position(position.x / tileWidth, position.y / tileHeight)) ||maze.isPowerPoint(new Position(position.x / tileWidth, position.y / tileHeight)))
-			maze.maze[position.y / tileHeight][position.x / tileWidth] = ' ';
+		if(position.x/tileWidth >= 0 && position.x/tileWidth < maze.maze[0].length)
+			if(maze.isPoint(new Position(position.x / tileWidth, position.y / tileHeight)) || maze.isPowerPoint(new Position(position.x / tileWidth, position.y / tileHeight)))
+				maze.maze[position.y / tileHeight][position.x / tileWidth] = ' ';
 	}
 	
 	public int getAnimation()
