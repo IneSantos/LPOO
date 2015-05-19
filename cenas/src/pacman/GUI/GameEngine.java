@@ -17,7 +17,7 @@ import pacman.logic.Position;
 @SuppressWarnings("serial")
 public class GameEngine extends JPanel implements ActionListener, KeyListener
 {
-	final int MILISSECONDS_TO_REFRESH = 45;
+	final int MILISSECONDS_TO_REFRESH = 20;
 	Timer  timer;
 	
 	int inputKey = 0;
