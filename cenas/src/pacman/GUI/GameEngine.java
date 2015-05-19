@@ -19,14 +19,14 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 {
 	final int MILISSECONDS_TO_REFRESH = 20;
 	Timer  timer;
+	int refresh = 0;
 	
 	int inputKey = 0;
 	int tileWidth = 20;
 	int tileHeight = 20;
 	
 	Game game = new Game();
-	
-	
+		
 	public GameEngine()
 	{
 		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
@@ -49,11 +49,11 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		game.getPacman().updateAnimation();
-				
-		game.getPacman().updateMovement(tileWidth, tileHeight, game.getMaze());
+		if(refresh++ == 0)
+			game.getPacman().updateAnimation();
+		else refresh = 0;
 		
-		
+		game.getPacman().updateMovement(inputKey, tileWidth, tileHeight, game.getMaze());
 		
 		repaint();
 	}
@@ -91,13 +91,13 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	public void keyPressed(KeyEvent e)
 	{
 		if(e.getKeyCode() == KeyEvent.VK_UP )
-			game.getPacman().setOrientation(0);
+			inputKey = KeyEvent.VK_UP;
 		else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
-			game.getPacman().setOrientation(1);
+			inputKey = KeyEvent.VK_RIGHT;
 		else if(e.getKeyCode() == KeyEvent.VK_DOWN)
-			game.getPacman().setOrientation(2);
+			inputKey = KeyEvent.VK_DOWN;
 		else if(e.getKeyCode() == KeyEvent.VK_LEFT)
-			game.getPacman().setOrientation(3);
+			inputKey = KeyEvent.VK_LEFT;
 	}
 
 	@Override
@@ -114,6 +114,11 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	public int getTileHeight()
 	{
 		return tileHeight;
+	}
+	
+	public void resetInputKey()
+	{
+		inputKey = 0;
 	}
 
 }

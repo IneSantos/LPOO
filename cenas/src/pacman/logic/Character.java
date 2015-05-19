@@ -12,8 +12,8 @@ public class Character {
 	public Character()
 	{
 		position = new Position(100, 100);
-		velocity = 4;
-		orientation = 0;
+		velocity = 2;
+		orientation = 3;
 		alive = true;
 	}
 
@@ -52,32 +52,14 @@ public class Character {
 	public boolean moveUp(int tileWidth, int tileHeight, Maze maze)
 	{
 		Position p1 = getTilePosition(position.x, position.y - velocity, tileWidth, tileHeight);
-		Position p2 = getTilePosition(position.x + tileWidth - 1, position.y - velocity, tileWidth, tileHeight);
 
-		boolean b1 = maze.isWall(p1);
-		boolean b2 = maze.isWall(p2);
-
-		if(b1 && b2)
+		if(maze.isWall(p1))
 		{
 			position.y = (p1.y + 1) * tileHeight;
 
 			return false;
 		}
-		else if(b1)
-		{
-			if(p2.x * tileWidth - position.x <= tileWidth/4)
-				position.x = p2.x * tileWidth;
-
-			return false;
-		}
-		else if(b2)
-		{
-			if(position.x - p1.x * tileWidth <= tileWidth/4)
-				position.x = p1.x * tileWidth;
-
-			return false;
-		}
-
+		
 		position.y -= velocity;
 		return true;
 	}
@@ -85,7 +67,6 @@ public class Character {
 	public boolean moveRight(int tileWidth, int tileHeight, Maze maze)
 	{
 		Position p1 = getTilePosition(position.x + tileWidth - 1 + velocity , position.y, tileWidth, tileHeight);
-		Position p2 = getTilePosition(position.x + tileWidth - 1 + velocity , position.y + tileHeight - 1, tileWidth, tileHeight);
 
 		if(p1.x >= maze.maze[0].length)
 		{
@@ -94,26 +75,9 @@ public class Character {
 		}
 		else
 		{
-			boolean b1 = maze.isWall(p1);
-			boolean b2 = maze.isWall(p2);
-
-			if(b1 && b2)
+			if(maze.isWall(p1))
 			{
 				position.x = (p1.x - 1) * tileWidth;
-
-				return false;
-			}
-			else if(b1)
-			{
-				if(p2.y * tileHeight - position.y <= tileHeight/4)
-					position.y = p2.y * tileHeight; 
-
-				return false;
-			}
-			else if(b2)
-			{
-				if(position.y - p1.y * tileHeight <= tileHeight/4)
-					position.y = p1.y * tileHeight;
 
 				return false;
 			}
@@ -126,8 +90,6 @@ public class Character {
 	public boolean moveLeft(int tileWidth, int tileHeight, Maze maze)
 	{		
 		Position p1 = getTilePosition(position.x - velocity, position.y, tileWidth, tileHeight);
-		Position p2 = getTilePosition(position.x - velocity, position.y + tileHeight - 1, tileWidth, tileHeight);
-
 
 		if(p1.x < 0)
 		{
@@ -135,31 +97,14 @@ public class Character {
 				position.x = Application.frame.getContentPane().getWidth();
 		}	
 		else
-		{ 
-			boolean b1 = maze.isWall(p1);
-			boolean b2 = maze.isWall(p2);
+		{
 
-			if(b1 && b2)
+			if(maze.isWall(p1))
 			{
 				position.x = (p1.x + 1) * tileWidth;
 
 				return false;
 			}
-			else if(b1)
-			{
-				if(p2.y * tileHeight - position.y <= tileHeight/4)
-					position.y = p2.y * tileHeight; 
-
-				return false;
-			}
-			else if(b2)
-			{
-				if(position.y - p1.y * tileHeight <= tileHeight/4)
-					position.y = p1.y * tileHeight;
-
-				return false;
-			}
-
 		}
 		position.x -= velocity;
 
@@ -169,32 +114,14 @@ public class Character {
 	public boolean moveDown(int tileWidth, int tileHeight, Maze maze)
 	{		
 		Position p1 = getTilePosition(position.x, position.y + tileHeight - 1 + velocity, tileWidth, tileHeight);
-		Position p2 = getTilePosition(position.x + tileWidth - 1, position.y + tileHeight - 1 + velocity, tileWidth, tileHeight);	
-
-		boolean b1 = maze.isWall(p1);
-		boolean b2 = maze.isWall(p2);
-
-		if(b1 && b2)
+		
+		if(maze.isWall(p1))
 		{
 			position.y = (p1.y - 1) * tileHeight;
 
 			return false;
 		}
-		else if(b1)
-		{
-			if(p2.x * tileWidth - position.x <= tileWidth/4)
-				position.x = p2.x * tileWidth;
-
-			return false;
-		}
-		else if(b2)
-		{
-			if(position.x - p1.x * tileWidth <= tileWidth/4)
-				position.x = p1.x * tileWidth;
-
-			return false;
-		}
-
+		
 		position.y += velocity;
 
 		return true;
