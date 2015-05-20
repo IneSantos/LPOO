@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JScrollBar;
 import javax.swing.JSlider;
 import java.awt.Font;
 import javax.swing.JTextField;
