@@ -14,26 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/images/disney.PNG</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/Desktop/disney.PNG</locationURI>
-		</link>
-		<link>
-			<name>src/images/fffb4ab3c38b84e5398cfe72a6bd02dd.jpg</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/Desktop/fffb4ab3c38b84e5398cfe72a6bd02dd.jpg</locationURI>
-		</link>
-		<link>
-			<name>src/images/google-pacman-logo-sprites.png</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/Desktop/google-pacman-logo-sprites.png</locationURI>
-		</link>
-		<link>
-			<name>src/images/tp_07_08.pdf</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/Desktop/tp_07_08.pdf</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
