@@ -1,9 +1,14 @@
 package pacman.logic;
 
 public class RedGhost extends Ghost {
-	
-	public RedGhost(){
+
+	public RedGhost() {
+		super();
 	}
+	
+	
+	
+	
 	
 	
 }

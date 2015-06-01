@@ -13,7 +13,7 @@ public class Character {
 	{
 		position = new Position(100, 100);
 		velocity = 2;
-		orientation = 3;
+		orientation = 2;
 		alive = true;
 	}
 
