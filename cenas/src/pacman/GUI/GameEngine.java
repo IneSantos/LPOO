@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import pacman.logic.Game;
+import pacman.logic.Maze;
 import pacman.logic.Position;
 
 @SuppressWarnings("serial")
@@ -36,6 +37,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		Application.frame.getContentPane().add(this, BorderLayout.CENTER);
 
 		game.getPacman().setPosition(new Position(13*tileWidth, (17+3)*tileHeight));
+		game.getRedGhost().setPosition(new Position(13*tileWidth, 14*tileHeight));
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -49,11 +51,14 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		if(refresh++ == 0)
+		if(refresh++ == 0){
 			game.getPacman().updateAnimation();
+			game.getRedGhost().updateAnimation();
+		}
 		else refresh = 0;
-		
+				
 		game.getPacman().updateMovement(inputKey, tileWidth, tileHeight, game.getMaze());
+		game.getRedGhost().moveGhost(game.getMaze(), tileWidth,tileHeight);
 		
 		repaint();
 	}
@@ -80,6 +85,13 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 				
 		g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * 24, game.getPacman().getOrientation() * 24, 24, 24), 
 					game.getPacman().getX(), game.getPacman().getY(), tileWidth, tileHeight, null, null);
+		
+		
+		g.drawImage(Application.images.sprites.getSubimage(game.getRedGhost().getAnimation() * 24 +24*4, game.getRedGhost().getOrientation() * 24, 24, 24), 
+				game.getRedGhost().getX(), game.getRedGhost().getY(), tileWidth, tileHeight, null, null);
+		
+
+		System.out.println(game.getRedGhost().getOrientation());
 		
 		
 		Application.frame.getContentPane().setPreferredSize(new Dimension(tileWidth*mazeWidth, tileHeight*mazeHeight));

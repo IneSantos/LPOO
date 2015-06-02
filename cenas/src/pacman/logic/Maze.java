@@ -71,7 +71,7 @@ public class Maze {
 	
 	//GHOST
 	
-	public boolean isDecisionPoin(Position p)
+	public boolean isDecisionPoint(Position p)
 	{
 		if(maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'd')
 			return true;

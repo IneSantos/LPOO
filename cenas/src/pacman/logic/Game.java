@@ -6,10 +6,10 @@ public class Game {
 	//21x26
 	
 	static Pacman pacman = new Pacman();	
-	static RedGhost redmonster = new RedGhost();
-	static PinkGhost pinkmonster = new PinkGhost();
-	static OrangeGhost orangemonster = new OrangeGhost();
-	static BlueGhost bluemonster = new BlueGhost();
+	static RedGhost redGhost = new RedGhost();
+	static PinkGhost pinkGhost = new PinkGhost();
+	static OrangeGhost orangeGhost = new OrangeGhost();
+	static BlueGhost blueGhost = new BlueGhost();
 	static Maze maze = new Maze();
 	
 	int level;
@@ -23,6 +23,10 @@ public class Game {
 	public Maze getMaze()
 	{
 		return maze;
+	}
+	
+	public RedGhost getRedGhost(){
+		return redGhost;
 	}
 	
 /*
