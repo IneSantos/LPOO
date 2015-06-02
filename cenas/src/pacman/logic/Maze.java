@@ -50,7 +50,7 @@ public class Maze {
 	
 	public boolean isPoint(Position p)
 	{
-		if(maze[p.y][p.x] == '.')
+		if(maze[p.y][p.x] == '.' || maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'I')
 			return true;
 		return false;
 	}
@@ -65,6 +65,22 @@ public class Maze {
 	public boolean isDoor(Position p)
 	{
 		if(maze[p.y][p.x] == 'S')
+			return true;
+		return false;
+	}
+	
+	//GHOST
+	
+	public boolean isDecisionPoin(Position p)
+	{
+		if(maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'd')
+			return true;
+		return false;
+	}
+	
+	public boolean isIntPoint(Position p)
+	{
+		if(maze[p.y][p.x] == 'I' || maze[p.y][p.x] == 'i')
 			return true;
 		return false;
 	}
