@@ -14,6 +14,7 @@ public class Application
 		frame = new JFrame("PacMano, m'putz");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
+		frame.setResizable(false);
 		
 		new GameEngine();
 		return;

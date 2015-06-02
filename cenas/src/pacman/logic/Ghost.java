@@ -1,7 +1,8 @@
 package pacman.logic;
 
-import java.awt.event.KeyEvent;
 import java.util.Random;
+
+import pacman.GUI.GameEngine;
 
 public class Ghost extends Character {
 
@@ -27,70 +28,70 @@ public class Ghost extends Character {
 		return rand;
 	}
 	
-	private void rightWin(int tileWidth, int tileHeight, Maze maze){
-		if(!maze.isWall(getTilePosition(position.x+tileWidth, position.y, tileWidth, tileHeight))){
+	private void rightWin(Maze maze){
+		if(!maze.isWall(getTilePosition(position.x+GameEngine.TILE_DIMENSION, position.y))){
 			this.orientation = 1;
-			moveRight(tileWidth, tileHeight,maze);
+			moveRight(maze);
 		}
 		else{
 			this.orientation = 3;
-			moveLeft(tileWidth, tileHeight,maze);
+			moveLeft(maze);
 		}
 	}
 	
 	
-	private void leftWin(int tileWidth, int tileHeight, Maze maze){
-		if(!maze.isWall(getTilePosition(position.x-1, position.y, tileWidth, tileHeight))){
+	private void leftWin(Maze maze){
+		if(!maze.isWall(getTilePosition(position.x-1, position.y))){
 			this.orientation = 3;
-			moveLeft(tileWidth, tileHeight,maze);
+			moveLeft(maze);
 		}
 		else{
 			this.orientation = 1;
-			moveRight(tileWidth, tileHeight,maze);
+			moveRight(maze);
 		}
 	}
 	
-	private void upWin(int tileWidth, int tileHeight, Maze maze){
-		if(!maze.isWall(getTilePosition(position.x, position.y-1, tileWidth, tileHeight))){
+	private void upWin(Maze maze){
+		if(!maze.isWall(getTilePosition(position.x, position.y-1))){
 			this.orientation = 0;
-			moveUp(tileWidth, tileHeight,maze);
+			moveUp(maze);
 		}
 		else{
 			this.orientation = 2;
-			moveDown(tileWidth, tileHeight,maze);
+			moveDown(maze);
 		}
 	}
 	
-	private void downWin(int tileWidth, int tileHeight, Maze maze){
-		if(!maze.isWall(getTilePosition(position.x, position.y+tileHeight, tileWidth, tileHeight))){
+	private void downWin(Maze maze){
+		if(!maze.isWall(getTilePosition(position.x, position.y+GameEngine.TILE_DIMENSION))){
 			this.orientation = 2;
-			moveDown(tileWidth, tileHeight,maze);
+			moveDown(maze);
 		}
 		else{
 			this.orientation = 0;
-			moveUp(tileWidth, tileHeight,maze);
+			moveUp(maze);
 		}
 	}
 
 
-	public void updateOrientation(int tileWidth, int tileHeight, Maze maze){
+	public void updateOrientation(Maze maze){
 
 		//Par -> Vertical
 		if(this.orientation%2 == 0){
-			if(testRightMove(tileWidth) < testLeftMove()){
-				rightWin(tileWidth, tileHeight,maze);
+			if(testRightMove() < testLeftMove()){
+				rightWin(maze);
 			}
 			else{
-				leftWin(tileWidth, tileHeight, maze);
+				leftWin(maze);
 			}
 		}
 		//Impar -> Horizontal
 		else{
-			if(testUpMove() < testDownMove(tileHeight)){
-				upWin(tileWidth, tileHeight, maze);
+			if(testUpMove() < testDownMove()){
+				upWin(maze);
 			}
 			else {
-				downWin(tileWidth, tileHeight, maze);
+				downWin(maze);
 			}
 		}
 	}
@@ -99,8 +100,8 @@ public class Ghost extends Character {
 		return (float) Math.sqrt(Math.pow((x - this.target.x),2) + Math.pow((y - this.target.y),2));
 	}
 
-	private float testDownMove(int tileHeight) {
-		return calDistance(this.position.x, position.y + tileHeight);
+	private float testDownMove() {
+		return calDistance(this.position.x, position.y + GameEngine.TILE_DIMENSION);
 	}
 
 	private float testUpMove() {
@@ -111,74 +112,78 @@ public class Ghost extends Character {
 		return calDistance(position.x - 1, this.position.y);
 	}
 
-	private float testRightMove(int tileWidth) {
-		return calDistance(position.x + tileWidth, this.position.y);
+	private float testRightMove() {
+		return calDistance(position.x + GameEngine.TILE_DIMENSION, this.position.y);
 	}
 
-	public void moveGhost(Maze maze, int tileWidth, int tileHeight){
+	public void moveGhost(Maze maze){
 
-		if(!maze.isDecisionPoint(getTilePosition(position.x, position.y, tileWidth, tileHeight)))
+		if(!maze.isDecisionPoint(getTilePosition(position.x, position.y)))
 		{
 			System.out.println("Entrou no 1 if");
-			if(this.orientation == 0 && !maze.isWall(getTilePosition(position.x, position.y - 1, tileWidth, tileHeight)))
-				moveUp(tileWidth, tileHeight, maze);
-			else if(this.orientation == 2 && !maze.isWall(getTilePosition(position.x, position.y + tileHeight, tileWidth, tileHeight)))
-				moveDown(tileWidth, tileHeight, maze);
-			else if(this.orientation == 1 && !maze.isWall(getTilePosition(position.x + tileWidth, position.y, tileWidth, tileHeight)))
-				moveRight(tileWidth, tileHeight, maze);
-			else if(this.orientation == 3 && !maze.isWall(getTilePosition(position.x - 1, position.y, tileWidth, tileHeight)))
+			if(this.orientation == 0 && !maze.isWall(getTilePosition(position.x, position.y - 1)))
+				moveUp(maze);
+			else if(this.orientation == 2 && !maze.isWall(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)))
+				moveDown(maze);
+			else if(this.orientation == 1 && !maze.isWall(getTilePosition(position.x + GameEngine.TILE_DIMENSION, position.y)))
+				moveRight(maze);
+			else if(this.orientation == 3 && !maze.isWall(getTilePosition(position.x - 1, position.y)))
 			{
-				moveLeft(tileWidth, tileHeight, maze);
+				moveLeft(maze);
 				System.out.println("Entrou posicao em x: " + position.x);
 			}
 			else { 
-				updateOrientation(tileWidth,tileHeight,maze);	
+				updateOrientation(maze);	
 				System.out.println("dentro do else");
 			}
 			System.out.println("Saiu 1 if");
 		}
-		else if(position.x % tileWidth == 0 && position.y % tileHeight == 0)
+		else if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0)
 		{
-			updateOrientation(tileWidth, tileHeight, maze);
+			updateOrientation(maze);
 		}
 		else{
 			if(this.orientation == 0)
-				moveUp(tileWidth, tileHeight, maze);
+				moveUp(maze);
 			else if(this.orientation == 2)
-				moveDown(tileWidth, tileHeight, maze);
+				moveDown(maze);
 			else if(this.orientation == 1)
-				moveRight(tileWidth, tileHeight, maze);
+				moveRight(maze);
 			else if(this.orientation == 3)
 			{
-				moveLeft(tileWidth, tileHeight, maze);
+				moveLeft(maze);
 				System.out.println("Entrou posicao em x: " + position.x);
 			}
 		}
 
 	}
 	//TODO: ainda falta fazer esta função!
-	private void movToGhostHouse(int tileWidth, int tileHeight, Maze maze){
+	private void movToGhostHouse(Maze maze){
 
 
 		boolean valid = false;
 
 		while(!valid){
 			int rand = generateOri(); 
-			if(position.x % tileWidth == 0 && position.y % tileHeight == 0 && rand != 0)
+			if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0 && rand != 0)
 			{
-				if(rand == 0 && !maze.isWall(getTilePosition(position.x, position.y - 1, tileWidth, tileHeight))){
+				if(rand == 0 && !maze.isWall(getTilePosition(position.x, position.y - 1)))
+				{
 					setOrientation(0);
 					valid = true;
 				}
-				else if(rand == 2 && !maze.isWall(getTilePosition(position.x, position.y + tileHeight, tileWidth, tileHeight)) && !this.alive){
+				else if(rand == 2 && !maze.isWall(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)) && !this.alive)
+				{
 					setOrientation(2);
 					valid = true;
 				}
-				else if(rand == 1 && !maze.isWall(getTilePosition(position.x + tileWidth, position.y, tileWidth, tileHeight))){
+				else if(rand == 1 && !maze.isWall(getTilePosition(position.x + GameEngine.TILE_DIMENSION, position.y)))
+				{
 					setOrientation(1);
 					valid = true;
 				}
-				else if(rand == 3 && !maze.isWall(getTilePosition(position.x - 1, position.y, tileWidth, tileHeight))){
+				else if(rand == 3 && !maze.isWall(getTilePosition(position.x - 1, position.y)))
+				{
 					setOrientation(3);
 					valid = true;
 				}
@@ -186,13 +191,13 @@ public class Ghost extends Character {
 		}
 
 		if(orientation == 0)
-			moveUp(tileWidth, tileHeight, maze);
+			moveUp(maze);
 		else if (orientation == 1)
-			moveRight(tileWidth, tileHeight, maze);
+			moveRight(maze);
 		else if(orientation == 2)
-			moveDown(tileWidth, tileHeight, maze);
+			moveDown(maze);
 		else if(orientation == 3)
-			moveLeft(tileWidth, tileHeight, maze);		
+			moveLeft(maze);		
 
 	}
 

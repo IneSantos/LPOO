@@ -2,6 +2,8 @@ package pacman.logic;
 
 import java.awt.event.KeyEvent;
 
+import pacman.GUI.GameEngine;
+
 
 public class Pacman extends Character {
 	
@@ -29,47 +31,47 @@ public class Pacman extends Character {
 		return animation;
 	}
 
-	public void updateMovement(int inputKey, int tileWidth, int tileHeight, Maze maze) 
+	public void updateMovement(int inputKey, Maze maze) 
 	{	
 		//Portal á direita no labirinto
-		if(position.x + tileWidth >= maze.maze[0].length * tileWidth && orientation == 1)
+		if(position.x + GameEngine.TILE_DIMENSION >= maze.maze[0].length * GameEngine.TILE_DIMENSION && orientation == 1)
 		{
-			if(position.x == maze.maze[0].length * tileWidth)
-				position.x = -tileWidth;
+			if(position.x == maze.maze[0].length * GameEngine.TILE_DIMENSION)
+				position.x = -GameEngine.TILE_DIMENSION;
 		}
 		//Portal á esquerda no labirinto
 		else if(position.x <= 0 && orientation == 3)
 		{
-			if(position.x == -tileWidth)
-				position.x = maze.maze[0].length * tileWidth;
+			if(position.x == -GameEngine.TILE_DIMENSION)
+				position.x = maze.maze[0].length * GameEngine.TILE_DIMENSION;
 		}
-		else if(position.x % tileWidth == 0 && position.y % tileHeight == 0 && inputKey != 0)
+		else if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0 && inputKey != 0)
 		{
-			if(inputKey == KeyEvent.VK_UP && !maze.isWall(getTilePosition(position.x, position.y - 1, tileWidth, tileHeight)))
+			if(inputKey == KeyEvent.VK_UP && !maze.isWall(getTilePosition(position.x, position.y - 1)))
 				setOrientation(0);
-			else if(inputKey == KeyEvent.VK_DOWN && !maze.isWall(getTilePosition(position.x, position.y + tileHeight, tileWidth, tileHeight)) && !maze.isDoor(getTilePosition(position.x, position.y + tileHeight, tileWidth, tileHeight)))
+			else if(inputKey == KeyEvent.VK_DOWN && !maze.isWall(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)) && !maze.isDoor(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)))
 				setOrientation(2);
-			else if(inputKey == KeyEvent.VK_RIGHT && !maze.isWall(getTilePosition(position.x + tileWidth, position.y, tileWidth, tileHeight)))
+			else if(inputKey == KeyEvent.VK_RIGHT && !maze.isWall(getTilePosition(position.x + GameEngine.TILE_DIMENSION, position.y)))
 				setOrientation(1);
-			else if(inputKey == KeyEvent.VK_LEFT && !maze.isWall(getTilePosition(position.x - 1, position.y, tileWidth, tileHeight)))
+			else if(inputKey == KeyEvent.VK_LEFT && !maze.isWall(getTilePosition(position.x - 1, position.y)))
 				setOrientation(3);
 			
 			inputKey = 0;
 		}
 		
 		if(orientation == 0)
-			moveUp(tileWidth, tileHeight, maze);
+			moveUp(maze);
 		else if (orientation == 1)
-			moveRight(tileWidth, tileHeight, maze);
+			moveRight(maze);
 		else if(orientation == 2)
-			moveDown(tileWidth, tileHeight, maze);
+			moveDown(maze);
 		else if(orientation == 3)
-			moveLeft(tileWidth, tileHeight, maze);
+			moveLeft(maze);
 		
 		 //TODO
-		if(position.x/tileWidth >= 0 && position.x/tileWidth < maze.maze[0].length)
-			if(maze.isPoint(new Position(position.x / tileWidth, position.y / tileHeight)) || maze.isPowerPoint(new Position(position.x / tileWidth, position.y / tileHeight)))
-				maze.maze[position.y / tileHeight][position.x / tileWidth] = ' ';
+		if(position.x/GameEngine.TILE_DIMENSION >= 0 && position.x/GameEngine.TILE_DIMENSION < maze.maze[0].length)
+			if(maze.isPoint(new Position(position.x / GameEngine.TILE_DIMENSION, position.y / GameEngine.TILE_DIMENSION)) || maze.isPowerPoint(new Position(position.x / GameEngine.TILE_DIMENSION, position.y / GameEngine.TILE_DIMENSION)))
+				maze.maze[position.y / GameEngine.TILE_DIMENSION][position.x / GameEngine.TILE_DIMENSION] = ' ';
 	}
 	
 	public int getAnimation()
