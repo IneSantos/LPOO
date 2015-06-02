@@ -68,7 +68,7 @@ public class Pacman extends Character {
 		else if(orientation == 3)
 			moveLeft(maze);
 		
-		 //TODO
+		 //TODO // eoiw
 		if(position.x/GameEngine.TILE_DIMENSION >= 0 && position.x/GameEngine.TILE_DIMENSION < maze.maze[0].length)
 			if(maze.isPoint(new Position(position.x / GameEngine.TILE_DIMENSION, position.y / GameEngine.TILE_DIMENSION)) || maze.isPowerPoint(new Position(position.x / GameEngine.TILE_DIMENSION, position.y / GameEngine.TILE_DIMENSION)))
 				maze.maze[position.y / GameEngine.TILE_DIMENSION][position.x / GameEngine.TILE_DIMENSION] = ' ';
