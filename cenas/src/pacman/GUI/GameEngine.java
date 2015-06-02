@@ -35,7 +35,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		this.setPreferredSize(new Dimension(game.getMaze().maze[0].length*tileWidth, game.getMaze().maze.length*tileHeight));
 		Application.frame.getContentPane().add(this, BorderLayout.CENTER);
 
-		game.getPacman().setPosition(new Position(13*tileWidth, 17*tileHeight));
+		game.getPacman().setPosition(new Position(13*tileWidth, (17+3)*tileHeight));
 		
 		addKeyListener(this);
 		setFocusable(true);
