@@ -31,11 +31,13 @@ public class Pacman extends Character {
 
 	public void updateMovement(int inputKey, int tileWidth, int tileHeight, Maze maze) 
 	{	
+		//Portal á direita no labirinto
 		if(position.x + tileWidth >= maze.maze[0].length * tileWidth && orientation == 1)
 		{
 			if(position.x == maze.maze[0].length * tileWidth)
 				position.x = -tileWidth;
 		}
+		//Portal á esquerda no labirinto
 		else if(position.x <= 0 && orientation == 3)
 		{
 			if(position.x == -tileWidth)
@@ -45,7 +47,7 @@ public class Pacman extends Character {
 		{
 			if(inputKey == KeyEvent.VK_UP && !maze.isWall(getTilePosition(position.x, position.y - 1, tileWidth, tileHeight)))
 				setOrientation(0);
-			else if(inputKey == KeyEvent.VK_DOWN && !maze.isWall(getTilePosition(position.x, position.y + tileHeight, tileWidth, tileHeight)))
+			else if(inputKey == KeyEvent.VK_DOWN && !maze.isWall(getTilePosition(position.x, position.y + tileHeight, tileWidth, tileHeight)) && !maze.isDoor(getTilePosition(position.x, position.y + tileHeight, tileWidth, tileHeight)))
 				setOrientation(2);
 			else if(inputKey == KeyEvent.VK_RIGHT && !maze.isWall(getTilePosition(position.x + tileWidth, position.y, tileWidth, tileHeight)))
 				setOrientation(1);
