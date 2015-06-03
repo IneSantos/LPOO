@@ -27,11 +27,11 @@ public class Ghost extends Character {
 		int rand = random.nextInt(4);
 		return rand;
 	}
-	
+
 	private boolean tieWin(Maze maze)
 	{
 		// UP > LEFT > DOWN
-		
+
 		if(!maze.isWall(getTilePosition(position.x, position.y - 1))){
 			return moveUp(maze);
 		}
@@ -44,7 +44,7 @@ public class Ghost extends Character {
 		}
 		return false;
 	}
-	
+
 	private boolean moveFront(Maze maze)
 	{
 		switch(this.orientation)
@@ -161,7 +161,7 @@ public class Ghost extends Character {
 			float front = testFrontMove(target);
 
 			System.out.println("mouco");
-			
+
 			if(up < down && up < front)
 			{				
 				if(moveUp(maze))
@@ -272,7 +272,7 @@ public class Ghost extends Character {
 				}
 			}
 
-			if(left < front && left < right)
+			else if(left < front && left < right)
 			{
 				if(moveLeft(maze))
 				{
@@ -295,7 +295,7 @@ public class Ghost extends Character {
 				}
 			}
 
-			if(front < left && front < right)
+			else if(front < left && front < right)
 			{
 				if(moveFront(maze))
 					return;
@@ -319,6 +319,7 @@ public class Ghost extends Character {
 				}
 
 			}
+			return;
 		}
 		//Impar -> Horizontal
 		else
@@ -350,7 +351,7 @@ public class Ghost extends Character {
 				}
 			}
 
-			if(down < front && down < up)
+			else if(down < front && down < up)
 			{
 				if(moveDown(maze))
 				{
@@ -373,7 +374,7 @@ public class Ghost extends Character {
 				}
 			}
 
-			if(front < down && front < up)
+			else if(front < down && front < up)
 			{
 				if(moveFront(maze))
 					return;
@@ -397,6 +398,7 @@ public class Ghost extends Character {
 				}
 
 			}
+			return;
 		}
 	}
 
