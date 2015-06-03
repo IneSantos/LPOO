@@ -276,7 +276,7 @@ public class Ghost extends Character {
 				moveUp(maze);
 			else if(this.orientation == 2 && !maze.isWall(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)))
 				moveDown(maze);
-			else if(this.orientation == 1 && !maze.isWall(getTilePosition(position.x + GameEngine.TILE_DIMENSION, position.y)))
+			else if(this.orientation == 1 && !maze.isWall(getTilePosition(position.x +/* GameEngine.TILE_DIMENSION*/1, position.y)))
 				moveRight(maze);
 			else if(this.orientation == 3 && !maze.isWall(getTilePosition(position.x - 1, position.y)))
 				moveLeft(maze);
