@@ -17,6 +17,10 @@ public class Character {
 		orientation = 2;
 		alive = true;
 	}
+	
+	public boolean getAlive(){
+		return alive;
+	}
 
 	public int getOrientation()
 	{

@@ -2,10 +2,12 @@ package pacman.logic;
 
 import java.util.Scanner;
 
+import pacman.logic.Ghost.Mode;
+
 public class Game {
 	//21x26
 	//28x36
-	
+
 	static Pacman pacman = new Pacman();	
 	static RedGhost redGhost = new RedGhost();
 	static PinkGhost pinkGhost = new PinkGhost();
@@ -14,39 +16,75 @@ public class Game {
 	static Maze maze = new Maze();
 	public static int mazeWidth = maze.maze[0].length;
 	public static int mazeHeight = maze.maze.length;
-	
+
 	int level;
 
-	
+
 	public Pacman getPacman()
 	{
 		return pacman;
 	}
-	
+
 	public Maze getMaze()
 	{
 		return maze;
 	}
-	
+
 	public RedGhost getRedGhost(){
 		return redGhost;
 	}
-	
+
 	public PinkGhost getPinkGhost(){
 		return pinkGhost;
 	}
-	
+
 	public OrangeGhost getOrangeGhost(){
 		return orangeGhost;
 	}
-	
+
 	public BlueGhost getBlueGhost(){
 		return blueGhost;
 	}
-	
 
-	
-/*
+	public boolean comparePosition(Position p1, Position p2){
+		return (p1.x == p2.x && p1.y == p2.y);
+
+	}
+
+	public void checkLive(){
+
+		if(pacman.lifes > 0 && pacman.power == 0){
+			if(comparePosition(pacman.position, redGhost.position) || comparePosition(pacman.position, pinkGhost.position) || comparePosition(pacman.position, blueGhost.position) || comparePosition(pacman.position, orangeGhost.position)){
+				pacman.lifes --;
+				return;
+			}
+		}
+		pacman.alive = false;
+	}
+
+
+	public void checkColision(){
+
+		if(pacman.power == 1)
+		{
+			if(comparePosition(pacman.position, redGhost.position)){
+				redGhost.mode = Mode.FRIGHTENED;
+			}
+			if(comparePosition(pacman.position, pinkGhost.position)){
+				pinkGhost.mode = Mode.FRIGHTENED;
+			}
+			if(comparePosition(pacman.position, blueGhost.position)){
+				blueGhost.mode = Mode.FRIGHTENED;
+			}
+			if(comparePosition(pacman.position, orangeGhost.position)){
+				orangeGhost.mode = Mode.FRIGHTENED;
+			}
+		}
+
+	}
+
+
+	/*
 	public static void main(String[] args) {
 
 		deslocaPacman();
@@ -166,17 +204,17 @@ public class Game {
 			pac.cresceu = true;
 		}
 
-				
+
 		if(labDefault[width][hight] == '.'){
 			labDefault[width][hight] = ' ';
 			pac.pontos += 3;
 		}
 
 		verificaPacmanMonstro(width,hight);
-		
+
 		return labDefault[width][hight]	!= 'X';	 
 	}
-*/
+	 */
 
 }
 

@@ -10,7 +10,7 @@ public class Pacman extends Character {
 	int score;
 	int animation;
 	int power;
-	int lifes;
+	public int lifes;
 
 	public Pacman()
 	{
@@ -30,7 +30,8 @@ public class Pacman extends Character {
 		
 		return animation;
 	}
-
+	
+	
 	public void updateMovement(int inputKey, Maze maze) 
 	{	
 		//Portal á direita no labirinto
@@ -48,13 +49,29 @@ public class Pacman extends Character {
 		else if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0 && inputKey != 0)
 		{
 			if(inputKey == KeyEvent.VK_UP && !maze.isWall(getTilePosition(position.x, position.y - 1)))
+			{
 				setOrientation(0);
+				if(maze.isPowerPoint(position))
+					this.power = 1;
+			}
 			else if(inputKey == KeyEvent.VK_DOWN && !maze.isWall(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)) && !maze.isDoor(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)))
+			{
 				setOrientation(2);
+				if(maze.isPowerPoint(position))
+					this.power = 1;
+			}
 			else if(inputKey == KeyEvent.VK_RIGHT && !maze.isWall(getTilePosition(position.x + GameEngine.TILE_DIMENSION, position.y)))
+			{
 				setOrientation(1);
-			else if(inputKey == KeyEvent.VK_LEFT && !maze.isWall(getTilePosition(position.x - 1, position.y)))
+				if(maze.isPowerPoint(position))
+					this.power = 1;
+			}
+			else if(inputKey == KeyEvent.VK_LEFT && !maze.isWall(getTilePosition(position.x - 1, position.y))){
 				setOrientation(3);
+				if(maze.isPowerPoint(position))
+					this.power = 1;
+			}
+				
 			
 			inputKey = 0;
 		}
@@ -77,6 +94,10 @@ public class Pacman extends Character {
 	public int getAnimation()
 	{
 		return animation;	
+	}
+	
+	public int getPower(){
+		return power;
 	}
 
 }

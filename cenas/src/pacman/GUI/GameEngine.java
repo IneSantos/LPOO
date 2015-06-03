@@ -66,12 +66,12 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		else refresh = 0;
 				
 		game.getPacman().updateMovement(inputKey, game.getMaze());
-//		game.getRedGhost().moveGhost(game.getMaze());
-//		game.getPinkGhost().moveGhost(game.getMaze());
-//		game.getOrangeGhost().moveGhost(game.getMaze());
+		game.getRedGhost().moveGhost(game.getMaze());
+		game.getPinkGhost().moveGhost(game.getMaze());
+		game.getOrangeGhost().moveGhost(game.getMaze());
 		game.getBlueGhost().moveGhost(game.getMaze());
 		
-		System.out.println(game.getRedGhost().getOrientation());
+//		System.out.println(game.getRedGhost().getOrientation());
 		
 		repaint();
 	}
@@ -80,8 +80,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	public void paintComponent(Graphics g)
 	{
 		
-		for(int h = 0; h < game.mazeHeight; h++)
-			for(int w = 0; w < game.mazeWidth; w++)
+		for(int h = 0; h < Game.mazeHeight; h++)
+			for(int w = 0; w < Game.mazeWidth; w++)
 				if(game.getMaze().isWall(new Position(w, h)))
 					g.drawImage(Application.images.wallTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 				else if(game.getMaze().isPoint(new Position(w, h)))

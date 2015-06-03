@@ -1,7 +1,5 @@
 package pacman.logic;
 
-import pacman.GUI.GameEngine;
-
 	public class PinkGhost extends Ghost {
 		
 		int animation;

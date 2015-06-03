@@ -52,15 +52,17 @@ public class Maze {
 	
 	public boolean isPoint(Position p)
 	{
-		if(maze[p.y][p.x] == '.' || maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'I')
-			return true;
+		if(p.x > 0 && p.x < Game.mazeWidth)
+			if(maze[p.y][p.x] == '.' || maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'I')
+				return true;
 		return false;
 	}
 	
 	public boolean isPowerPoint(Position p)
 	{
-		if(maze[p.y][p.x] == 'P')
-			return true;
+		if(p.x > 0 && p.x < Game.mazeWidth)
+			if(maze[p.y][p.x] == 'P')
+				return true;
 		return false;
 	}
 	

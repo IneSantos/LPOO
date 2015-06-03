@@ -27,355 +27,357 @@ public class Ghost extends Character {
 		int rand = random.nextInt(4);
 		return rand;
 	}
-	
-	private boolean tieWin(Maze maze)
-	{
-		// UP > LEFT > DOWN
-		
-		if(!maze.isWall(getTilePosition(position.x, position.y - 1))){
-			return moveUp(maze);
-		}
-		if(!maze.isWall(getTilePosition(position.x - 1, position.y))){
-			return moveLeft(maze);
-		}
-		if(!maze.isWall(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)))
-		{
-			return moveDown(maze);
-		}
-		return false;
-	}
-	
-	public void switchMode()
-	{
-		if(mode == Mode.CHASE)
-			updateOrientation(Game.maze, Game.pacman.position);
-		else if (mode == Mode.SCATTER)
-			updateOrientation(Game.maze, this.target);
-	}
-
-	public void updateOrientation(Maze maze, Position target)
-	{
-		if(this.orientation == 0) //UP
-		{
-			float right = testRightMove(target);
-			float left = testLeftMove(target);
-			float up = testUpMove(target);
-			
-			if(right < up && right < left)
-			{
-				if(moveRight(maze))
-				{
-					this.orientation = 1;
-					return;
-				}
-				else if(left < up)
-				{
-					if(moveLeft(maze))
-					{
-						this.orientation = 3;
-						return;
-					}
-				}
-				else {
-					moveUp(maze);
-					return ;
-				}
-			}
-			else if(left < right && left < up)
-			{
-				if(moveLeft(maze))
-				{
-					this.orientation = 3;
-					return;
-				}
-				else if(right < up)
-				{
-					if(moveRight(maze))
-					{
-						this.orientation = 1;
-						return;
-					}
-				}
-				else  {
-					moveUp(maze);
-					return ;
-				}
-			}
-			else if (up <  left && up < right)
-			{
-				if(moveUp(maze))
-					return;
-				else if (left < right)
-				{
-					if(moveLeft(maze))
-					{
-						this.orientation = 3;
-						return;
-					}
-				}
-				else moveRight(maze);
-			}
-		}
-		else if(this.orientation == 2) //DOWN
-		{
-			float right = testRightMove(target);
-			float left = testLeftMove(target);
-			float down = testDownMove(target);
-			
-			if(right < down && right < left)
-			{
-				if(moveRight(maze))
-				{
-					this.orientation = 1;
-					return;
-				}
-				else if(left < down)
-				{
-					if(moveLeft(maze))
-					{
-						this.orientation = 3;
-						return;
-					}
-				}
-				else {
-					moveDown(maze);
-					return ;
-				}
-			}
-			else if(left < right && left < down)
-			{
-				if(moveLeft(maze))
-				{
-					this.orientation = 3;
-					return;
-				}
-				else if(right < down)
-				{
-					if(moveRight(maze))
-					{
-						this.orientation = 1;
-						return;
-					}
-				}
-				else  {
-					moveDown(maze);
-					return ;
-				}
-			}
-			else if (down <  left && down < right)
-			{
-				if(moveDown(maze))
-					return;
-				else if (left < right)
-				{
-					if(moveLeft(maze))
-					{
-						this.orientation = 3;
-						return;
-					}
-				}
-				else{
-					moveRight(maze);
-					this.orientation = 1;
-				}
-			}
-		}
-		else if(this.orientation == 1) //RIGHT
-		{
-			float right = testRightMove(target);
-			float down = testDownMove(target);
-			float up = testUpMove(target);
-			
-			if(down < up && down < right)
-			{
-				if(moveDown(maze))
-				{
-					this.orientation = 2;
-					return;
-				}
-				else if(up < right)
-				{
-					if(moveUp(maze))
-					{
-						this.orientation = 0;
-						return;
-					}
-				}
-				else moveRight(maze);
-			}
-			else if(up < right && up < down)
-			{
-				if(moveUp(maze))
-				{
-					this.orientation = 0;
-					return;
-				}
-				else if(down < right)
-				{
-					if(moveDown(maze))
-					{
-						this.orientation = 2;
-						return;
-					}
-				}
-				else moveRight(maze);
-			}
-			else if (right <  up && right < down)
-			{
-				if(moveRight(maze))
-					return;
-				else if (down < up)
-				{
-					if(moveDown(maze))
-					{
-						this.orientation = 2;
-						return;
-					}
-				}
-				else{
-					moveUp(maze);
-					this.orientation = 0;
-				}
-			}
-		}
-		else if(this.orientation == 3) //LEFT
-		{
-			float left = testLeftMove(target);
-			float down = testDownMove(target);
-			float up = testUpMove(target);
-			
-			if(down < up && down < left)
-			{
-				if(moveDown(maze))
-				{
-					this.orientation = 2;
-					return;
-				}
-				else if(up < left)
-				{
-					if(moveUp(maze))
-					{
-						this.orientation = 0;
-						return;
-					}
-				}
-				else moveLeft(maze);
-			}
-			else if(up < left && up < down)
-			{
-				if(moveUp(maze))
-				{
-					this.orientation = 0;
-					return;
-				}
-				else if(down < left)
-				{
-					if(moveDown(maze))
-					{
-						this.orientation = 2;
-						return;
-					}
-				}
-				else moveLeft(maze);
-			}
-			else if (left <  up && left < down)
-			{
-				if(moveLeft(maze))
-					return;
-				else if (down < up)
-				{
-					if(moveDown(maze))
-					{
-						this.orientation = 2;
-						return;
-					}
-				}
-				else {
-					moveUp(maze);
-					this.orientation = 0;
-				}
-			}
-		}
-		
-		if(moveUp(maze) && this.orientation != 2)
-		{
-			this.orientation = 0;
-			return;
-		}
-		else if(moveLeft(maze) && this.orientation != 1)
-		{
-			this.orientation = 3;
-			return;
-		}
-		else if(this.orientation != 0)
-		{
-			moveDown(maze);
-			this.orientation = 2;
-			return;
-		}
-		
-	}
-	
-	private int calculateDistance(int x, int y, Position target)
-	{
-		return (int) Math.sqrt(Math.pow((x - target.x),2) + Math.pow((y - target.y),2));
-	}
-
-	private int testDownMove(Position target) {
-		return calculateDistance(this.position.x, position.y + 1, target);
-	}
-
-	private int testUpMove(Position target) {
-		return calculateDistance(this.position.x, this.position.y-1, target);
-	}
-
-	private int testLeftMove(Position target) {
-		return calculateDistance(position.x - 1, this.position.y, target);
-	}
-
-	private int testRightMove(Position target) {
-		return calculateDistance(position.x + 1, this.position.y, target);
-	}
 
 	public void moveGhost(Maze maze)
 	{
 		if(!maze.isDecisionPoint(getTilePosition(position.x, position.y)))
 		{
-			if(this.orientation == 0 && moveUp(maze))
+			if(this.orientation == 0 && moveUp())
 				return;
-			else if(this.orientation == 2 && moveDown(maze))
+			else if(this.orientation == 2 && moveDown())
 				return;
-			else if(this.orientation == 1 && moveRight(maze))
+			else if(this.orientation == 1 && moveRight())
 				return;
-			else if(this.orientation == 3 && moveLeft(maze))
+			else if(this.orientation == 3 && moveLeft())
 				return;
-			else{
+			else
 				switchMode();
-				System.out.println("Passou pelo 1 if esta no else");
-			}
-				
+
 		}
 		else if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0)
-		{
-			System.out.println("dsnvosdnvsdnv");
 			switchMode();
-		}
 		else
 		{
-			if(this.orientation == 0 && moveUp(maze))
+			if(this.orientation == 0 && moveUp())
 				return;
-			else if(this.orientation == 3 && moveLeft(maze))
+			else if(this.orientation == 3 && moveLeft())
 				return;
-			else if(this.orientation == 2 && moveDown(maze))
+			else if(this.orientation == 2 && moveDown())
 				return ;
-			else if(this.orientation == 1 && moveRight(maze))
+			else if(this.orientation == 1 && moveRight())
 				return;
 			else
 				switchMode();
 		}
 
 	}
-	
+
+	public void switchMode()
+	{
+		if(mode == Mode.CHASE)
+			updateOrientation(Game.pacman.position);
+		else if (mode == Mode.SCATTER)
+			updateOrientation(this.target);
+	}
+
+	public void updateOrientation(Position target)
+	{
+		if(this.orientation == 0) //UP
+			updateOrientationFromUpMovement(target);
+		else if(this.orientation == 1) //RIGHT
+			updateOrientationFromRightMovement(target);
+		else if(this.orientation == 2) //DOWN
+			updateOrientationFromDownMovement(target);
+		else if(this.orientation == 3) //LEFT
+			updateOrientationFromLeftMovement(target);
+	}
+
+	private void updateOrientationFromLeftMovement(Position target) 
+	{
+		float down = testDownMove(target);
+		float up = testUpMove(target);
+		float left = testLeftMove(target);
+
+
+		if(up < left)
+		{
+			if(up < down)
+			{
+				if(moveUp())
+					this.orientation = 0;
+				else if (down < left)
+				{
+					if(moveDown())
+						this.orientation = 2;
+					else moveLeft();
+				}
+				else if(moveLeft())
+					return;
+				else 
+				{
+					moveDown();
+					this.orientation = 2;
+				}
+			}
+			else if(moveDown())
+				this.orientation = 2;
+			else if(moveUp())
+				this.orientation = 0;
+			else moveLeft();
+		}
+		else if(down < left)
+		{
+			if(moveDown())
+				this.orientation = 2;
+			else if(moveLeft())
+				return;
+			else 
+			{
+				moveUp();
+				this.orientation = 0;
+			}
+		}
+		else
+		{
+			if (moveLeft())
+				return;
+			else if(down < up)
+			{
+				if (moveDown())
+					this.orientation = 2;
+				else
+				{
+					moveUp();
+					this.orientation = 0;
+				}
+			}
+			else if(moveUp())
+				this.orientation = 0;
+			else 
+			{
+				moveDown();
+				this.orientation = 2;
+			}
+		}
+	}
+
+	private void updateOrientationFromDownMovement(Position target)	
+	{
+		float left = testLeftMove(target);
+		float right = testRightMove(target);
+		float down = testDownMove(target);
+
+		if(right < down)
+		{
+			if(right < left)
+			{
+				if(moveRight())
+					this.orientation = 1;
+				else if (left < down)
+				{
+					if(moveLeft())
+						this.orientation = 3;
+					else moveDown();
+				}
+				else if(moveDown())
+					return;
+				else
+				{
+					moveLeft();
+					this.orientation = 3;
+				}
+			}
+			else if(moveLeft())
+				this.orientation = 3;
+			else if(moveRight())
+				this.orientation = 1;
+			else moveDown();
+		}
+		else if(left < down)
+		{
+			if(moveLeft())
+				this.orientation = 3;
+			else if(moveDown())
+				return;
+			else 
+			{
+				moveRight();
+				this.orientation = 1;
+			}
+		}
+		else
+		{
+			if (moveDown())
+				return;
+			else if(left < right)
+			{
+				if (moveLeft())
+					this.orientation = 3;
+				else
+				{
+					moveRight();
+					this.orientation = 1;
+				}
+			}
+			else if(moveRight())
+				this.orientation = 1;
+			else 
+			{
+				moveLeft();
+				this.orientation = 3;
+			}
+		}
+	}
+
+	private void updateOrientationFromRightMovement(Position target) 	
+	{
+		float down = testDownMove(target);
+		float up = testUpMove(target);
+		float right = testRightMove(target);
+
+		if(up < right)
+		{
+			if(up < down)
+			{
+				if(moveUp())
+					this.orientation = 0;
+				else if (down < right)
+				{
+					if(moveDown())
+						this.orientation = 2;
+					else moveRight();
+				}
+				else if(moveRight())
+					return;
+				else 
+				{
+					moveDown();
+					this.orientation = 2;
+				}
+			}
+			else if(moveDown())
+				this.orientation = 2;
+			else if(moveUp())
+				this.orientation = 0;
+			else moveRight();
+		}
+		else if(down < right)
+		{
+			if(moveDown())
+				this.orientation = 2;
+			else if(moveRight())
+				return;
+			else 
+			{
+				moveUp();
+				this.orientation = 0;
+			}
+		}
+		else
+		{
+			if (moveRight())
+				return;
+			else if(down < up)
+			{
+				if (moveDown())
+					this.orientation = 2;
+				else
+				{
+					moveUp();
+					this.orientation = 0;
+				}
+			}
+			else if(moveUp())
+				this.orientation = 0;
+			else 
+			{
+				moveDown();
+				this.orientation = 2;
+			}
+		}
+	}
+
+	private void updateOrientationFromUpMovement(Position target) 
+	{
+		float left = testLeftMove(target);
+		float right = testRightMove(target);
+		float up = testUpMove(target);
+
+		if(right < up)
+		{
+			if(right < left)
+			{
+				if(moveRight())
+					this.orientation = 1;
+				else if (left < up)
+				{
+					if(moveLeft())
+						this.orientation = 3;
+					else moveUp();
+				}
+				else if(moveUp())
+					return;
+				else
+				{
+					moveLeft();
+					this.orientation = 3;
+				}
+			}
+			else if(moveLeft())
+				this.orientation = 3;
+			else if(moveRight())
+				this.orientation = 1;
+			else moveUp();
+		}
+		else if(left < up)
+		{
+			if(moveLeft())
+				this.orientation = 3;
+			else if(moveUp())
+				return;
+			else 
+			{
+				moveRight();
+				this.orientation = 1;
+			}
+		}
+		else
+		{
+			if (moveUp())
+				return;
+			else if(left < right)
+			{
+				if (moveLeft())
+					this.orientation = 3;
+				else
+				{
+					moveRight();
+					this.orientation = 1;
+				}
+			}
+			else if(moveRight())
+				this.orientation = 1;
+			else 
+			{
+				moveLeft();
+				this.orientation = 3;
+			}
+		}
+	}
+
+	private float calculateDistance(int x, int y, Position target)
+	{
+		return (float) Math.sqrt(Math.pow((x - target.x),2) + Math.pow((y - target.y),2));
+	}
+
+	private float testDownMove(Position target) {
+		return calculateDistance(this.position.x, position.y + 1, target);
+	}
+
+	private float testUpMove(Position target) {
+		return calculateDistance(this.position.x, this.position.y-1, target);
+	}
+
+	private float testLeftMove(Position target) {
+		return calculateDistance(position.x - 1, this.position.y, target);
+	}
+
+	private float testRightMove(Position target) {
+		return calculateDistance(position.x + 1, this.position.y, target);
+	}
+
+
+
 	//TODO: ainda falta fazer esta função!
 	private void moveToGhostHouse(Maze maze){
 
@@ -410,13 +412,13 @@ public class Ghost extends Character {
 		}
 
 		if(orientation == 0)
-			moveUp(maze);
+			moveUp();
 		else if (orientation == 1)
-			moveRight(maze);
+			moveRight();
 		else if(orientation == 2)
-			moveDown(maze);
+			moveDown();
 		else if(orientation == 3)
-			moveLeft(maze);		
+			moveLeft();		
 
 	}
 
