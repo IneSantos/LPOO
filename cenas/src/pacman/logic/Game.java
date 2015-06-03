@@ -67,17 +67,21 @@ public class Game {
 
 		if(pacman.power == 1)
 		{
+			redGhost.mode = Mode.FRIGHTENED;
+			pinkGhost.mode = Mode.FRIGHTENED;
+			blueGhost.mode = Mode.FRIGHTENED;
+			orangeGhost.mode = Mode.FRIGHTENED;
 			if(comparePosition(pacman.position, redGhost.position)){
-				redGhost.mode = Mode.FRIGHTENED;
+				redGhost.alive = false;
 			}
 			if(comparePosition(pacman.position, pinkGhost.position)){
-				pinkGhost.mode = Mode.FRIGHTENED;
+				pinkGhost.alive = false;
 			}
 			if(comparePosition(pacman.position, blueGhost.position)){
-				blueGhost.mode = Mode.FRIGHTENED;
+				blueGhost.alive = false;
 			}
 			if(comparePosition(pacman.position, orangeGhost.position)){
-				orangeGhost.mode = Mode.FRIGHTENED;
+				orangeGhost.alive = false;
 			}
 		}
 

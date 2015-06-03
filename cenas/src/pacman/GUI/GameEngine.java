@@ -71,6 +71,14 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		game.getOrangeGhost().moveGhost(game.getMaze());
 		game.getBlueGhost().moveGhost(game.getMaze());
 		
+		game.checkLive();
+		System.out.println("Vidas do pacman: " + game.getPacman().lifes);
+		
+		game.checkColision();
+		System.out.println("Power up:" + game.getPacman().getPower());
+		
+		System.out.println("Blue ghost mode: " + 	game.getBlueGhost().mode );
+
 //		System.out.println(game.getRedGhost().getOrientation());
 		
 		repaint();
