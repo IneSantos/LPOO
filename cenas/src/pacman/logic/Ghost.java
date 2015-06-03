@@ -48,6 +48,24 @@ public class Ghost extends Character {
 	{
 		return moveDown(maze);
 	}
+	
+	private boolean tieWin(Maze maze)
+	{
+		// UP > LEFT > DOWN
+		
+		if(!maze.isWall(getTilePosition(position.x, position.y - 1))){
+			return moveUp(maze);
+		}
+		if(!maze.isWall(getTilePosition(position.x - 1, position.y))){
+			return moveLeft(maze);
+		}
+		if(!maze.isWall(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)))
+		{
+			return moveDown(maze);
+		}
+		return false;
+	}
+	
 
 	private boolean frontWin(Maze maze)
 	{
