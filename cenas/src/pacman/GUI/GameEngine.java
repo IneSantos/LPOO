@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import pacman.logic.Game;
-import pacman.logic.Maze;
 import pacman.logic.Position;
 
 @SuppressWarnings("serial")
@@ -20,13 +19,14 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 {
 	final int MILISSECONDS_TO_REFRESH = 20;
 	public static final int TILE_DIMENSION = 20;
+	static final int SPRITE_DIMENSION = 24;
 	Timer  timer;
 	int refresh = 0;
 	
 	int inputKey = 0;
 
 	
-	Game game = new Game();
+	public Game game = new Game();
 		
 	public GameEngine()
 	{
@@ -41,7 +41,6 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		game.getPinkGhost().setPosition(new Position(10*TILE_DIMENSION, 14*TILE_DIMENSION));
 		game.getOrangeGhost().setPosition(new Position(11*TILE_DIMENSION, 14*TILE_DIMENSION));
 		game.getBlueGhost().setPosition(new Position(9*TILE_DIMENSION, 14*TILE_DIMENSION));
-
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -55,7 +54,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		if(refresh++ == 0){
+		if(refresh++ == 0)
+		{
 			game.getPacman().updateAnimation();
 			game.getRedGhost().updateAnimation();
 		}
@@ -67,7 +67,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		game.getOrangeGhost().moveGhost(game.getMaze());
 		game.getBlueGhost().moveGhost(game.getMaze());
 		
-
+		System.out.println(game.getRedGhost().getOrientation());
 		
 		repaint();
 	}
@@ -75,11 +75,9 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void paintComponent(Graphics g)
 	{
-		int mazeWidth = game.getMaze().maze[0].length;
-		int mazeHeight = game.getMaze().maze.length;
 		
-		for(int h = 0; h < mazeHeight; h++)
-			for(int w = 0; w < mazeWidth; w++)
+		for(int h = 0; h < game.mazeHeight; h++)
+			for(int w = 0; w < game.mazeWidth; w++)
 				if(game.getMaze().isWall(new Position(w, h)))
 					g.drawImage(Application.images.wallTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 				else if(game.getMaze().isPoint(new Position(w, h)))
@@ -89,27 +87,22 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 				else g.drawImage(Application.images.backgroundTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 		
 				
-		g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * 24, game.getPacman().getOrientation() * 24, 24, 24), 
+		g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * SPRITE_DIMENSION, game.getPacman().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 					game.getPacman().getX(), game.getPacman().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 		
 		
-		g.drawImage(Application.images.sprites.getSubimage(game.getRedGhost().getAnimation() * 24 +24*4, game.getRedGhost().getOrientation() * 24, 24, 24), 
+		g.drawImage(Application.images.sprites.getSubimage(game.getRedGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*4, game.getRedGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getRedGhost().getX(), game.getRedGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 		
-		g.drawImage(Application.images.sprites.getSubimage(game.getPinkGhost().getAnimation() * 24 +24*8, game.getPinkGhost().getOrientation() * 24, 24, 24), 
+		g.drawImage(Application.images.sprites.getSubimage(game.getPinkGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*8, game.getPinkGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 		
-		g.drawImage(Application.images.sprites.getSubimage(game.getOrangeGhost().getAnimation() * 24 +24*10, game.getOrangeGhost().getOrientation() * 24, 24, 24), 
+		g.drawImage(Application.images.sprites.getSubimage(game.getOrangeGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*10, game.getOrangeGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getOrangeGhost().getX(), game.getOrangeGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 		
-		g.drawImage(Application.images.sprites.getSubimage(game.getBlueGhost().getAnimation() * 24 +24*6, game.getBlueGhost().getOrientation() * 24, 24, 24), 
+		g.drawImage(Application.images.sprites.getSubimage(game.getBlueGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*6, game.getBlueGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getBlueGhost().getX(), game.getBlueGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 		
-
-
-		
-
-		System.out.println(game.getRedGhost().getOrientation());
 		
 	}
 
@@ -132,9 +125,5 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void keyTyped(KeyEvent e) {}
 	
-	public void resetInputKey()
-	{
-		inputKey = 0;
-	}
 
 }

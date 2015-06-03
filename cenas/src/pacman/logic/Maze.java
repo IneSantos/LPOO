@@ -1,5 +1,7 @@
 package pacman.logic;
 
+import pacman.GUI.GameEngine;
+
 public class Maze {
 
 	public char maze[][] =  {
@@ -73,15 +75,19 @@ public class Maze {
 	
 	public boolean isDecisionPoint(Position p)
 	{
-		if(maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'd')
-			return true;
+		if(p.x > 0 && p.x < Game.mazeWidth)
+			if(maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'd')
+				return true;
+		
 		return false;
 	}
 	
 	public boolean isIntPoint(Position p)
 	{
-		if(maze[p.y][p.x] == 'I' || maze[p.y][p.x] == 'i')
-			return true;
+		if(p.x >= 0 && p.x <= Game.mazeWidth)
+			if(maze[p.y][p.x] == 'I' || maze[p.y][p.x] == 'i')
+				return true;
+		
 		return false;
 	}
 	
