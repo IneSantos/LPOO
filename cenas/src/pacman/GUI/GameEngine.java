@@ -30,6 +30,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		
 	public GameEngine()
 	{
+		Application.frame.getContentPane().removeAll();
 		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
 		timer.start();
 		
@@ -65,9 +66,9 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		else refresh = 0;
 				
 		game.getPacman().updateMovement(inputKey, game.getMaze());
-		game.getRedGhost().moveGhost(game.getMaze());
-		game.getPinkGhost().moveGhost(game.getMaze());
-		game.getOrangeGhost().moveGhost(game.getMaze());
+//		game.getRedGhost().moveGhost(game.getMaze());
+//		game.getPinkGhost().moveGhost(game.getMaze());
+//		game.getOrangeGhost().moveGhost(game.getMaze());
 		game.getBlueGhost().moveGhost(game.getMaze());
 		
 		System.out.println(game.getRedGhost().getOrientation());

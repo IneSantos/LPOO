@@ -1,31 +1,43 @@
 package pacman.menus;
 
 import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
-public class MainMenu extends JPanel {
-  
-	private static final long serialVersionUID = 1L;
-	public static JFrame frame;
-	public JPanel panel = new JPanel();
-	public JButton NewGame = new JButton();
-	public JButton settings = new JButton();
-	public JButton scores = new JButton();
-	public JButton android = new JButton();
-	public JButton exit = new JButton();
+import pacman.GUI.Application;
+import pacman.GUI.GameEngine;
+import pacman.GUI.Images;
+
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.FlowLayout;
+
+
+@SuppressWarnings("serial")
+public class MainMenu extends JPanel implements KeyListener , ActionListener{
+
+	final int MILISSECONDS_TO_REFRESH = 20;
+	Timer  timer;
+	String[] opcoes = {"Start", "Settings" , "Exit"};
+	int currOption;
+	int selected ;
+	Color corCurrOption = Color.RED;
+	Color corTexto = Color.YELLOW;
+
 
 	/**
 	 * Launch the application.
 	 */
-/*	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@SuppressWarnings("static-access")
 			public void run() {
 				try {
 					MainMenu window = new MainMenu();
@@ -35,63 +47,96 @@ public class MainMenu extends JPanel {
 				}
 			}
 		});
-	}
+	}*/
 
-	*/
+
 	public MainMenu() {
+		setBounds(232, 5, 10, 10);
 		initialize();
 	}
 
-	
+
 	private void initialize() {
 
-		
-		frame = new JFrame();
-		frame.getContentPane().setForeground(Color.WHITE);
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 481, 413);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		panel.setBackground(Color.BLACK);
+		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
+		timer.start();
 
-		panel.setBounds(0, 0, 475, 384);
-		frame.getContentPane().add(panel);
-		panel.setLayout(null);
-		
-		NewGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		Application.frame.setVisible(true);
+		Application.frame.setResizable(false);
+		Application.frame.setBounds(100, 100, 240, 320);
+		Application.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Application.frame.getContentPane().add(this);
+
+		this.repaint();
+		addKeyListener(this);
+		setFocusable(true);
+		requestFocus();
+	}
+
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		g.drawImage(new Images().gif, 0, 0, Application.frame.getWidth(), Application.frame.getHeight(), null, null);
+		for(int i = 0; i < opcoes.length ; ++i){
+			if(i == currOption){
+				g.setColor(corCurrOption);
 			}
-		});
-		NewGame.setText("New Game");
-		NewGame.setForeground(Color.BLACK);
-		NewGame.setVerticalTextPosition(SwingConstants.CENTER);
-		NewGame.setHorizontalTextPosition(SwingConstants.CENTER);
-		NewGame.setBounds(168, 137, 104, 31);
-		panel.add(NewGame);
-		
-		settings.setText("Settings");
-		settings.setBounds(168, 179, 104, 31);
-		panel.add(settings);
-		
-		//settings.addActionListener(new SettingsListener());
-		
-		scores.setText("Scores");
-		scores.setBounds(168, 221, 104, 31);
-		panel.add(scores);
+			else
+				g.setColor(corTexto);
 
-		android.setText("Android");
-		android.setBounds(168, 263, 104, 31);
-		panel.add(android);
-		
-		exit.setText("Exit");
-		exit.setBounds(168, 305, 104, 31);
-		panel.add(exit);
-		exit.addActionListener(new ExitListener());
-		
-		
-		
-				
-		
-		
+			g.setFont(new Font("Cooper Black", Font.PLAIN, 25));
+			g.drawString(opcoes[i],100, 150 + i*35);
+		}
+
+	}
+
+
+	private void selected(){
+		if(selected == 0){
+			new GameEngine();
+		}
+		else 
+			if(selected == 1){
+				new SettingsListener();
+			}
+			else if(selected == 2){
+				System.exit(0);
+			}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		if(arg0.getKeyCode() == KeyEvent.VK_UP && currOption != 0){
+			this.currOption--;
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_DOWN && currOption != (opcoes.length - 1)){
+			this.currOption++;
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
+			this.selected = currOption;
+			selected();
+		}
+
+	}
+
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+
+		repaint();
 	}
 }

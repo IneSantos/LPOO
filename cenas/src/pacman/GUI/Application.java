@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+import pacman.menus.MainMenu;
+
 public class Application
 {
 	public static JFrame frame;
@@ -16,7 +18,8 @@ public class Application
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.setResizable(false);
 		
-		new GameEngine();
+	//	new GameEngine();
+		new MainMenu();
 		return;
 	}
 }

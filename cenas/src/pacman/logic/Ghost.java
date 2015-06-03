@@ -76,7 +76,10 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else moveUp(maze);
+				else {
+					moveUp(maze);
+					return ;
+				}
 			}
 			else if(left < right && left < up)
 			{
@@ -93,7 +96,10 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else moveUp(maze);
+				else  {
+					moveUp(maze);
+					return ;
+				}
 			}
 			else if (up <  left && up < right)
 			{
@@ -131,7 +137,10 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else moveDown(maze);
+				else {
+					moveDown(maze);
+					return ;
+				}
 			}
 			else if(left < right && left < down)
 			{
@@ -148,7 +157,10 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else moveDown(maze);
+				else  {
+					moveDown(maze);
+					return ;
+				}
 			}
 			else if (down <  left && down < right)
 			{
@@ -162,7 +174,10 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else moveRight(maze);
+				else{
+					moveRight(maze);
+					this.orientation = 1;
+				}
 			}
 		}
 		else if(this.orientation == 1) //RIGHT
@@ -195,9 +210,9 @@ public class Ghost extends Character {
 					this.orientation = 0;
 					return;
 				}
-				else if(right < down)
+				else if(down < right)
 				{
-					if(moveRight(maze))
+					if(moveDown(maze))
 					{
 						this.orientation = 2;
 						return;
@@ -217,7 +232,10 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else moveUp(maze);
+				else{
+					moveUp(maze);
+					this.orientation = 0;
+				}
 			}
 		}
 		else if(this.orientation == 3) //LEFT
@@ -250,9 +268,9 @@ public class Ghost extends Character {
 					this.orientation = 0;
 					return;
 				}
-				else if(left < down)
+				else if(down < left)
 				{
-					if(moveRight(maze))
+					if(moveDown(maze))
 					{
 						this.orientation = 2;
 						return;
@@ -272,7 +290,10 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else moveUp(maze);
+				else {
+					moveUp(maze);
+					this.orientation = 0;
+				}
 			}
 		}
 		
@@ -328,8 +349,11 @@ public class Ghost extends Character {
 				return;
 			else if(this.orientation == 3 && moveLeft(maze))
 				return;
-			else
+			else{
 				switchMode();
+				System.out.println("Passou pelo 1 if esta no else");
+			}
+				
 		}
 		else if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0)
 		{

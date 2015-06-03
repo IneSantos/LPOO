@@ -13,6 +13,7 @@ public class Images {
 	public BufferedImage powerPointTile;
 	public BufferedImage backgroundTile;
 	public BufferedImage wallTile;
+	public BufferedImage gif;
 
 	public Images()
 	{
@@ -24,6 +25,7 @@ public class Images {
 			powerPointTile = ImageIO.read(this.getClass().getResource("/images/powerPoint.png"));
 			backgroundTile = ImageIO.read(this.getClass().getResource("/images/blank.png"));
 			wallTile = ImageIO.read(this.getClass().getResource("/images/wall.PNG"));
+			gif = ImageIO.read(this.getClass().getResource("/images/pacman.gif"));
 		} 
 		catch (IOException e)
 		{
