@@ -7,7 +7,7 @@ public class RedGhost extends Ghost {
 	int animation;
 
 	public RedGhost() {
-		super(new Position(0*GameEngine.TILE_DIMENSION,0));
+		super(new Position(33*GameEngine.TILE_DIMENSION,0));
 		animation = 0;
 	}
 

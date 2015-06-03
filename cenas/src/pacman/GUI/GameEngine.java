@@ -38,6 +38,10 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 
 		game.getPacman().setPosition(new Position(13*TILE_DIMENSION, (17+3)*TILE_DIMENSION));
 		game.getRedGhost().setPosition(new Position(13*TILE_DIMENSION, 14*TILE_DIMENSION));
+		game.getPinkGhost().setPosition(new Position(10*TILE_DIMENSION, 14*TILE_DIMENSION));
+		game.getOrangeGhost().setPosition(new Position(11*TILE_DIMENSION, 14*TILE_DIMENSION));
+		game.getBlueGhost().setPosition(new Position(9*TILE_DIMENSION, 14*TILE_DIMENSION));
+
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -59,6 +63,11 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 				
 		game.getPacman().updateMovement(inputKey, game.getMaze());
 		game.getRedGhost().moveGhost(game.getMaze());
+		game.getPinkGhost().moveGhost(game.getMaze());
+		game.getOrangeGhost().moveGhost(game.getMaze());
+		game.getBlueGhost().moveGhost(game.getMaze());
+		
+
 		
 		repaint();
 	}
@@ -86,6 +95,18 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		
 		g.drawImage(Application.images.sprites.getSubimage(game.getRedGhost().getAnimation() * 24 +24*4, game.getRedGhost().getOrientation() * 24, 24, 24), 
 				game.getRedGhost().getX(), game.getRedGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
+		
+		g.drawImage(Application.images.sprites.getSubimage(game.getPinkGhost().getAnimation() * 24 +24*8, game.getPinkGhost().getOrientation() * 24, 24, 24), 
+				game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
+		
+		g.drawImage(Application.images.sprites.getSubimage(game.getOrangeGhost().getAnimation() * 24 +24*10, game.getOrangeGhost().getOrientation() * 24, 24, 24), 
+				game.getOrangeGhost().getX(), game.getOrangeGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
+		
+		g.drawImage(Application.images.sprites.getSubimage(game.getBlueGhost().getAnimation() * 24 +24*6, game.getBlueGhost().getOrientation() * 24, 24, 24), 
+				game.getBlueGhost().getX(), game.getBlueGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
+		
+
+
 		
 
 		System.out.println(game.getRedGhost().getOrientation());

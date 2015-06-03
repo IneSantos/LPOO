@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Game {
 	//21x26
+	//28x36
 	
 	static Pacman pacman = new Pacman();	
 	static RedGhost redGhost = new RedGhost();
@@ -28,6 +29,20 @@ public class Game {
 	public RedGhost getRedGhost(){
 		return redGhost;
 	}
+	
+	public PinkGhost getPinkGhost(){
+		return pinkGhost;
+	}
+	
+	public OrangeGhost getOrangeGhost(){
+		return orangeGhost;
+	}
+	
+	public BlueGhost getBlueGhost(){
+		return blueGhost;
+	}
+	
+
 	
 /*
 	public static void main(String[] args) {
