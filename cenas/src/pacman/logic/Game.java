@@ -12,6 +12,8 @@ public class Game {
 	static OrangeGhost orangeGhost = new OrangeGhost();
 	static BlueGhost blueGhost = new BlueGhost();
 	static Maze maze = new Maze();
+	public static int mazeWidth = maze.maze[0].length;
+	public static int mazeHeight = maze.maze.length;
 	
 	int level;
 
