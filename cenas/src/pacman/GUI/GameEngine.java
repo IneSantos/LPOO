@@ -65,7 +65,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		}
 		else refresh = 0;
 				
-		game.getPacman().updateMovement(inputKey, game.getMaze());
+		game.getPacman().updateMovement(inputKey);
 		game.getRedGhost().moveGhost(game.getMaze());
 		game.getPinkGhost().moveGhost(game.getMaze());
 		game.getOrangeGhost().moveGhost(game.getMaze());
