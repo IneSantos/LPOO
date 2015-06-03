@@ -16,7 +16,7 @@ public class Ghost extends Character {
 
 	public Ghost(Position target){
 		this.orientation = 3; //sempre que sai da casa sai com a orientacao para a esquerda
-		this.mode = Mode.CHASE;
+		this.mode = Mode.SCATTER;
 		this.velocity = 2;
 		this.alive = true;
 		this.target = target;
@@ -27,11 +27,11 @@ public class Ghost extends Character {
 		int rand = random.nextInt(4);
 		return rand;
 	}
-
+	
 	private boolean tieWin(Maze maze)
 	{
 		// UP > LEFT > DOWN
-
+		
 		if(!maze.isWall(getTilePosition(position.x, position.y - 1))){
 			return moveUp(maze);
 		}
@@ -44,219 +44,31 @@ public class Ghost extends Character {
 		}
 		return false;
 	}
-
-	private boolean moveFront(Maze maze)
-	{
-		switch(this.orientation)
-		{
-		case 0:
-			return moveUp(maze);
-		case 1:
-			return moveRight(maze);
-		case 2:
-			return moveDown(maze);
-		case 3:
-			return moveLeft(maze);
-		}
-
-		return true;
-	}
-
-
-	public void updateOrientation()
+	
+	public void switchMode()
 	{
 		if(mode == Mode.CHASE)
-			updateOrientationChase(Game.maze, Game.pacman.position);
+			updateOrientation(Game.maze, Game.pacman.position);
 		else if (mode == Mode.SCATTER)
-			updateOrientationScatter(Game.maze, this.target);
+			updateOrientation(Game.maze, this.target);
 	}
 
-	public void updateOrientationChase(Maze maze, Position target)
+	public void updateOrientation(Maze maze, Position target)
 	{
-		System.out.println("chase");
-		//OrientationPar -> Vertical
-		if(this.orientation%2 == 0)
+		if(this.orientation == 0) //UP
 		{
 			float right = testRightMove(target);
 			float left = testLeftMove(target);
-			float front = testFrontMove(target);
-
-			if(right < left && right < front) //Caminho a direita mais proximo de target
-			{
-				if(moveRight(maze)) //Se puder mover para a direita, altera orientacao
-				{
-					this.orientation = 1;
-					return;
-				}
-				// Se nao puder mover para a direita
-				else if(left < front)  //Se a distancia pela esquerda for menor do que continuar em frente
-				{
-					if(moveLeft(maze))	//Se puder mover para a esquerda altera orientacao
-					{
-						this.orientation = 3;
-						return;
-					}
-				}
-				else if (!moveFront(maze)) // Se mover em frente for a melhor opcao, verifica se pode mover ou nao. caso nao posse,mve para a esquerda
-				{
-					this.orientation = 3;
-					moveLeft(maze);
-					return;
-				}
-			}
-
-			if(left < front && left < right)
-			{
-				if(moveLeft(maze))
-				{
-					this.orientation = 3;
-					return;
-				}
-				else if(right < front)
-				{
-					if(moveRight(maze))
-					{
-						this.orientation = 1;
-						return;
-					}
-				}
-				else if (!moveFront(maze))
-				{
-					this.orientation = 1;
-					moveRight(maze);
-					return;
-				}
-			}
-
-			if(front < left && front < right)
-			{
-				if(moveFront(maze))
-					return;
-				else if (right < left)
-				{
-					if(moveRight(maze))
-						this.orientation = 1;
-					return;
-				}
-				else if (moveLeft(maze))
-				{
-					this.orientation = 3;
-					moveLeft(maze);
-					return;
-				}
-				else 
-				{
-					this.orientation = 1;
-					moveRight(maze);
-					return;
-				}
-
-			}
-		}
-		//OrientationImpar -> Horizontal
-		else
-		{
 			float up = testUpMove(target);
-			float down = testDownMove(target);
-			float front = testFrontMove(target);
-
-			System.out.println("mouco");
-
-			if(up < down && up < front)
-			{				
-				if(moveUp(maze))
-				{
-					this.orientation = 0;
-					return;
-				}
-				else if(down < front)
-				{
-					if(moveDown(maze))
-					{
-						this.orientation = 2;
-						return;
-					}
-				}
-				else if (!moveFront(maze))
-				{
-					this.orientation = 2;
-					moveDown(maze);
-					return;
-				}
-			}
-
-			if(down < front && down < up)
-			{
-				if(moveDown(maze))
-				{
-					this.orientation = 2;
-					return;
-				}
-				else if(up < front)
-				{
-					if(moveUp(maze))
-					{
-						this.orientation = 0;
-						return;
-					}
-				}
-				else if (!moveFront(maze))
-				{
-					this.orientation = 0;
-					moveUp(maze);
-					return;
-				}
-			}
-
-			if(front < down && front < up)
-			{
-				if(moveFront(maze))
-					return;
-				else if (up < down)
-				{
-					if(moveUp(maze))
-					{
-						this.orientation = 0;
-						return;
-					}
-				}
-				else if (moveDown(maze))
-				{
-					this.orientation = 2;
-					moveDown(maze);
-					return;
-				}
-				else 
-				{
-					this.orientation = 0;
-					moveUp(maze);
-					return;
-				}
-
-			}
-		}
-	}
-
-	public void updateOrientationScatter(Maze maze, Position target)
-	{
-
-		//Par -> Vertical
-		if(this.orientation%2 == 0)
-		{
-			float right = testRightMove(target);
-			float left = testLeftMove(target);
-			float front = testFrontMove(target);
-
-			System.out.println(right + "    " + front);
-
-			if(right < left && right < front)
+			
+			if(right < up && right < left)
 			{
 				if(moveRight(maze))
 				{
 					this.orientation = 1;
 					return;
 				}
-				else if(left < front)
+				else if(left < up)
 				{
 					if(moveLeft(maze))
 					{
@@ -264,22 +76,16 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else if (!moveFront(maze))
-				{
-					this.orientation = 3;
-					moveLeft(maze);
-					return;
-				}
+				else moveUp(maze);
 			}
-
-			else if(left < front && left < right)
+			else if(left < right && left < up)
 			{
 				if(moveLeft(maze))
 				{
 					this.orientation = 3;
 					return;
 				}
-				else if(right < front)
+				else if(right < up)
 				{
 					if(moveRight(maze))
 					{
@@ -287,55 +93,123 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else if (!moveFront(maze))
+				else moveUp(maze);
+			}
+			else if (up <  left && up < right)
+			{
+				if(moveUp(maze))
+					return;
+				else if (left < right)
+				{
+					if(moveLeft(maze))
+					{
+						this.orientation = 3;
+						return;
+					}
+				}
+				else moveRight(maze);
+			}
+		}
+		else if(this.orientation == 2) //DOWN
+		{
+			float right = testRightMove(target);
+			float left = testLeftMove(target);
+			float down = testDownMove(target);
+			
+			if(right < down && right < left)
+			{
+				if(moveRight(maze))
 				{
 					this.orientation = 1;
-					moveRight(maze);
 					return;
 				}
-			}
-
-			else if(front < left && front < right)
-			{
-				if(moveFront(maze))
-					return;
-				else if (right < left)
+				else if(left < down)
 				{
-					if(moveRight(maze))
-						this.orientation = 1;
-					return;
+					if(moveLeft(maze))
+					{
+						this.orientation = 3;
+						return;
+					}
 				}
-				else if (moveLeft(maze))
+				else moveDown(maze);
+			}
+			else if(left < right && left < down)
+			{
+				if(moveLeft(maze))
 				{
 					this.orientation = 3;
-					moveLeft(maze);
 					return;
 				}
-				else 
+				else if(right < down)
 				{
-					this.orientation = 1;
-					moveRight(maze);
+					if(moveRight(maze))
+					{
+						this.orientation = 1;
+						return;
+					}
+				}
+				else moveDown(maze);
+			}
+			else if (down <  left && down < right)
+			{
+				if(moveDown(maze))
+					return;
+				else if (left < right)
+				{
+					if(moveLeft(maze))
+					{
+						this.orientation = 3;
+						return;
+					}
+				}
+				else moveRight(maze);
+			}
+		}
+		else if(this.orientation == 1) //RIGHT
+		{
+			float right = testRightMove(target);
+			float down = testDownMove(target);
+			float up = testUpMove(target);
+			
+			if(down < up && down < right)
+			{
+				if(moveDown(maze))
+				{
+					this.orientation = 2;
 					return;
 				}
-
+				else if(up < right)
+				{
+					if(moveUp(maze))
+					{
+						this.orientation = 0;
+						return;
+					}
+				}
+				else moveRight(maze);
 			}
-			return;
-		}
-		//Impar -> Horizontal
-		else
-		{
-			float up = testUpMove(target);
-			float down = testDownMove(target);
-			float front = testFrontMove(target);
-
-			if(up < down && up < front)
+			else if(up < right && up < down)
 			{
 				if(moveUp(maze))
 				{
 					this.orientation = 0;
 					return;
 				}
-				else if(down < front)
+				else if(right < down)
+				{
+					if(moveRight(maze))
+					{
+						this.orientation = 2;
+						return;
+					}
+				}
+				else moveRight(maze);
+			}
+			else if (right <  up && right < down)
+			{
+				if(moveRight(maze))
+					return;
+				else if (down < up)
 				{
 					if(moveDown(maze))
 					{
@@ -343,22 +217,23 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else if (!moveFront(maze))
-				{
-					this.orientation = 2;
-					moveLeft(maze);
-					return;
-				}
+				else moveUp(maze);
 			}
-
-			else if(down < front && down < up)
+		}
+		else if(this.orientation == 3) //LEFT
+		{
+			float left = testLeftMove(target);
+			float down = testDownMove(target);
+			float up = testUpMove(target);
+			
+			if(down < up && down < left)
 			{
 				if(moveDown(maze))
 				{
 					this.orientation = 2;
 					return;
 				}
-				else if(up < front)
+				else if(up < left)
 				{
 					if(moveUp(maze))
 					{
@@ -366,84 +241,83 @@ public class Ghost extends Character {
 						return;
 					}
 				}
-				else if (!moveFront(maze))
-				{
-					this.orientation = 0;
-					moveUp(maze);
-					return;
-				}
+				else moveLeft(maze);
 			}
-
-			else if(front < down && front < up)
+			else if(up < left && up < down)
 			{
-				if(moveFront(maze))
-					return;
-				else if (up < down)
-				{
-					if(moveUp(maze))
-						this.orientation = 0;
-					return;
-				}
-				else if (moveDown(maze))
-				{
-					this.orientation = 2;
-					moveDown(maze);
-					return;
-				}
-				else 
+				if(moveUp(maze))
 				{
 					this.orientation = 0;
-					moveUp(maze);
 					return;
 				}
-
+				else if(left < down)
+				{
+					if(moveRight(maze))
+					{
+						this.orientation = 2;
+						return;
+					}
+				}
+				else moveLeft(maze);
 			}
+			else if (left <  up && left < down)
+			{
+				if(moveLeft(maze))
+					return;
+				else if (down < up)
+				{
+					if(moveDown(maze))
+					{
+						this.orientation = 2;
+						return;
+					}
+				}
+				else moveUp(maze);
+			}
+		}
+		
+		if(moveUp(maze) && this.orientation != 2)
+		{
+			this.orientation = 0;
 			return;
 		}
-	}
-
-
-
-	private float calculateDistance(int x, int y, Position target)
-	{
-		return (float) Math.sqrt(Math.pow((x - target.x),2) + Math.pow((y - target.y),2));
-	}
-
-	private float testFrontMove(Position target)
-	{
-		switch(this.orientation)
+		else if(moveLeft(maze) && this.orientation != 1)
 		{
-		case 0:	
-			return testUpMove(target);
-		case 1:
-			return testRightMove(target);
-		case 2:
-			return testDownMove(target);
-		case 3:
-			return testLeftMove(target);
+			this.orientation = 3;
+			return;
 		}
-
-		return 0;
+		else if(this.orientation != 0)
+		{
+			moveDown(maze);
+			this.orientation = 2;
+			return;
+		}
+		
+	}
+	
+	private int calculateDistance(int x, int y, Position target)
+	{
+		return (int) Math.sqrt(Math.pow((x - target.x),2) + Math.pow((y - target.y),2));
 	}
 
-	private float testDownMove(Position target) {
+	private int testDownMove(Position target) {
 		return calculateDistance(this.position.x, position.y + 1, target);
 	}
 
-	private float testUpMove(Position target) {
+	private int testUpMove(Position target) {
 		return calculateDistance(this.position.x, this.position.y-1, target);
 	}
 
-	private float testLeftMove(Position target) {
+	private int testLeftMove(Position target) {
 		return calculateDistance(position.x - 1, this.position.y, target);
 	}
 
-	private float testRightMove(Position target) {
+	private int testRightMove(Position target) {
 		return calculateDistance(position.x + 1, this.position.y, target);
 	}
 
-	public void moveGhost(Maze maze){
-
+	public void moveGhost(Maze maze)
+	{
 		if(!maze.isDecisionPoint(getTilePosition(position.x, position.y)))
 		{
 			if(this.orientation == 0 && moveUp(maze))
@@ -455,23 +329,29 @@ public class Ghost extends Character {
 			else if(this.orientation == 3 && moveLeft(maze))
 				return;
 			else
-				updateOrientation();
+				switchMode();
 		}
 		else if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0)
-			updateOrientation();
+		{
+			System.out.println("dsnvosdnvsdnv");
+			switchMode();
+		}
 		else
 		{
-			if(this.orientation == 0)
-				moveUp(maze);
-			else if(this.orientation == 2)
-				moveDown(maze);
-			else if(this.orientation == 1)
-				moveRight(maze);
-			else if(this.orientation == 3)
-				moveLeft(maze);
+			if(this.orientation == 0 && moveUp(maze))
+				return;
+			else if(this.orientation == 3 && moveLeft(maze))
+				return;
+			else if(this.orientation == 2 && moveDown(maze))
+				return ;
+			else if(this.orientation == 1 && moveRight(maze))
+				return;
+			else
+				switchMode();
 		}
 
 	}
+	
 	//TODO: ainda falta fazer esta função!
 	private void moveToGhostHouse(Maze maze){
 
