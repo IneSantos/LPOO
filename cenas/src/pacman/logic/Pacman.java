@@ -74,7 +74,7 @@ public class Pacman extends Character {
 		else if(orientation == 3)
 			moveLeft();
 
-		Position tile = getTilePosition(Game.pacman.position.x, Game.pacman.position.y);
+		Position tile = getTilePosition(Game.pacman.position.x + GameEngine.TILE_DIMENSION/2, Game.pacman.position.y + GameEngine.TILE_DIMENSION/2);
 
 		if(Game.maze.isPoint(tile))
 		{
