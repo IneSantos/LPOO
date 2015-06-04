@@ -117,9 +117,14 @@ public class Pacman extends Character {
 		return score;
 	}
 
-	public boolean getKilled() {
-		// TODO Auto-generated method stub
-		return false;
+	public int getLifes()
+	{
+		return lifes;
+	}
+
+	public void setAlive(boolean b) {
+		this.alive = b;
+		
 	}
 
 }

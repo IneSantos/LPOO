@@ -25,26 +25,34 @@ public class Game {
 	int ghost_wave = 0;
 	int collected_pills = 0;
 	
-	public static Mode ghostMode = Mode.CHASE;
+	public static Mode ghostMode;
 	
 	public Game()
 	{
 		pacman = new Pacman();
+		maze = new Maze();
+		
+		initLevel(1);
+		
+		mazeWidth = maze.maze[0].length;
+		mazeHeight = maze.maze.length;
+
+	}
+	
+	public void initLevel(int level)
+	{
 		redGhost = new RedGhost();
 		pinkGhost = new PinkGhost();
 		orangeGhost = new OrangeGhost();
 		blueGhost = new BlueGhost();
-		maze = new Maze();
 		
-		mazeWidth = maze.maze[0].length;
-		mazeHeight = maze.maze.length;
-		
-		pacman.setPosition(new Position(13*GameEngine.TILE_DIMENSION, (17+3)*GameEngine.TILE_DIMENSION));
 		redGhost.setPosition(new Position(13*GameEngine.TILE_DIMENSION, 14*GameEngine.TILE_DIMENSION));
 		pinkGhost.setPosition(new Position(13*GameEngine.TILE_DIMENSION, 18*GameEngine.TILE_DIMENSION));
 		blueGhost.setPosition(new Position(13*GameEngine.TILE_DIMENSION, 18*GameEngine.TILE_DIMENSION));
 		orangeGhost.setPosition(new Position(14*GameEngine.TILE_DIMENSION, 18*GameEngine.TILE_DIMENSION));
-
+		pacman.setPosition(new Position(13*GameEngine.TILE_DIMENSION, (17+3)*GameEngine.TILE_DIMENSION));
+		
+		ghostMode = Mode.CHASE;
 	}
 
 	public Pacman getPacman()
@@ -88,6 +96,7 @@ public class Game {
 					|| pacman.position.equals(orangeGhost.position) && orangeGhost.getAlive())
 			{
 				pacman.lifes--;
+				System.out.println(Game.pacman.getLifes());
 				pacman.alive = false;
 			}
 		}

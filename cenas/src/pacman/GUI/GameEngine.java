@@ -11,7 +11,11 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import pacman.logic.BlueGhost;
 import pacman.logic.Game;
+import pacman.logic.OrangeGhost;
+import pacman.logic.PinkGhost;
+import pacman.logic.RedGhost;
 import pacman.logic.Game.Mode;
 import pacman.logic.Position;
 import pacman.menus.MainMenu;
@@ -27,6 +31,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 
 	int inputKey = 0;
 	private int deathAnimation = 0;
+	int startAnimation = -1;
 
 
 	public static Game game;;
@@ -35,15 +40,15 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	{
 		Application.frame.getContentPane().removeAll();
 		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
-		timer.start();
-		
+
 		Application.frame.getContentPane().removeAll();
 
 		game = new Game();
-		
+
 		this.setPreferredSize(new Dimension(game.getMaze().maze[0].length*TILE_DIMENSION, game.getMaze().maze.length*TILE_DIMENSION));
 		Application.frame.getContentPane().add(this, BorderLayout.CENTER);
-		
+		System.out.println(Game.pacman.getLifes());
+
 		addKeyListener(this);
 		setFocusable(true);
 		requestFocus();
@@ -68,21 +73,22 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			game.getBlueGhost().updateAnimation();
 		}	
 
+		
 		//Verificacao do power up do pacman
 		if(Game.pacman.getPower() > 0 && refresh %  25== 0)
 		{
 			Game.pacman.decPower();
-			
+
 			if(Game.pacman.getPower() == 0)
 				Game.ghostMode = Mode.CHASE;
 		}
-		
+
 		//Atualizacao do comportamento dos fantasmas
 		if(refresh == 50*7 || refresh == 50*34 || refresh == 50*59 || refresh == 50*84)
 			Game.ghostMode = Mode.CHASE;
 		else if(refresh == 50*27 || refresh == 50*54 || refresh == 50*79)
 			Game.ghostMode = Mode.SCATTER;
-		
+
 		//Actualizacao do movimento dos elementos da cena
 		if(Game.pacman.getAlive())
 			game.getPacman().updateMovement(inputKey);
@@ -90,10 +96,11 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		game.getPinkGhost().moveGhost();
 		game.getOrangeGhost().moveGhost();
 		game.getBlueGhost().moveGhost();
-		
+
 		//Verificacao de colisoes entre elementos da cena
-		game.checkCharacterColision();
-		
+		if(Game.pacman.getAlive())
+			game.checkCharacterColision();
+
 		//verificacoes de arrnaque de Orange e Blue
 		if(game.getCollectedPills() >= 30 && game.getBlueGhost().house)
 		{
@@ -105,17 +112,34 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			game.getOrangeGhost().setOrientation(0);
 			game.getOrangeGhost().house = false;
 		}
-		
+
 		//Verificacao de fim do jogo
 		if(game.getCollectedPills() == Game.maze.getPills() || (!Game.pacman.getAlive() && this.deathAnimation == 11))
 		{
 			timer.stop();
-			try {
-				this.finalize();
-			} catch (Throwable e1) {
+			this.deathAnimation = 0;
+
+			if(Game.pacman.getLifes() == 0)
+			{
+				try { this.finalize();}
+				catch (Throwable e1) {}
+				new MainMenu();
 			}
-			new MainMenu();
-		}	
+			else
+			{
+				game.initLevel(1);
+				Game.pacman.setAlive(true);
+				Game.pacman.setOrientation(2);
+				
+				this.startAnimation = -1;
+				repaint();
+				refresh = 0;
+			}
+			
+		}
+		
+		
+		
 		repaint();
 	}
 
@@ -140,12 +164,12 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		{
 			g.drawImage(Application.images.deathAnimation.getSubimage(this.deathAnimation*50, 0, 50, 57), 
 					game.getPacman().getX(), game.getPacman().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			
+
 			if(refresh % 4 == 0)
-			deathAnimation++;
+				deathAnimation++;
 		}
 
-		
+
 		if(game.getRedGhost().getAlive())
 		{
 			if(Game.pacman.getPower() == 0)
@@ -160,8 +184,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		}
 		else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getRedGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getRedGhost().getX(), game.getRedGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			
-		
+
+
 		if(game.getPinkGhost().getAlive())
 		{
 			if(Game.pacman.getPower() == 0)
@@ -172,12 +196,12 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 						game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 					game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			
+
 		}
 		else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getPinkGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 
-		
+
 		if(game.getOrangeGhost().getAlive())
 		{
 			if(Game.pacman.getPower() == 0)
@@ -193,7 +217,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getOrangeGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getPinkGhost().getX(), game.getOrangeGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 
-		
+
 		if(game.getBlueGhost().getAlive())
 		{
 			if(Game.pacman.getPower() == 0)
@@ -208,21 +232,22 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getBlueGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getPinkGhost().getX(), game.getBlueGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 
-		
+		if(startAnimation <= 5)
+		{
+			g.drawImage(Application.images.startScreen, startAnimation * Application.frame.getContentPane().getWidth()/10, startAnimation * Application.frame.getContentPane().getHeight()/10, 
+					Application.frame.getContentPane().getWidth() - startAnimation * Application.frame.getContentPane().getWidth()/5, 
+					Application.frame.getContentPane().getHeight() - startAnimation * Application.frame.getContentPane().getHeight()/5, null);
 
-
-		if(game.getPacman().getAlive()){
+			startAnimation++;
 		}
-
-		if(game.getLevel() == 1){
-
-		}
-
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
+		if(!timer.isRunning())
+			timer.start();
+
 		if(e.getKeyCode() == KeyEvent.VK_UP )
 			inputKey = KeyEvent.VK_UP;
 		else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
@@ -231,6 +256,16 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			inputKey = KeyEvent.VK_DOWN;
 		else if(e.getKeyCode() == KeyEvent.VK_LEFT)
 			inputKey = KeyEvent.VK_LEFT;
+		else if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+		{
+			if(timer.isRunning())
+			{
+				timer.stop();
+				repaint();
+				startAnimation = 0;
+			}
+
+		}
 	}
 
 	@Override
