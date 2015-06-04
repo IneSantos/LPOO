@@ -86,7 +86,10 @@ public class Game {
 					|| pacman.position.equals(pinkGhost.position) && pinkGhost.getAlive()
 					|| pacman.position.equals(blueGhost.position) && blueGhost.getAlive()
 					|| pacman.position.equals(orangeGhost.position) && orangeGhost.getAlive())
-			pacman.alive = false;;
+			{
+				pacman.lifes--;
+				pacman.alive = false;
+			}
 		}
 		if(pacman.power_timer > 0)
 		{			

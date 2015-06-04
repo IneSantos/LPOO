@@ -26,6 +26,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	int refresh = 0;
 
 	int inputKey = 0;
+	private int deathAnimation = 0;
 
 
 	public static Game game;;
@@ -83,7 +84,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			Game.ghostMode = Mode.SCATTER;
 		
 		//Actualizacao do movimento dos elementos da cena
-		game.getPacman().updateMovement(inputKey);
+		if(Game.pacman.getAlive())
+			game.getPacman().updateMovement(inputKey);
 		game.getRedGhost().moveGhost();
 		game.getPinkGhost().moveGhost();
 		game.getOrangeGhost().moveGhost();
@@ -104,8 +106,8 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			game.getOrangeGhost().house = false;
 		}
 		
-		//Verificacao de terminacao do jogo
-		if(game.getCollectedPills() == Game.maze.getPills() || !Game.pacman.getAlive())
+		//Verificacao de fim do jogo
+		if(game.getCollectedPills() == Game.maze.getPills() || (!Game.pacman.getAlive() && this.deathAnimation == 11))
 		{
 			timer.stop();
 			try {
@@ -114,7 +116,6 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			}
 			new MainMenu();
 		}	
-		
 		repaint();
 	}
 
@@ -132,10 +133,17 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 					g.drawImage(Application.images.powerPointTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 				else g.drawImage(Application.images.backgroundTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 
-
-		g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * SPRITE_DIMENSION, game.getPacman().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-				game.getPacman().getX(), game.getPacman().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-
+		if(Game.pacman.getAlive())
+			g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * SPRITE_DIMENSION, game.getPacman().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+					game.getPacman().getX(), game.getPacman().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
+		else 
+		{
+			g.drawImage(Application.images.deathAnimation.getSubimage(this.deathAnimation*50, 0, 50, 57), 
+					game.getPacman().getX(), game.getPacman().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
+			
+			if(refresh % 4 == 0)
+			deathAnimation++;
+		}
 
 		
 		if(game.getRedGhost().getAlive())

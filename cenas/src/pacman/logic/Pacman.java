@@ -14,7 +14,8 @@ public class Pacman extends Character {
 	int score;
 	int animation;
 	int power_timer;
-	public int lifes;
+	int lifes;
+	
 
 	public Pacman()
 	{
@@ -114,6 +115,11 @@ public class Pacman extends Character {
 	public int getScore()
 	{
 		return score;
+	}
+
+	public boolean getKilled() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

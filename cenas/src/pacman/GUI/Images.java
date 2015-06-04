@@ -14,6 +14,7 @@ public class Images {
 	public BufferedImage backgroundTile;
 	public BufferedImage wallTile;
 	public BufferedImage gif;
+	public BufferedImage deathAnimation;
 
 	public Images()
 	{
@@ -26,6 +27,7 @@ public class Images {
 			backgroundTile = ImageIO.read(this.getClass().getResource("/images/blank.png"));
 			wallTile = ImageIO.read(this.getClass().getResource("/images/wall.PNG"));
 			gif = ImageIO.read(this.getClass().getResource("/images/pacman.gif"));
+			deathAnimation = ImageIO.read(this.getClass().getResource("/images/deathAnimation.png"));
 		} 
 		catch (IOException e)
 		{
