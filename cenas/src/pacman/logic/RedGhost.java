@@ -9,6 +9,7 @@ public class RedGhost extends Ghost {
 	public RedGhost() {
 		super(new Position(33*GameEngine.TILE_DIMENSION,0));
 		animation = 0;
+		house = false;
 	}
 
 	public int updateAnimation()
@@ -24,14 +25,6 @@ public class RedGhost extends Ghost {
 	public int getAnimation()
 	{
 		return animation;	
-	}
-
-	public void switchMode()
-	{
-		if(mode == Mode.CHASE)
-			updateOrientation(Game.pacman.position);
-		else if (mode == Mode.SCATTER)
-			updateOrientation(this.target);
 	}
 
 }

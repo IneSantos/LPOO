@@ -1,25 +1,51 @@
 package pacman.logic;
 
-import java.util.Scanner;
-
 import pacman.GUI.GameEngine;
-import pacman.logic.Ghost.Mode;
+import pacman.menus.MainMenu;
 
 public class Game {
 	//21x26
 	//28x36
+	
+	public enum Mode {
+		CHASE , SCATTER , FRIGHTENED
+	}
 
-	static Pacman pacman = new Pacman();	
-	static RedGhost redGhost = new RedGhost();
-	static PinkGhost pinkGhost = new PinkGhost();
-	static OrangeGhost orangeGhost = new OrangeGhost();
-	static BlueGhost blueGhost = new BlueGhost();
-	static Maze maze = new Maze();
-	public static int mazeWidth = maze.maze[0].length;
-	public static int mazeHeight = maze.maze.length;
-
+	public static Pacman pacman;	
+	static RedGhost redGhost;
+	static PinkGhost pinkGhost;
+	static OrangeGhost orangeGhost;
+	static BlueGhost blueGhost;
+	public static Maze maze;
+	
+	public static int mazeWidth;
+	public static int mazeHeight;
+	
 	int level;
+	int ghost_wave = 0;
+	int collected_pills = 0;
+	
+	public static Mode ghostMode = Mode.CHASE;
+	
+	public Game()
+	{
+		pacman = new Pacman();
+		redGhost = new RedGhost();
+		pinkGhost = new PinkGhost();
+		orangeGhost = new OrangeGhost();
+		blueGhost = new BlueGhost();
+		maze = new Maze();
+		
+		mazeWidth = maze.maze[0].length;
+		mazeHeight = maze.maze.length;
+		
+		pacman.setPosition(new Position(13*GameEngine.TILE_DIMENSION, (17+3)*GameEngine.TILE_DIMENSION));
+		redGhost.setPosition(new Position(13*GameEngine.TILE_DIMENSION, 14*GameEngine.TILE_DIMENSION));
+		pinkGhost.setPosition(new Position(13*GameEngine.TILE_DIMENSION, 18*GameEngine.TILE_DIMENSION));
+		blueGhost.setPosition(new Position(13*GameEngine.TILE_DIMENSION, 18*GameEngine.TILE_DIMENSION));
+		orangeGhost.setPosition(new Position(14*GameEngine.TILE_DIMENSION, 18*GameEngine.TILE_DIMENSION));
 
+	}
 
 	public Pacman getPacman()
 	{
@@ -47,51 +73,38 @@ public class Game {
 		return blueGhost;
 	}
 	
-	public int getLevel(){
+	public int getLevel()
+	{
 		return level;
 	}
 
-	public boolean comparePosition(Position p1, Position p2){
-		if(p1.x % GameEngine.TILE_DIMENSION == 0 && p1.y % GameEngine.TILE_DIMENSION == 0)
-				return (p1.x == p2.x && p1.y == p2.y);
-		return false;
-	}
-
-	public void checkLive(){
-
-		if(pacman.lifes > 0 && pacman.power == 0){
-			if(comparePosition(pacman.position, redGhost.position) || comparePosition(pacman.position, pinkGhost.position) || comparePosition(pacman.position, blueGhost.position) || comparePosition(pacman.position, orangeGhost.position)){
-				pacman.lifes --;
-				return;
-			}
-		}
-		if(pacman.lifes == 0)
-			pacman.alive = false;
-	}
-
-
-	public void checkColision(){
-
-		if(pacman.power == 1)
+	public void checkCharacterColision()
+	{
+		if(pacman.power_timer == 0)
 		{
-			redGhost.mode = Mode.FRIGHTENED;
-			pinkGhost.mode = Mode.FRIGHTENED;
-			blueGhost.mode = Mode.FRIGHTENED;
-			orangeGhost.mode = Mode.FRIGHTENED;
-			if(comparePosition(pacman.position, redGhost.position)){
+			if(pacman.position.equals(redGhost.position) && redGhost.getAlive()
+					|| pacman.position.equals(pinkGhost.position) && pinkGhost.getAlive()
+					|| pacman.position.equals(blueGhost.position) && blueGhost.getAlive()
+					|| pacman.position.equals(orangeGhost.position) && orangeGhost.getAlive())
+			pacman.alive = false;;
+		}
+		if(pacman.power_timer > 0)
+		{			
+			if(pacman.position.equals(redGhost.position))
 				redGhost.alive = false;
-			}
-			if(comparePosition(pacman.position, pinkGhost.position)){
+			if(pacman.position.equals(pinkGhost.position))
 				pinkGhost.alive = false;
-			}
-			if(comparePosition(pacman.position, blueGhost.position)){
+			if(pacman.position.equals(blueGhost.position))
 				blueGhost.alive = false;
-			}
-			if(comparePosition(pacman.position, orangeGhost.position)){
+			if(pacman.position.equals(orangeGhost.position))
 				orangeGhost.alive = false;
-			}
 		}
 
+	}
+
+	public int getCollectedPills()
+	{
+		return collected_pills;
 	}
 	
 	

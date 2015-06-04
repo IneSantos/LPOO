@@ -3,34 +3,80 @@ package pacman.logic;
 import java.util.Random;
 
 import pacman.GUI.GameEngine;
+import pacman.logic.Game.Mode;
 
 public class Ghost extends Character {
 
-	public enum Mode {
-		CHASE , SCATTER , FRIGHTENED
-	}
 
 	int state;
-	public Mode mode;
 	public Position target;
-
-	public Ghost(Position target){
-		this.orientation = 3; //sempre que sai da casa sai com a orientacao para a esquerda
-		this.mode = Mode.SCATTER;
+	public boolean house;
+	public Ghost(Position target)
+	{
+		this.orientation = 0; //sempre que sai da casa sai com a orientacao para a esquerda
 		this.velocity = 2;
 		this.alive = true;
 		this.target = target;
 	}
 
-	private int generateOri(){
+	private int generateOrientation()
+	{
 		Random random = new Random();
 		int rand = random.nextInt(4);
 		return rand;
 	}
 
-	public void moveGhost(Maze maze)
+	public void moveGhost()
 	{
-		if(!maze.isDecisionPoint(getTilePosition(position.x, position.y)))
+		if(house)
+		{
+			if(this.orientation == 0)
+			{
+				if(moveUp() && !Game.maze.isDoor(getTilePosition(position.x, position.y - 1)))
+					return;
+				else
+				{
+					this.orientation = 2;
+					moveDown();
+					return;
+				}
+			}
+			else if(this.orientation == 2)
+			{
+				if(moveDown())
+					return;
+				else
+				{
+					this.orientation = 0;
+					moveUp();
+					return;
+				}
+			}
+		}
+
+		if(Game.maze.isSpecial(getTilePosition(position.x, position.y)))
+		{
+			if (!this.alive && position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0)
+			{
+				this.orientation = 2;
+				moveDown();
+				return;
+			}
+		}
+
+		if(Game.maze.isDoor(getTilePosition(position.x, position.y)))
+		{
+			if (!this.alive && position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0)
+			{
+				this.alive = true;
+				this.orientation = 0;
+				moveUp();
+				return;
+			}
+
+		}
+
+		if(!Game.maze.isDecisionPoint(getTilePosition(position.x, position.y)))
 		{
 			if(this.orientation == 0 && moveUp())
 				return;
@@ -60,39 +106,79 @@ public class Ghost extends Character {
 				switchMode();
 		}
 
+
 	}
 
 	public void switchMode()
 	{
-		/*
-		if(mode == Mode.CHASE)
-			updateOrientation(Game.pacman.position);
-		else if (mode == Mode.SCATTER)
-			updateOrientation(this.target);
-		else if(mode == Mode.FRIGHTENED){
-			//updateFrightened(new Position(13*GameEngine.TILE_DIMENSION,16*GameEngine.TILE_DIMENSION));
-			//updateFrightened(new Position(14*GameEngine.TILE_DIMENSION,14*GameEngine.TILE_DIMENSION));
-		}*/	
-		return;
+		if(this.alive)
+		{
+			if(Game.ghostMode == Mode.CHASE)
+				updateOrientation(Game.pacman.position);
+			else if (Game.ghostMode == Mode.SCATTER)
+				updateOrientation(this.target);
+			else if(Game.ghostMode == Mode.FRIGHTENED)
+				updateOrientation(null);
+		}
+		else 
+		{
+			if(!this.position.equals(new Position(12*GameEngine.TILE_DIMENSION, 17*GameEngine.TILE_DIMENSION)))
+				updateOrientation(new Position(12*GameEngine.TILE_DIMENSION, 17*GameEngine.TILE_DIMENSION));
+			else 
+				this.alive = true;
+		}
+
 	}
 
-	private void updateFrightened(Position position) {
-		/*
-		 * Mudar de direcao o movimento!
-		 */
-		
+	private void updateFrightened() 
+	{
+		int new_orientation = generateOrientation();
+
+		if(new_orientation == 0)
+			if(moveUp())
+				this.orientation = 0;
+			else {
+				moveDown();
+				this.orientation = 2;
+			}
+		else if(new_orientation == 2)
+			if(moveDown())
+				this.orientation = 2;
+			else {
+				moveUp();
+				this.orientation = 0;
+			}
+		else if(new_orientation == 1)
+			if(moveRight())
+				this.orientation = 1;
+			else {
+				moveLeft();
+				this.orientation = 3;
+			}
+		else if(new_orientation == 3)
+			if(moveLeft())
+				this.orientation = 3;
+			else {
+				moveRight();
+				this.orientation = 1;
+			}
 	}
 
 	public void updateOrientation(Position target)
 	{
-		if(this.orientation == 0) //UP
-			updateOrientationFromUpMovement(target);
-		else if(this.orientation == 1) //RIGHT
-			updateOrientationFromRightMovement(target);
-		else if(this.orientation == 2) //DOWN
-			updateOrientationFromDownMovement(target);
-		else if(this.orientation == 3) //LEFT
-			updateOrientationFromLeftMovement(target);
+		if(target == null)
+			updateFrightened();
+		else{
+
+			if(this.orientation == 0) //UP
+				updateOrientationFromUpMovement(target);
+			else if(this.orientation == 1) //RIGHT
+				updateOrientationFromRightMovement(target);
+			else if(this.orientation == 2) //DOWN
+				updateOrientationFromDownMovement(target);
+			else if(this.orientation == 3) //LEFT
+				updateOrientationFromLeftMovement(target);
+		}
 	}
 
 	private void updateOrientationFromLeftMovement(Position target) 
@@ -389,21 +475,7 @@ public class Ghost extends Character {
 		return calculateDistance(position.x + 1, this.position.y, target);
 	}
 
-	private void moveFromGhostHouse(Maze maze){
-		/*
-		 * Sai no inicio do jogo...
-		 */
-	}
 
 
-	//TODO: ainda falta fazer esta função!
-	private void moveToGhostHouse(Maze maze){
-		/*
-		 * So vai para la quando morre!!! 
-		 */
-	}
-	
-	
-	
 
 }

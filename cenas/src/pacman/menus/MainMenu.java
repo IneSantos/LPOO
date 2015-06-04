@@ -61,8 +61,10 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener{
 		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
 		timer.start();
 
+		Application.frame.getContentPane().removeAll();
+		Application.frame.getContentPane().revalidate();
 		Application.frame.setVisible(true);
-		Application.frame.setResizable(true);
+		Application.frame.setResizable(false);
 		Application.frame.setBounds(100, 100, 400, 500);
 		Application.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Application.frame.getContentPane().add(this);
@@ -93,6 +95,11 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener{
 
 	private void selected(){
 		if(selected == 0){
+			timer.stop();
+			try {
+				this.finalize();
+			} catch (Throwable e) {
+			}
 			new GameEngine();
 		}
 		else 

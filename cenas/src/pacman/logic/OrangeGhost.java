@@ -1,43 +1,50 @@
 package pacman.logic;
 
 import pacman.GUI.GameEngine;
+import pacman.logic.Game.Mode;
 
-	public class OrangeGhost extends Ghost {
-		
-		int animation;
+public class OrangeGhost extends Ghost {
 
-		public OrangeGhost() {
-			super(new Position(0,36*GameEngine.TILE_DIMENSION));
+	int animation;
+
+	public OrangeGhost() {
+		super(new Position(0,36*GameEngine.TILE_DIMENSION));
+		animation = 0;
+		house = true;
+	}
+
+	public int updateAnimation()
+	{
+		animation++;
+
+		if (animation > 1)
 			animation = 0;
-		}
 
-		public int updateAnimation()
-		{
-			animation++;
+		return animation;
+	}
 
-			if (animation > 1)
-				animation = 0;
+	public int getAnimation()
+	{
+		return animation;	
+	}
 
-			return animation;
-		}
+	public void switchMode()
+	{
 
-		public int getAnimation()
-		{
-			return animation;	
-		}
-		
-		public void switchMode()
+		if(Game.ghostMode == Mode.CHASE)
 		{
 			Position target = Game.pacman.position;
-			
+
 			if(calculateDistance(position.x, position.y, target)%GameEngine.TILE_DIMENSION >= 8)
 				target = this.target;
-				
-			if(mode == Mode.CHASE)
-				updateOrientation(Game.pacman.position);
-			else if (mode == Mode.SCATTER)
-				updateOrientation(this.target);
+
+			updateOrientation(target);
 		}
-		
+		else if (Game.ghostMode == Mode.SCATTER)
+			updateOrientation(this.target);
+		else if(Game.ghostMode == Mode.FRIGHTENED)
+			updateOrientation(null);
 	}
+
+}
 

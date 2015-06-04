@@ -3,13 +3,17 @@ package pacman.logic;
 import java.awt.event.KeyEvent;
 
 import pacman.GUI.GameEngine;
+import pacman.logic.Game.Mode;
 
 
 public class Pacman extends Character {
+
+	final int POINT_SCORE = 100;
+	final int POWER_POINT_SCORE = 250;
 	
 	int score;
 	int animation;
-	int power;
+	int power_timer;
 	public int lifes;
 
 	public Pacman()
@@ -17,20 +21,20 @@ public class Pacman extends Character {
 		super();
 		score = 0;
 		animation = 0;
-		power = 0;
+		power_timer = 0;
 		lifes = 3;
 	}
-	
+
 	public int updateAnimation()
 	{
 		animation++;
-		
+
 		if (animation > 3)
 			animation = 0;
-		
+
 		return animation;
 	}
-	
+
 
 	public void updateMovement(int inputKey) 
 	{	
@@ -56,12 +60,10 @@ public class Pacman extends Character {
 				setOrientation(1);
 			else if(inputKey == KeyEvent.VK_LEFT && !Game.maze.isWall(getTilePosition(position.x - 1, position.y)))
 				setOrientation(3);
-			
-				
-			
+
 			inputKey = 0;
 		}
-		
+
 		if(orientation == 0)
 			moveUp();			
 		else if (orientation == 1)
@@ -70,23 +72,48 @@ public class Pacman extends Character {
 			moveDown();
 		else if(orientation == 3)
 			moveLeft();
-		
-			if(Game.maze.isPowerPoint(new Position(position.x / GameEngine.TILE_DIMENSION, position.y / GameEngine.TILE_DIMENSION)))
-			this.power = 1;
-		
-		 //TODO // eoiw
-		if(position.x/GameEngine.TILE_DIMENSION >= 0 && position.x/GameEngine.TILE_DIMENSION < Game.mazeWidth)
-			if(Game.maze.isPoint(new Position(position.x / GameEngine.TILE_DIMENSION, position.y / GameEngine.TILE_DIMENSION)) || Game.maze.isPowerPoint(new Position(position.x / GameEngine.TILE_DIMENSION, position.y / GameEngine.TILE_DIMENSION)))
-				Game.maze.maze[position.y / GameEngine.TILE_DIMENSION][position.x / GameEngine.TILE_DIMENSION] = ' ';
+
+		Position tile = getTilePosition(Game.pacman.position.x, Game.pacman.position.y);
+
+		if(Game.maze.isPoint(tile))
+		{
+			if(Game.maze.isDecisionPoint(tile))
+				Game.maze.maze[tile.y][tile.x] = 'd';
+			else Game.maze.maze[tile.y][tile.x] = ' ';
+
+			this.score += POINT_SCORE;
+			GameEngine.game.collected_pills++;
+		}
+		else if(Game.maze.isPowerPoint(tile))
+		{
+			Game.maze.maze[tile.y][tile.x] = ' ';
+
+			this.power_timer = 12;
+			this.score += POWER_POINT_SCORE;
+			GameEngine.game.collected_pills++;
+
+			Game.ghostMode = Mode.FRIGHTENED;
+		}
+
+
 	}
-	
+
 	public int getAnimation()
 	{
 		return animation;	
 	}
-	
+
 	public int getPower(){
-		return power;
+		return power_timer;
+	}
+	
+	public void decPower(){
+		power_timer--;
+	}
+	
+	public int getScore()
+	{
+		return score;
 	}
 
 }

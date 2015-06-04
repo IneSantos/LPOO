@@ -3,10 +3,7 @@ package pacman.GUI;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import pacman.logic.Ghost.Mode;
-
-@SuppressWarnings("serial")
-public class GameTimer extends GameEngine
+/*public class GameTimer extends GameEngine
 {
 	Timer timer = new Timer();
 	public GameTimer(){
@@ -24,3 +21,4 @@ public class GameTimer extends GameEngine
 	
 	
 }
+*/

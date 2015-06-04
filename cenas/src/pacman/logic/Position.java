@@ -2,6 +2,8 @@ package pacman.logic;
 
 import java.io.Serializable;
 
+import pacman.GUI.GameEngine;
+
 
 /**  
 * Coordenada.java - a simple class to create a coordinate that represents a location in (x,y) point in space,  specified in
@@ -19,7 +21,7 @@ public class Position implements Serializable
 	@Override
 	public boolean equals(Object o) 
 	{
-		return (o != null) && (o instanceof Position) && ((Position)o).x == x && ((Position)o).y == y;
+		return (o != null) && (o instanceof Position) && ((Position)o).x / GameEngine.TILE_DIMENSION == x / GameEngine.TILE_DIMENSION && ((Position)o).y / GameEngine.TILE_DIMENSION == y / GameEngine.TILE_DIMENSION;
 	}
 
 	/**

@@ -1,49 +1,63 @@
 package pacman.logic;
 
 import pacman.GUI.GameEngine;
+import pacman.logic.Game.Mode;
 
-	public class PinkGhost extends Ghost {
-		
-		int animation;
+public class PinkGhost extends Ghost {
 
-		public PinkGhost() {
-			super(new Position(0,33));
-			animation = 0;
-		}
+	int animation;
 
-		public int updateAnimation()
-		{
-			animation++;
-
-			if (animation > 1)
-				animation = 0;
-
-			return animation;
-		}
-
-		public int getAnimation()
-		{
-			return animation;	
-		}
-		
-		public void switchMode()
-		{
-			Position new_target = this.target;
-			
-			if(this.orientation == 0)
-				new_target = new Position(Game.pacman.position.x, Game.pacman.position.y - 4*GameEngine.TILE_DIMENSION);
-			else if (this.orientation == 1)
-				new_target = new Position(Game.pacman.position.x + 4*GameEngine.TILE_DIMENSION, Game.pacman.position.y);
-			else if (this.orientation == 2)
-				new_target = new Position(Game.pacman.position.x, Game.pacman.position.y + 4*GameEngine.TILE_DIMENSION);
-			else new_target = new Position(Game.pacman.position.x + 4*GameEngine.TILE_DIMENSION, Game.pacman.position.y);
-
-			
-			if(mode == Mode.CHASE)
-				updateOrientation(new_target);
-			else if (mode == Mode.SCATTER)
-				updateOrientation(this.target);
-		}
-		
+	public PinkGhost() {
+		super(new Position(0,33));
+		animation = 0;
+		house = false;
 	}
 
+	public int updateAnimation()
+	{
+		animation++;
+
+		if (animation > 1)
+			animation = 0;
+
+		return animation;
+	}
+
+	public int getAnimation()
+	{
+		return animation;	
+	}
+
+	public void switchMode()
+	{
+		if(this.alive)
+		{
+			if(Game.ghostMode == Mode.CHASE)
+			{
+				Position new_target = this.target;
+
+				if(this.orientation == 0)
+					new_target = new Position(Game.pacman.position.x, Game.pacman.position.y - 4*GameEngine.TILE_DIMENSION);
+				else if (this.orientation == 1)
+					new_target = new Position(Game.pacman.position.x + 4*GameEngine.TILE_DIMENSION, Game.pacman.position.y);
+				else if (this.orientation == 2)
+					new_target = new Position(Game.pacman.position.x, Game.pacman.position.y + 4*GameEngine.TILE_DIMENSION);
+				else new_target = new Position(Game.pacman.position.x + 4*GameEngine.TILE_DIMENSION, Game.pacman.position.y);
+
+
+				updateOrientation(new_target);
+			}
+			else if (Game.ghostMode == Mode.SCATTER)
+				updateOrientation(this.target);
+			else if(Game.ghostMode == Mode.FRIGHTENED)
+				updateOrientation(null);
+		}
+		else 
+		{
+			if(!this.position.equals(new Position(12*GameEngine.TILE_DIMENSION, 17*GameEngine.TILE_DIMENSION)))
+				updateOrientation(new Position(12*GameEngine.TILE_DIMENSION, 17*GameEngine.TILE_DIMENSION));
+			else 
+				this.alive = true;
+		}
+	}
+}

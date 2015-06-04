@@ -1,7 +1,5 @@
 package pacman.logic;
 
-import pacman.GUI.GameEngine;
-
 public class Maze {
 
 	public char maze[][] =  {
@@ -19,7 +17,7 @@ public class Maze {
 		{ 'X', '.', '.', '.', '.', '.', 'D', 'X', 'X', '.', '.', '.' , '.' , 'X', 'X', '.' , '.' , '.' , '.' , 'X', 'X', 'D', '.', '.', '.', '.', '.', 'X'},
 		{ 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X' , ' ' , 'X', 'X', ' ' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X'},
 		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', 'X', 'X', 'X' , ' ' , 'X', 'X', ' ' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
-		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', ' ', ' ', ' ' , 'i' , ' ', ' ', 'i' , ' ' , ' ' , ' ' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
+		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', ' ', ' ', ' ' , ' ' , 's', 's', ' ' , ' ' , ' ' , ' ' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
 		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', ' ', 'X', 'X' , 'X' , 'S', 'S', 'X' , 'X' , 'X' , ' ' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
 		{ 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', ' ', 'X', ' ' , ' ' , ' ', ' ', ' ' , ' ' , 'X' , ' ' , 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X'},
 		{ ' ', ' ', ' ', ' ', ' ', ' ', 'D', ' ', ' ', 'd', 'X', ' ' , ' ' , ' ', ' ', ' ' , ' ' , 'X' , 'd' , ' ', ' ', 'D', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -31,7 +29,7 @@ public class Maze {
 		{ 'X', '.', '.', '.', '.', '.', 'D', '.', '.', 'D', '.', '.' , '.' , 'X', 'X', '.' , '.' , '.' , '.' , '.', '.', '.', '.', '.', '.', '.', '.', 'X'},
 		{ 'X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X' , '.' , 'X', 'X', '.' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'},
 		{ 'X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X' , '.' , 'X', 'X', '.' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', 'P', '.', '.', 'X', 'X', 'D', '.', '.', 'D', '.', '.' , 'I' , '.', '.', 'I' , '.' , '.' , 'D' , '.', '.', 'D', 'X', 'X', '.', '.', 'P', 'X'},
+		{ 'X', 'P', '.', '.', 'X', 'X', 'D', '.', '.', 'D', '.', '.' , '.' , '.', '.', '.' , '.' , '.' , 'D' , '.', '.', 'D', 'X', 'X', '.', '.', 'P', 'X'},
 		{ 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , '.' , 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', 'X'},
 		{ 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , '.' , 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', 'X'},
 		{ 'X', '.', '.', 'D', '.', '.', '.', 'X', 'X', '.', '.', '.' , '.' , 'X', 'X', '.' , '.' , '.' , '.' , 'X', 'X', '.', '.', '.', 'D', '.', '.', 'X'},
@@ -42,11 +40,21 @@ public class Maze {
 		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' , ' ' , ' ', ' ', ' ' , ' ' , ' ' , ' ' , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
 		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' , ' ' , ' ', ' ', ' ' , ' ' , ' ' , ' ' , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}};
 
+	int pills = 0;
+	
+	public Maze()
+	{
+		for(int i = 0; i < maze.length; ++i)
+			for (int j = 0; j < maze[0].length; ++j)
+				if(maze[i][j] == 'P' || maze[i][j] == '.' || maze[i][j] == 'D')
+					this.pills++;
+	}
 	
 	public boolean isWall(Position p)
 	{
-		if(maze[p.y][p.x] == 'X')
-			return true;
+		if(p.x >= 0 && p.x < Game.mazeWidth)
+			if(maze[p.y][p.x] == 'X')
+				return true;
 		return false;
 	}
 	
@@ -68,8 +76,9 @@ public class Maze {
 	
 	public boolean isDoor(Position p)
 	{
-		if(maze[p.y][p.x] == 'S')
-			return true;
+		if(p.x > 0 && p.x < Game.mazeWidth)
+			if(maze[p.y][p.x] == 'S')
+				return true;
 		return false;
 	}
 	
@@ -86,11 +95,23 @@ public class Maze {
 	
 	public boolean isIntPoint(Position p)
 	{
-		if(p.x >= 0 && p.x <= Game.mazeWidth)
+		if(p.x >= 0 && p.x < Game.mazeWidth)
 			if(maze[p.y][p.x] == 'I' || maze[p.y][p.x] == 'i')
 				return true;
 		
 		return false;
 	}
 	
+	public boolean isSpecial(Position p)
+	{
+		if(p.x >= 0 && p.x < Game.mazeWidth)
+			if(maze[p.y][p.x] == 's')
+				return true;
+		
+		return false;
+	}
+
+	public int getPills() {
+		return pills;
+	}
 }

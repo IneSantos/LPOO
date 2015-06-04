@@ -18,7 +18,6 @@ public class Application
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.setResizable(false);
 		
-	//	new GameEngine();
 		new MainMenu();
 		return;
 	}
