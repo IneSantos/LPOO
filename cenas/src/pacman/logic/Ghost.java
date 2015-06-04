@@ -68,8 +68,17 @@ public class Ghost extends Character {
 			updateOrientation(Game.pacman.position);
 		else if (mode == Mode.SCATTER)
 			updateOrientation(this.target);
-		//else if(mode == Mode.FRIGHTENED)
-			//updateFrightened();
+		else if(mode == Mode.FRIGHTENED){
+			//updateFrightened(new Position(13*GameEngine.TILE_DIMENSION,16*GameEngine.TILE_DIMENSION));
+			//updateFrightened(new Position(14*GameEngine.TILE_DIMENSION,14*GameEngine.TILE_DIMENSION));
+		}
+	}
+
+	private void updateFrightened(Position position) {
+		/*
+		 * Mudar de direcao o movimento!
+		 */
+		
 	}
 
 	public void updateOrientation(Position target)
@@ -378,50 +387,21 @@ public class Ghost extends Character {
 		return calculateDistance(position.x + 1, this.position.y, target);
 	}
 
+	private void moveFromGhostHouse(Maze maze){
+		/*
+		 * Sai no inicio do jogo...
+		 */
+	}
 
 
 	//TODO: ainda falta fazer esta função!
 	private void moveToGhostHouse(Maze maze){
-
-
-		boolean valid = false;
-
-		while(!valid){
-			int rand = generateOri(); 
-			if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0 && rand != 0)
-			{
-				if(rand == 0 && !maze.isWall(getTilePosition(position.x, position.y - 1)))
-				{
-					setOrientation(0);
-					valid = true;
-				}
-				else if(rand == 2 && !maze.isWall(getTilePosition(position.x, position.y + GameEngine.TILE_DIMENSION)) && !this.alive)
-				{
-					setOrientation(2);
-					valid = true;
-				}
-				else if(rand == 1 && !maze.isWall(getTilePosition(position.x + GameEngine.TILE_DIMENSION, position.y)))
-				{
-					setOrientation(1);
-					valid = true;
-				}
-				else if(rand == 3 && !maze.isWall(getTilePosition(position.x - 1, position.y)))
-				{
-					setOrientation(3);
-					valid = true;
-				}
-			}
-		}
-
-		if(orientation == 0)
-			moveUp();
-		else if (orientation == 1)
-			moveRight();
-		else if(orientation == 2)
-			moveDown();
-		else if(orientation == 3)
-			moveLeft();		
-
+		/*
+		 * So vai para la quando morre!!! 
+		 */
 	}
+	
+	
+	
 
 }

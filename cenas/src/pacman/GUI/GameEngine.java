@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -80,7 +81,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		System.out.println("Blue ghost mode: " + 	game.getBlueGhost().mode );
 
 //		System.out.println(game.getRedGhost().getOrientation());
-		
+			
 		repaint();
 	}
 	
@@ -115,6 +116,14 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		g.drawImage(Application.images.sprites.getSubimage(game.getBlueGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*6, game.getBlueGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 				game.getBlueGhost().getX(), game.getBlueGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
 		
+		if(game.getPacman().getAlive()){
+			System.out.println(game.getPacman().getAlive());
+			System.out.println("perdeste");
+		}
+		
+		if(game.getLevel() == 1){
+		 
+		}
 		
 	}
 
