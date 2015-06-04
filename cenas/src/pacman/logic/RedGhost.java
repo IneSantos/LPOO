@@ -26,5 +26,12 @@ public class RedGhost extends Ghost {
 		return animation;	
 	}
 
+	public void switchMode()
+	{
+		if(mode == Mode.CHASE)
+			updateOrientation(Game.pacman.position);
+		else if (mode == Mode.SCATTER)
+			updateOrientation(this.target);
+	}
 
 }

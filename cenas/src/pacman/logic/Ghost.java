@@ -64,6 +64,7 @@ public class Ghost extends Character {
 
 	public void switchMode()
 	{
+		/*
 		if(mode == Mode.CHASE)
 			updateOrientation(Game.pacman.position);
 		else if (mode == Mode.SCATTER)
@@ -71,7 +72,8 @@ public class Ghost extends Character {
 		else if(mode == Mode.FRIGHTENED){
 			//updateFrightened(new Position(13*GameEngine.TILE_DIMENSION,16*GameEngine.TILE_DIMENSION));
 			//updateFrightened(new Position(14*GameEngine.TILE_DIMENSION,14*GameEngine.TILE_DIMENSION));
-		}
+		}*/	
+		return;
 	}
 
 	private void updateFrightened(Position position) {
@@ -366,7 +368,7 @@ public class Ghost extends Character {
 		}
 	}
 
-	private float calculateDistance(int x, int y, Position target)
+	protected float calculateDistance(int x, int y, Position target)
 	{
 		return (float) Math.sqrt(Math.pow((x - target.x),2) + Math.pow((y - target.y),2));
 	}

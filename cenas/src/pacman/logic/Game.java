@@ -52,7 +52,7 @@ public class Game {
 	}
 
 	public boolean comparePosition(Position p1, Position p2){
-		if(p1.x % GameEngine.TILE_DIMENSION == 0 && p1.y % GameEngine.TILE_DIMENSION == 0/* && p2.x % GameEngine.TILE_DIMENSION == 0 && p2.y % GameEngine.TILE_DIMENSION == 0 */)
+		if(p1.x % GameEngine.TILE_DIMENSION == 0 && p1.y % GameEngine.TILE_DIMENSION == 0)
 				return (p1.x == p2.x && p1.y == p2.y);
 		return false;
 	}
