@@ -51,7 +51,7 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener{
 
 
 	public MainMenu() {
-		setBounds(232, 5, 10, 10);
+		setBounds(232, 5, 462, 435);
 		initialize();
 	}
 
@@ -62,8 +62,8 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener{
 		timer.start();
 
 		Application.frame.setVisible(true);
-		Application.frame.setResizable(false);
-		Application.frame.setBounds(100, 100, 240, 320);
+		Application.frame.setResizable(true);
+		Application.frame.setBounds(100, 100, 400, 500);
 		Application.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Application.frame.getContentPane().add(this);
 
@@ -85,7 +85,7 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener{
 				g.setColor(corTexto);
 
 			g.setFont(new Font("Cooper Black", Font.PLAIN, 25));
-			g.drawString(opcoes[i],100, 150 + i*35);
+			g.drawString(opcoes[i],Application.frame.getWidth()/2, Application.frame.getHeight()/2-35 + i*35*2);
 		}
 
 	}

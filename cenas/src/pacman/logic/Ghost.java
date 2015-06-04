@@ -68,6 +68,8 @@ public class Ghost extends Character {
 			updateOrientation(Game.pacman.position);
 		else if (mode == Mode.SCATTER)
 			updateOrientation(this.target);
+		//else if(mode == Mode.FRIGHTENED)
+			//updateFrightened();
 	}
 
 	public void updateOrientation(Position target)
