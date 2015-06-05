@@ -165,8 +165,8 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener, Mo
 					new SettingsListener();
 				}
 				else if(e.getY() >= 337 && e.getY() <= 356){
-					System.exit(0);
-					//new GameOver();
+					//System.exit(0);
+					new GameOver();
 				}
 			}
 	}
