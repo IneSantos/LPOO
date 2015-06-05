@@ -1,5 +1,6 @@
 package pacman.GUI;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -16,6 +17,9 @@ public class Images {
 	public BufferedImage gif;
 	public BufferedImage deathAnimation;
 	public BufferedImage startScreen;
+	public BufferedImage game_over1;
+	public BufferedImage game_over2;
+	public BufferedImage mouse;
 
 	public Images()
 	{
@@ -30,6 +34,10 @@ public class Images {
 			gif = ImageIO.read(this.getClass().getResource("/images/pacman.gif"));
 			deathAnimation = ImageIO.read(this.getClass().getResource("/images/deathAnimation.png"));
 			startScreen = ImageIO.read(this.getClass().getResource("/images/startScreen.png"));
+			game_over1 = ImageIO.read(this.getClass().getResource("/images/game_over_1.png"));
+			game_over2 = ImageIO.read(this.getClass().getResource("/images/game_over_2.png"));
+			mouse = ImageIO.read(this.getClass().getResource("/images/mouse.png"));
+			
 		} 
 		catch (IOException e)
 		{

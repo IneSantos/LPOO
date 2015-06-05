@@ -11,14 +11,11 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import pacman.logic.BlueGhost;
 import pacman.logic.Game;
-import pacman.logic.OrangeGhost;
-import pacman.logic.PinkGhost;
-import pacman.logic.RedGhost;
 import pacman.logic.Game.Mode;
 import pacman.logic.Position;
 import pacman.menus.MainMenu;
+import pacman.sound.Sound;
 
 @SuppressWarnings("serial")
 public class GameEngine extends JPanel implements ActionListener, KeyListener
@@ -27,6 +24,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	public static final int TILE_DIMENSION = 20;
 	static final int SPRITE_DIMENSION = 24;
 	Timer  timer;
+	Sound sound;
 	int refresh = 0;
 
 	int inputKey = 0;
@@ -44,6 +42,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		Application.frame.getContentPane().removeAll();
 
 		game = new Game();
+		sound = new Sound();
 
 		this.setPreferredSize(new Dimension(game.getMaze().maze[0].length*TILE_DIMENSION, game.getMaze().maze.length*TILE_DIMENSION));
 		Application.frame.getContentPane().add(this, BorderLayout.CENTER);
@@ -92,10 +91,10 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		//Actualizacao do movimento dos elementos da cena
 		if(Game.pacman.getAlive())
 			game.getPacman().updateMovement(inputKey);
-		game.getRedGhost().moveGhost();
+		/*game.getRedGhost().moveGhost();
 		game.getPinkGhost().moveGhost();
 		game.getOrangeGhost().moveGhost();
-		game.getBlueGhost().moveGhost();
+		game.getBlueGhost().moveGhost();*/
 
 		//Verificacao de colisoes entre elementos da cena
 		if(Game.pacman.getAlive())
@@ -117,12 +116,24 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		if(game.getCollectedPills() == Game.maze.getPills() || (!Game.pacman.getAlive() && this.deathAnimation == 11))
 		{
 			timer.stop();
+			Sound.clip.close();
+			sound = new Sound();
 			this.deathAnimation = 0;
 
-			if(Game.pacman.getLifes() == 0)
+			if(game.getCollectedPills() == Game.maze.getPills())
 			{
 				try { this.finalize();}
 				catch (Throwable e1) {}
+				
+				Sound.clip.close();
+				new MainMenu();
+			}
+			else if(Game.pacman.getLifes() == 0)
+			{
+				try { this.finalize();}
+				catch (Throwable e1) {}
+				
+				Sound.clip.close();
 				new MainMenu();
 			}
 			else
@@ -246,8 +257,12 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	public void keyPressed(KeyEvent e)
 	{
 		if(!timer.isRunning())
+		{
+			Sound.clip.start();
+			Sound.clip.loop(10);
 			timer.start();
-
+		}
+		
 		if(e.getKeyCode() == KeyEvent.VK_UP )
 			inputKey = KeyEvent.VK_UP;
 		else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
@@ -260,6 +275,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		{
 			if(timer.isRunning())
 			{
+				Sound.clip.stop();
 				timer.stop();
 				repaint();
 				startAnimation = 0;
