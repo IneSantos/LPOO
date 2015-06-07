@@ -38,7 +38,6 @@ public class BackgroundAnimation extends JPanel implements ActionListener, KeyLi
 		this.setPreferredSize(new Dimension(width, height));
 		Application.frame.getContentPane().add(this, null);
 
-
 		this.width = width;
 		this.height = height;
 		addKeyListener(this);

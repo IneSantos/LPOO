@@ -25,15 +25,11 @@ public class Maze {
 	{
 		maze = new ArrayList<char[]>();
 
-		try 
-		{
-			Scanner scan = new Scanner(new File("maze" + level +".txt"));
-			while (scan.hasNextLine())
-				maze.add(scan.nextLine().toCharArray());
+		Scanner scan = new Scanner(getClass().getResourceAsStream("/resources/mazes/maze" + level + ".txt"));
+		while (scan.hasNextLine())
+			maze.add(scan.nextLine().toCharArray());
 
-			scan.close();
-		} 
-		catch (FileNotFoundException e) {e.printStackTrace();}
+		scan.close();
 
 	}
 
