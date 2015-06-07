@@ -6,8 +6,6 @@ import pacman.GUI.MediaPlayer;
 
 public class Sounds {
 	
-	public URL eminem;
-	public URL frozen;
 	public URL chomp;
 	public URL beginning;
 	public URL death;
@@ -20,10 +18,6 @@ public class Sounds {
 	{
 		System.out.println("Sounds");
 		
-		//eminem = MediaPlayer.class.getResource("/resources/sounds/eminem.wav");
-		
-		frozen = MediaPlayer.class.getResource("/resources/sounds/frozen.wav");
-
 		beginning = MediaPlayer.class.getResource("/resources/sounds/beginning.wav");
 		
 		chomp = MediaPlayer.class.getResource("/resources/sounds/chomp.wav");

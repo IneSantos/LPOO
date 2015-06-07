@@ -128,7 +128,6 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener, Mo
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
-		System.out.println("Mouse Clicked: ("+e.getX()+", "+e.getY() +")");
 
 		if(e.getX() >= 100 && e.getX() <= 200){
 
@@ -150,8 +149,6 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener, Mo
 	@Override
 	public void mouseEntered(MouseEvent e) 
 	{
-		System.out.println("entrou");
-
 		java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
 		Cursor a = toolkit.createCustomCursor(Application.images.mouse , new Point(this.getX(),this.getY()), "img");
 		Application.frame.setCursor (a);

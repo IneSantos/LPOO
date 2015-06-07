@@ -36,8 +36,6 @@ public class Images {
 
 	public Images()
 	{
-		System.out.println("Images");
-
 		try 
 		{
 			sprites = ImageIO.read(this.getClass().getResource("/resources/images/pacmanSprites.png"));
