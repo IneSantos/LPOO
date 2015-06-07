@@ -31,6 +31,9 @@ public class Images {
 	public BufferedImage scores;
 	public BufferedImage winbackground;
 	public BufferedImage win2;
+	public BufferedImage soundON;
+	public BufferedImage soundOFF;
+	public BufferedImage mspacman;
 	
 
 
@@ -62,6 +65,9 @@ public class Images {
 			scores = ImageIO.read(this.getClass().getResource("/resources/images/socre_sem_ani.png"));
 			winbackground = ImageIO.read(this.getClass().getResource("/resources/images/win1.jpg"));
 			win2 = ImageIO.read(this.getClass().getResource("/resources/images/win2.jpg"));
+			soundON = ImageIO.read(this.getClass().getResource("/resources/images/soundON.png"));
+			soundOFF = ImageIO.read(this.getClass().getResource("/resources/images/soundOFF.png"));
+			mspacman = ImageIO.read(this.getClass().getResource("/resources/images/mspacman.png"));
 		} 
 		catch (IOException e)
 		{

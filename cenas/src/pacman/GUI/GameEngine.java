@@ -1,12 +1,16 @@
 package pacman.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
@@ -20,7 +24,7 @@ import pacman.menus.WinAnimation;
 import resources.sounds.MediaPlayer;
 
 @SuppressWarnings("serial")
-public class GameEngine extends JPanel implements ActionListener, KeyListener
+public class GameEngine extends JPanel implements ActionListener, KeyListener, MouseListener
 {
 	final int MILISSECONDS_TO_REFRESH = 20;
 	public static final int TILE_DIMENSION = 20;
@@ -30,6 +34,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	public static int refresh = 0;
 	public static int inputKey = 0;
 	Timer  timer;
+	boolean sound = true;
 	MediaPlayer beginning;
 	MediaPlayer chomp;
 	MediaPlayer power;
@@ -62,6 +67,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		Application.frame.pack();
 
 		addKeyListener(this);
+		addMouseListener(this);
 		setFocusable(true);
 		requestFocus();
 
@@ -69,8 +75,11 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		startAnimation--;
 
 		beginning.open();
-		beginning.clip.start();
-		chomp.open();
+		if(sound)
+		{
+			beginning.clip.start();
+			chomp.open();
+		}
 	}
 
 
@@ -79,9 +88,24 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	{
 		refresh++;
 
-		updateSound();
-		game.updateElements();
+		if(sound)
+		{
+			updateSound();
+			
+			if(!chomp.clip.isRunning())
+				chomp.clip.loop(Clip.LOOP_CONTINUOUSLY);
+		}
+		else
+		{
+			if(chomp.clip.isRunning())
+				chomp.clip.stop();
+			
+			if(intermission.clip.isRunning())
+				intermission.clip.close();
+				
+		}
 
+		game.updateElements();
 
 
 		if(game.getCollectedPills() == Game.maze.getPills() || (!Game.pacman.getAlive() && this.deathAnimation == 11))
@@ -95,12 +119,13 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 				if(game.getLevel() == 3)
 				{
 					Application.setNewScore(game.getPacman().getScore());
-					
+
 					try { this.finalize();}
 					catch (Throwable e1) {}
 
 					new WinAnimation();
-					chomp.clip.close();
+					if(sound)
+						chomp.clip.close();
 				}
 				else
 				{
@@ -111,10 +136,12 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 
 					this.setPreferredSize(new Dimension(game.getMaze().maze.get(0).length*TILE_DIMENSION, game.getMaze().maze.size()*TILE_DIMENSION + TOP_HUD_HEIGHT + BOTTOM_HUD_HEIGHT));
 					Application.frame.pack();
-
 					beginning.open();
-					beginning.clip.start();
-					chomp.clip.stop();
+					if(sound)
+					{
+						beginning.clip.start();
+						chomp.clip.stop();
+					}
 				}
 
 			}
@@ -134,9 +161,14 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 				repaint();
 				refresh = 0;
 
-				beginning.open();
-				beginning.clip.start();
-				chomp.clip.stop();
+				if(!beginning.clip.isOpen())
+					beginning.open();
+
+				if(sound)
+				{
+					beginning.clip.start();
+					chomp.clip.stop();
+				}
 			}
 		}
 
@@ -149,6 +181,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 
 	private void updateSound() 
 	{
+		
 		if(death.clip.isOpen() && !death.clip.isRunning())
 			death.clip.close();
 
@@ -164,13 +197,13 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			intermission.open();
 			intermission.clip.start();
 		}
-		
+
 		if(ghost.clip.isOpen() && !ghost.clip.isRunning())
 			ghost.clip.close();
-		
+
 		if(fruit.clip.isOpen() && !fruit.clip.isRunning())
 			fruit.clip.close();
-		
+
 		if(!game.getPacman().getAlive() && !death.clip.isRunning())
 		{
 			if(beginning.clip.isRunning())
@@ -188,7 +221,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			power.open();
 			power.clip.start();
 		}
-		
+
 		if(game.checkCharacterColision(false) && !ghost.clip.isOpen())
 		{
 			ghost.open();
@@ -341,8 +374,28 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	{
 
 		if(Game.pacman.getAlive())
+		{
+			if(Game.male)
 			g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * SPRITE_DIMENSION, game.getPacman().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
 					game.getPacman().getX() - 5, game.getPacman().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+			else 
+			{
+				int o = game.getPacman().getOrientation();
+				if(o == 0)
+					o = 2;
+				else if (o == 2)
+					o = 3;
+				else if(o == 3) 
+					o = 0;
+				
+				int a = game.getPacman().getAnimation();
+				if(a == 3)
+					a = 1;
+				
+				g.drawImage(Application.images.mspacman.getSubimage(a * 46, o * 45, 46, 45), 
+						game.getPacman().getX() - 5, game.getPacman().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+			}
+		}
 		else 
 		{
 			g.drawImage(Application.images.deathAnimation.getSubimage(this.deathAnimation*50, 0, 50, 57), 
@@ -357,6 +410,46 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	{
 		g.drawImage(Application.images.background, 0,  0, Application.frame.getContentPane().getWidth(), 60, null);
 
+		g.drawImage(Application.images.letters.getSubimage(7*50, 0, 50, 50), 25, 10, 20, 20, null); //h
+		g.drawImage(Application.images.letters.getSubimage(8*50, 0, 50, 50), 25*2, 10, 20, 20, null); //i
+		g.drawImage(Application.images.letters.getSubimage(6*50, 0, 50, 50), 25*3, 10, 20, 20, null); //g
+		g.drawImage(Application.images.letters.getSubimage(7*50, 0, 50, 50), 25*4, 10, 20, 20, null); //h
+
+		g.drawImage(Application.images.letters.getSubimage(18*50, 0, 50, 50), 25*6, 10, 20, 20, null); //s
+		g.drawImage(Application.images.letters.getSubimage(2*50, 0, 50, 50), 25*7, 10, 20, 20, null);  //c
+		g.drawImage(Application.images.letters.getSubimage(14*50, 0, 50, 50), 25*8, 10, 20, 20, null); //o
+		g.drawImage(Application.images.letters.getSubimage(17*50, 0, 50, 50), 25*9, 10, 20, 20, null); //r
+		g.drawImage(Application.images.letters.getSubimage(4*50, 0, 50, 50), 25*10, 10, 20, 20, null);  //e
+
+		if(Application.scores.get(0) >= 1000000)
+			g.drawImage(Application.images.numbers.getSubimage(30*(Application.scores.get(0)/1000000)%10, 0, 30, 30), 25, 35, 20, 20, null);
+
+		if(Application.scores.get(0) >= 100000)
+			g.drawImage(Application.images.numbers.getSubimage(30*(Application.scores.get(0)/100000)%10, 0, 30, 30), 25*2, 35, 20, 20, null);
+
+		if(Application.scores.get(0) >= 10000)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Application.scores.get(0)/10000)%10), 0, 30, 30), 25*3, 35, 20, 20, null);
+
+		if(Application.scores.get(0) >= 1000)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Application.scores.get(0)/1000)%10), 0, 30, 30), 25*4, 35, 20, 20, null);
+
+		if(Application.scores.get(0) >= 100)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Application.scores.get(0)/100)%10), 0, 30, 30), 25*5, 35, 20, 20, null);
+
+		if(Application.scores.get(0) >= 10)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Application.scores.get(0)/10)%10), 0, 30, 30), 25*6, 35, 20, 20, null);
+
+		if(Application.scores.get(0) >= 1)
+			g.drawImage(Application.images.numbers.getSubimage(30*(Application.scores.get(0)%10), 0, 30, 30), 25*7, 35, 20, 20, null);	
+
+
+		if(sound)
+			g.drawImage(Application.images.soundON, 25*13, 10, 30, 30, null); 
+		else
+			g.drawImage(Application.images.soundOFF, 25*13, 10, 30, 30, null); 
+		
+		
+		
 		g.drawImage(Application.images.letters.getSubimage(18*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*5, 10, 20, 20, null); //s
 		g.drawImage(Application.images.letters.getSubimage(2*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*4, 10, 20, 20, null);  //c
 		g.drawImage(Application.images.letters.getSubimage(14*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*3, 10, 20, 20, null); //o
@@ -402,7 +495,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			{
 				timer.start();
 				chomp.clip.loop(Clip.LOOP_CONTINUOUSLY);
-				
+
 				if(intermission.clip.isOpen())
 					intermission.clip.start();
 			}
@@ -416,7 +509,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			{
 				timer.start();
 				chomp.clip.loop(Clip.LOOP_CONTINUOUSLY);
-				
+
 				if(intermission.clip.isOpen())
 					intermission.clip.start();
 			}
@@ -450,6 +543,12 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			}
 
 		}
+		else if (e.getKeyCode() == KeyEvent.VK_M)
+		{
+			if(sound)
+				sound = false;
+			else sound = true;
+		}
 	}
 
 	@Override
@@ -457,6 +556,42 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 
 	@Override
 	public void keyTyped(KeyEvent e) {}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+		if(e.getX() >= 25*13 && e.getX() <= 25*13+30)
+		{
+			if(e.getY() >= 10 && e.getY() <= 40)
+				if(sound)
+					sound = false;
+				else sound = true;
+		}
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		
+
+		java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+		Cursor a = toolkit.createCustomCursor(Application.images.mouse , new Point(this.getX(),this.getY()), "img");
+		Application.frame.setCursor (a);
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {}
+
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {}
+
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {}
 
 
 }

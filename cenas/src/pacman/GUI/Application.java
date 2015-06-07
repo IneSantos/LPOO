@@ -3,11 +3,6 @@ package pacman.GUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -31,7 +26,7 @@ public class Application
 	{
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		frame = new JFrame("PacMano, m'putz");
+		frame = new JFrame("PacMano");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.setVisible(true);
@@ -53,15 +48,13 @@ public class Application
 		Scanner scan;
 		scan = new Scanner(getClass().getResourceAsStream("/resources/scores.txt"));
 
-		while (scan.hasNextLine())
+		for(int i = 0; i < 5; i++)
 			scores.add(scan.nextInt());
 
 		scan.close();
 
 		scores.sort(new MyCompare());
 
-		for(int i = 0; i < scores.size(); i++)
-			System.out.println(scores.get(i));
 
 	}
 

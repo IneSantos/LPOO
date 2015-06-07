@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import pacman.GUI.Application;
-import pacman.GUI.GameEngine;
 
 @SuppressWarnings("serial")
 public class GameOverAnimation extends JPanel implements ActionListener, KeyListener, MouseListener{
@@ -128,7 +127,7 @@ public class GameOverAnimation extends JPanel implements ActionListener, KeyList
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_ENTER)
 		{
-			new GameEngine();
+			new MainMenu();
 		}
 
 	}

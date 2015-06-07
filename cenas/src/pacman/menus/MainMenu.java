@@ -92,12 +92,15 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener, Mo
 	public void keyPressed(KeyEvent arg0) 
 	{
 		if(arg0.getKeyCode() == KeyEvent.VK_UP && currOption != 0){
-			this.currOption--;
+			if(currOption == 5)
+				currOption = 3;
+			else currOption--;
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_DOWN && currOption != (opcoes.length - 1))
 		{
-			currOption++;
-			System.out.println(currOption);
+			if(currOption == 5)
+				currOption = 1;
+			else currOption++;
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
 			selected();
