@@ -37,13 +37,9 @@ public class Character {
 		return position.y;
 	}
 
-	public boolean setOrientation(int o)
+	public void setOrientation(int o)
 	{
-		if(o == orientation)
-			return false;
-
 		orientation = o;
-		return true;
 	}
 
 	public Position getTilePosition(int width, int height) 
@@ -73,7 +69,7 @@ public class Character {
 	{
 		Position p1 = getTilePosition(position.x + GameEngine.TILE_DIMENSION - 1 + velocity , position.y);
 
-		if(p1.x >= Game.maze.maze[0].length)
+		if(p1.x >= Game.maze.maze.get(0).length)
 		{
 			if(position.x >= Application.frame.getContentPane().getWidth())
 				position.x = -GameEngine.TILE_DIMENSION;
@@ -135,5 +131,10 @@ public class Character {
 	public void setPosition(Position p)
 	{
 		this.position = p;
+	}
+
+	public void setVelocity(int vel)
+	{
+		this.velocity = vel;
 	}
 }

@@ -8,13 +8,15 @@ import pacman.logic.Game.Mode;
 
 public class Pacman extends Character {
 
-	final int POINT_SCORE = 100;
-	final int POWER_POINT_SCORE = 250;
+	final int POINT_SCORE = 10;
+	final int POWER_POINT_SCORE = 50;
+	final int FRUIT_SCORE = 150;
 	
 	int score;
 	int animation;
 	int power_timer;
 	int lifes;
+	int fruits;
 	
 
 	public Pacman()
@@ -24,6 +26,7 @@ public class Pacman extends Character {
 		animation = 0;
 		power_timer = 0;
 		lifes = 3;
+		fruits = 0;
 	}
 
 	public int updateAnimation()
@@ -36,20 +39,19 @@ public class Pacman extends Character {
 		return animation;
 	}
 
-
 	public void updateMovement(int inputKey) 
 	{	
 		//Portal á direita no labirinto
 		if(position.x + GameEngine.TILE_DIMENSION >= Game.mazeWidth * GameEngine.TILE_DIMENSION && orientation == 1)
 		{
-			if(position.x == Game.maze.maze[0].length * GameEngine.TILE_DIMENSION)
+			if(position.x == Game.maze.maze.get(0).length * GameEngine.TILE_DIMENSION)
 				position.x = -GameEngine.TILE_DIMENSION;
 		}
 		//Portal á esquerda no labirinto
 		else if(position.x <= 0 && orientation == 3)
 		{
 			if(position.x == -GameEngine.TILE_DIMENSION)
-				position.x = Game.maze.maze[0].length * GameEngine.TILE_DIMENSION;
+				position.x = Game.maze.maze.get(0).length * GameEngine.TILE_DIMENSION;
 		}
 		else if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0 && inputKey != 0)
 		{
@@ -79,21 +81,29 @@ public class Pacman extends Character {
 		if(Game.maze.isPoint(tile))
 		{
 			if(Game.maze.isDecisionPoint(tile))
-				Game.maze.maze[tile.y][tile.x] = 'd';
-			else Game.maze.maze[tile.y][tile.x] = ' ';
+				Game.maze.maze.get(tile.y)[tile.x] = 'd';
+			else Game.maze.maze.get(tile.y)[tile.x] = ' ';
 
 			this.score += POINT_SCORE;
 			GameEngine.game.collected_pills++;
 		}
 		else if(Game.maze.isPowerPoint(tile))
 		{
-			Game.maze.maze[tile.y][tile.x] = ' ';
+			Game.maze.maze.get(tile.y)[tile.x] = ' ';
 
 			this.power_timer = 12;
 			this.score += POWER_POINT_SCORE;
 			GameEngine.game.collected_pills++;
-
 			Game.ghostMode = Mode.FRIGHTENED;
+		}
+		else if(Game.maze.isFruit(tile))
+		{
+			Game.maze.maze.get(tile.y)[tile.x] = ' ';
+
+			this.score += POWER_POINT_SCORE;
+			GameEngine.game.collected_pills++;
+			
+			
 		}
 
 
@@ -127,4 +137,15 @@ public class Pacman extends Character {
 		
 	}
 
+	public int getFruits() {
+		return fruits;
+	}
+
+	
+	public void bonusLife() 
+	{
+		if(this.lifes < 3)
+			this.lifes++;	
+	}
+	
 }

@@ -11,10 +11,11 @@ public class Ghost extends Character {
 	int state;
 	public Position target;
 	public boolean house;
+	
 	public Ghost(Position target)
 	{
+		super();
 		this.orientation = 0; //sempre que sai da casa sai com a orientacao para a esquerda
-		this.velocity = 2;
 		this.alive = true;
 		this.target = target;
 	}
@@ -66,14 +67,14 @@ public class Ghost extends Character {
 
 		if(Game.maze.isDoor(getTilePosition(position.x, position.y)))
 		{
-			if (!this.alive && position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0)
+			if (position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0)
 			{
 				this.alive = true;
 				this.orientation = 0;
+				this.velocity = 2;
 				moveUp();
 				return;
 			}
-
 		}
 
 		if(!Game.maze.isDecisionPoint(getTilePosition(position.x, position.y)))
@@ -105,8 +106,6 @@ public class Ghost extends Character {
 			else
 				switchMode();
 		}
-
-
 	}
 
 	public void switchMode()
@@ -120,13 +119,7 @@ public class Ghost extends Character {
 			else if(Game.ghostMode == Mode.FRIGHTENED)
 				updateOrientation(null);
 		}
-		else 
-		{
-			if(!this.position.equals(new Position(12*GameEngine.TILE_DIMENSION, 17*GameEngine.TILE_DIMENSION)))
-				updateOrientation(new Position(12*GameEngine.TILE_DIMENSION, 17*GameEngine.TILE_DIMENSION));
-			else 
-				this.alive = true;
-		}
+		else updateOrientation(new Position(12*GameEngine.TILE_DIMENSION, 15*GameEngine.TILE_DIMENSION));
 
 	}
 

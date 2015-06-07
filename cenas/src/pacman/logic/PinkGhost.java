@@ -52,12 +52,7 @@ public class PinkGhost extends Ghost {
 			else if(Game.ghostMode == Mode.FRIGHTENED)
 				updateOrientation(null);
 		}
-		else 
-		{
-			if(!this.position.equals(new Position(12*GameEngine.TILE_DIMENSION, 17*GameEngine.TILE_DIMENSION)))
-				updateOrientation(new Position(12*GameEngine.TILE_DIMENSION, 17*GameEngine.TILE_DIMENSION));
-			else 
-				this.alive = true;
-		}
+		else updateOrientation(new Position(12*GameEngine.TILE_DIMENSION, 15*GameEngine.TILE_DIMENSION));
+		
 	}
 }

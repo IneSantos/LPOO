@@ -30,20 +30,23 @@ public class OrangeGhost extends Ghost {
 
 	public void switchMode()
 	{
-
-		if(Game.ghostMode == Mode.CHASE)
+		if(alive)
 		{
-			Position target = Game.pacman.position;
+			if(Game.ghostMode == Mode.CHASE)
+			{
+				Position target = Game.pacman.position;
 
-			if(calculateDistance(position.x, position.y, target)%GameEngine.TILE_DIMENSION >= 8)
-				target = this.target;
+				if(calculateDistance(position.x, position.y, target)%GameEngine.TILE_DIMENSION >= 8)
+					target = this.target;
 
-			updateOrientation(target);
+				updateOrientation(target);
+			}
+			else if (Game.ghostMode == Mode.SCATTER)
+				updateOrientation(this.target);
+			else if(Game.ghostMode == Mode.FRIGHTENED)
+				updateOrientation(null);
 		}
-		else if (Game.ghostMode == Mode.SCATTER)
-			updateOrientation(this.target);
-		else if(Game.ghostMode == Mode.FRIGHTENED)
-			updateOrientation(null);
+		else updateOrientation(new Position(12*GameEngine.TILE_DIMENSION, 15*GameEngine.TILE_DIMENSION));
 	}
 
 }

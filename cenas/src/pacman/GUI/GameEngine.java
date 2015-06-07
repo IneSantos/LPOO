@@ -8,52 +8,66 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import pacman.logic.Game;
-import pacman.logic.Game.Mode;
 import pacman.logic.Position;
 import pacman.menus.MainMenu;
-import pacman.sound.Sound;
 
 @SuppressWarnings("serial")
 public class GameEngine extends JPanel implements ActionListener, KeyListener
 {
 	final int MILISSECONDS_TO_REFRESH = 20;
 	public static final int TILE_DIMENSION = 20;
+	public static final int TOP_HUD_HEIGHT = 60;
+	public static final int BOTTOM_HUD_HEIGHT = 40;
 	static final int SPRITE_DIMENSION = 24;
+	public static int refresh = 0;
+	public static int inputKey = 0;
 	Timer  timer;
-	Sound sound;
-	int refresh = 0;
+	MediaPlayer beginning;
+	MediaPlayer chomp;
+	MediaPlayer power;
+	MediaPlayer death;
+	MediaPlayer ghost;
+	MediaPlayer intermission;
+	MediaPlayer fruit;
 
-	int inputKey = 0;
 	private int deathAnimation = 0;
-	int startAnimation = -1;
-
+	int startAnimation = 7;
 
 	public static Game game;;
 
 	public GameEngine()
 	{
 		Application.frame.getContentPane().removeAll();
-		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
-
-		Application.frame.getContentPane().removeAll();
-
+		Application.frame.getContentPane().revalidate();
 		game = new Game();
-		sound = new Sound();
+		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
+		beginning = new MediaPlayer(Application.sounds.beginning);
+		chomp = new MediaPlayer(Application.sounds.chomp);
+		power = new MediaPlayer(Application.sounds.power);
+		death = new MediaPlayer(Application.sounds.death);
+		ghost = new MediaPlayer(Application.sounds.ghost);
+		intermission = new MediaPlayer(Application.sounds.intermission);
+		fruit = new MediaPlayer(Application.sounds.fruit);
 
-		this.setPreferredSize(new Dimension(game.getMaze().maze[0].length*TILE_DIMENSION, game.getMaze().maze.length*TILE_DIMENSION));
 		Application.frame.getContentPane().add(this, BorderLayout.CENTER);
-		System.out.println(Game.pacman.getLifes());
+		Application.frame.getContentPane().setPreferredSize(new Dimension(game.getMaze().maze.get(0).length*TILE_DIMENSION, game.getMaze().maze.size()*TILE_DIMENSION + TOP_HUD_HEIGHT + BOTTOM_HUD_HEIGHT));
+		Application.frame.pack();
 
 		addKeyListener(this);
 		setFocusable(true);
 		requestFocus();
 
-		Application.frame.pack();
-		Application.frame.setVisible(true);
+		repaint();
+		startAnimation--;
+
+		beginning.open();
+		beginning.clip.start();
+		chomp.open();
 	}
 
 
@@ -62,97 +76,131 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 	{
 		refresh++;
 
-		//Actualizacao da animacao
-		if(refresh % 2 == 0)
-		{
-			game.getPacman().updateAnimation();
-			game.getRedGhost().updateAnimation();
-			game.getPinkGhost().updateAnimation();
-			game.getOrangeGhost().updateAnimation();
-			game.getBlueGhost().updateAnimation();
-		}	
+		updateSound();
+		game.updateElements();
 
-		
-		//Verificacao do power up do pacman
-		if(Game.pacman.getPower() > 0 && refresh %  25== 0)
-		{
-			Game.pacman.decPower();
 
-			if(Game.pacman.getPower() == 0)
-				Game.ghostMode = Mode.CHASE;
-		}
 
-		//Atualizacao do comportamento dos fantasmas
-		if(refresh == 50*7 || refresh == 50*34 || refresh == 50*59 || refresh == 50*84)
-			Game.ghostMode = Mode.CHASE;
-		else if(refresh == 50*27 || refresh == 50*54 || refresh == 50*79)
-			Game.ghostMode = Mode.SCATTER;
-
-		//Actualizacao do movimento dos elementos da cena
-		if(Game.pacman.getAlive())
-			game.getPacman().updateMovement(inputKey);
-		/*game.getRedGhost().moveGhost();
-		game.getPinkGhost().moveGhost();
-		game.getOrangeGhost().moveGhost();
-		game.getBlueGhost().moveGhost();*/
-
-		//Verificacao de colisoes entre elementos da cena
-		if(Game.pacman.getAlive())
-			game.checkCharacterColision();
-
-		//verificacoes de arrnaque de Orange e Blue
-		if(game.getCollectedPills() >= 30 && game.getBlueGhost().house)
-		{
-			game.getBlueGhost().setOrientation(0);
-			game.getBlueGhost().house = false;
-		}
-		if(game.getCollectedPills() >= Game.maze.getPills()/3 && game.getOrangeGhost().house)
-		{
-			game.getOrangeGhost().setOrientation(0);
-			game.getOrangeGhost().house = false;
-		}
-
-		//Verificacao de fim do jogo
 		if(game.getCollectedPills() == Game.maze.getPills() || (!Game.pacman.getAlive() && this.deathAnimation == 11))
 		{
 			timer.stop();
-			Sound.clip.close();
-			sound = new Sound();
-			this.deathAnimation = 0;
+			deathAnimation = 0;
+			startAnimation = 7;
 
 			if(game.getCollectedPills() == Game.maze.getPills())
 			{
-				try { this.finalize();}
-				catch (Throwable e1) {}
-				
-				Sound.clip.close();
-				new MainMenu();
+				if(game.getLevel() == 3)
+				{
+					try { this.finalize();}
+					catch (Throwable e1) {}
+
+					//new WinAnimation();
+					new MainMenu();
+					chomp.clip.close();
+				}
+				else
+				{
+					game.nextLevel();
+					Game.pacman.bonusLife();
+					startAnimation = 7;
+					game.initLevel(true);
+
+					this.setPreferredSize(new Dimension(game.getMaze().maze.get(0).length*TILE_DIMENSION, game.getMaze().maze.size()*TILE_DIMENSION + TOP_HUD_HEIGHT + BOTTOM_HUD_HEIGHT));
+					Application.frame.pack();
+
+					beginning.open();
+					beginning.clip.start();
+					chomp.clip.stop();
+				}
+
 			}
 			else if(Game.pacman.getLifes() == 0)
 			{
 				try { this.finalize();}
 				catch (Throwable e1) {}
-				
-				Sound.clip.close();
+
+				//new GameOverAnimation(0, 0);	
 				new MainMenu();
+
+				chomp.clip.close();
 			}
 			else
 			{
-				game.initLevel(1);
-				Game.pacman.setAlive(true);
-				Game.pacman.setOrientation(2);
-				
-				this.startAnimation = -1;
+				game.initLevel(false);
 				repaint();
 				refresh = 0;
+
+				beginning.open();
+				beginning.clip.start();
+				chomp.clip.stop();
 			}
-			
+		}
+
+		repaint();
+
+		if(startAnimation > 1)
+			startAnimation--;
+
+	}
+
+
+	private void updateSound() 
+	{
+		if(death.clip.isOpen() && !death.clip.isRunning())
+			death.clip.close();
+
+		if(beginning.clip.isOpen() && !beginning.clip.isRunning())
+			beginning.clip.close();
+
+		if(intermission.clip.isOpen() && !intermission.clip.isRunning())
+			intermission.clip.close();
+
+		if(power.clip.isOpen() && !power.clip.isRunning())
+		{
+			power.clip.close();
+			intermission.open();
+			intermission.clip.start();
 		}
 		
+		if(ghost.clip.isOpen() && !ghost.clip.isRunning())
+			ghost.clip.close();
 		
+		if(fruit.clip.isOpen() && !fruit.clip.isRunning())
+			fruit.clip.close();
 		
-		repaint();
+		if(!game.getPacman().getAlive() && !death.clip.isRunning())
+		{
+			if(beginning.clip.isRunning())
+				beginning.clip.close();
+
+			if(chomp.clip.isRunning())
+				chomp.clip.stop();
+
+			death.open();
+			death.clip.start();
+		}
+
+		if(game.getPacman().getPower() == 12 && !power.clip.isOpen())
+		{
+			power.open();
+			power.clip.start();
+		}
+		
+		if(game.checkCharacterColision() && !ghost.clip.isOpen())
+		{
+			ghost.open();
+			ghost.clip.start();
+		}
+
+		if(Game.maze.isFruit(game.getPacman().getTilePosition(game.getPacman().getX(), game.getPacman().getY())) && !fruit.clip.isOpen())
+		{
+			fruit.open();
+			fruit.clip.start();
+		}
+
 	}
+
+
 
 	@Override
 	public void paintComponent(Graphics g)
@@ -161,124 +209,241 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 		for(int h = 0; h < Game.mazeHeight; h++)
 			for(int w = 0; w < Game.mazeWidth; w++)
 				if(game.getMaze().isWall(new Position(w, h)))
-					g.drawImage(Application.images.wallTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+				{
+					if(game.getLevel() == 1)
+						g.drawImage(Application.images.wallTile1, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+					else if(game.getLevel() == 2)
+						g.drawImage(Application.images.wallTile2, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+					else
+						g.drawImage(Application.images.wallTile3, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+				}
 				else if(game.getMaze().isPoint(new Position(w, h)))
-					g.drawImage(Application.images.pointTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+					g.drawImage(Application.images.pointTile, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 				else if(game.getMaze().isPowerPoint(new Position(w, h)))
-					g.drawImage(Application.images.powerPointTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
-				else g.drawImage(Application.images.backgroundTile, TILE_DIMENSION*w, TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+					g.drawImage(Application.images.powerPointTile, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+				else if(game.getMaze().isFruit(new Position(w, h)))
+					g.drawImage(Application.images.fruits.getSubimage(0, 0, 50, 50), TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+				else g.drawImage(Application.images.backgroundTile, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
+
+
+		paintPacman(g);
+
+		paintGhosts(g);
+
+		paintScores(g);
+
+		paintBottomHUD(g);
+
+
+
+		if(startAnimation > 1)
+		{
+			if(startAnimation >= 6)
+				g.drawImage(Application.images.startScreen, 0, 0, Application.frame.getContentPane().getWidth(), Application.frame.getContentPane().getHeight(), null);
+			else {
+				g.drawImage(Application.images.startScreen, Application.frame.getContentPane().getWidth()/(startAnimation*2), 
+						Application.frame.getContentPane().getHeight()/(startAnimation*2), 
+						Application.frame.getContentPane().getWidth() - Application.frame.getContentPane().getWidth()/(startAnimation), 
+						Application.frame.getContentPane().getHeight() - Application.frame.getContentPane().getHeight()/(startAnimation), null);
+			}
+		}
+	}
+
+	private void paintBottomHUD(Graphics g) 
+	{
+		g.drawImage(Application.images.background, 0,  60 + Game.mazeHeight*TILE_DIMENSION, Application.frame.getContentPane().getWidth(), 40, null);
+
+		for(int i = 0; i < Game.pacman.getLifes(); ++i)
+			g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 20 + 35 * i, 60 + Game.mazeHeight * TILE_DIMENSION + 10, 25, 25, null);
+
+		if(Game.pacman.getFruits() >= 10)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Game.pacman.getFruits()/10)%10), 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25*4, 60 + Game.mazeHeight * TILE_DIMENSION + 10, 20, 20, null);
+
+		g.drawImage(Application.images.numbers.getSubimage(30*((Game.pacman.getFruits()/10)%10), 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25*3, 60 + Game.mazeHeight * TILE_DIMENSION + 10, 20, 20, null);
+		g.drawImage(Application.images.letters.getSubimage(23*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*2, 60 + Game.mazeHeight * TILE_DIMENSION + 15, 15, 15, null);
+		g.drawImage(Application.images.fruits.getSubimage(0, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25, 60 + Game.mazeHeight * TILE_DIMENSION + 10, 20, 20, null);
+
+	}
+
+	private void paintGhosts(Graphics g) 
+	{
+		if(Game.redFlag)
+			if(game.getRedGhost().getAlive())
+			{
+				if(Game.pacman.getPower() == 0)
+					g.drawImage(Application.images.sprites.getSubimage(game.getRedGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*4, game.getRedGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+							game.getRedGhost().getX() - 5, game.getRedGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+				else if(Game.pacman.getPower() > 5 || Game.pacman.getPower() % 2 == 0)
+					g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*13, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+							game.getRedGhost().getX() - 5, game.getRedGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+				else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+						game.getRedGhost().getX() - 5, game.getRedGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+
+			}
+			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getRedGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+					game.getRedGhost().getX() - 5, game.getRedGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+
+
+		if(Game.pinkFlag)
+			if(game.getPinkGhost().getAlive())
+			{
+				if(Game.pacman.getPower() == 0)
+					g.drawImage(Application.images.sprites.getSubimage(game.getPinkGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*8, game.getPinkGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+							game.getPinkGhost().getX() - 5, game.getPinkGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+				else if(Game.pacman.getPower() > 5 || Game.pacman.getPower() % 2 == 0)
+					g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*13, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+							game.getPinkGhost().getX() - 5, game.getPinkGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+				else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+						game.getPinkGhost().getX() - 5, game.getPinkGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+
+			}
+			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getPinkGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+					game.getPinkGhost().getX() - 5, game.getPinkGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+
+		if(Game.orangeFlag)
+			if(game.getOrangeGhost().getAlive())
+			{
+				if(Game.pacman.getPower() == 0)
+					g.drawImage(Application.images.sprites.getSubimage(game.getOrangeGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*10, game.getOrangeGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+							game.getOrangeGhost().getX() - 5, game.getOrangeGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+				else if(Game.pacman.getPower() > 5 || Game.pacman.getPower() % 2 == 0)
+					g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*13, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+							game.getOrangeGhost().getX() - 5, game.getOrangeGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+				else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+						game.getOrangeGhost().getX() - 5, game.getOrangeGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+
+			}
+			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getOrangeGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+					game.getOrangeGhost().getX() - 5, game.getOrangeGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+
+		if(Game.blueFlag)
+			if(game.getBlueGhost().getAlive())
+			{
+				if(Game.pacman.getPower() == 0)
+					g.drawImage(Application.images.sprites.getSubimage(game.getBlueGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*6, game.getBlueGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+							game.getBlueGhost().getX() - 5, game.getBlueGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+				else if(Game.pacman.getPower() > 5 || Game.pacman.getPower() % 2 == 0)
+					g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*13, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+							game.getBlueGhost().getX() - 5, game.getBlueGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+				else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+						game.getBlueGhost().getX() - 5, game.getBlueGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+			}
+			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getBlueGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
+					game.getBlueGhost().getX() - 5, game.getBlueGhost().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
+
+
+	}
+
+	private void paintPacman(Graphics g)
+	{
 
 		if(Game.pacman.getAlive())
 			g.drawImage(Application.images.sprites.getSubimage(game.getPacman().getAnimation() * SPRITE_DIMENSION, game.getPacman().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-					game.getPacman().getX(), game.getPacman().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
+					game.getPacman().getX() - 5, game.getPacman().getY() + TOP_HUD_HEIGHT - 5, TILE_DIMENSION + 10, TILE_DIMENSION + 10, null, null);
 		else 
 		{
 			g.drawImage(Application.images.deathAnimation.getSubimage(this.deathAnimation*50, 0, 50, 57), 
-					game.getPacman().getX(), game.getPacman().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
+					game.getPacman().getX(), game.getPacman().getY() + TOP_HUD_HEIGHT, TILE_DIMENSION, TILE_DIMENSION, null, null);
 
 			if(refresh % 4 == 0)
 				deathAnimation++;
 		}
+	}	
+
+	private void paintScores(Graphics g) 
+	{
+		g.drawImage(Application.images.background, 0,  0, Application.frame.getContentPane().getWidth(), 60, null);
+
+		g.drawImage(Application.images.letters.getSubimage(18*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*5, 10, 20, 20, null); //s
+		g.drawImage(Application.images.letters.getSubimage(2*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*4, 10, 20, 20, null);  //c
+		g.drawImage(Application.images.letters.getSubimage(14*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*3, 10, 20, 20, null); //o
+		g.drawImage(Application.images.letters.getSubimage(17*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*2, 10, 20, 20, null); //r
+		g.drawImage(Application.images.letters.getSubimage(4*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25, 10, 20, 20, null);  //e
+
+		if(Game.pacman.getScore() >= 1000000)
+			g.drawImage(Application.images.numbers.getSubimage(30*(Game.pacman.getScore()/1000000)%10, 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25*7, 35, 20, 20, null);
+
+		if(Game.pacman.getScore() >= 100000)
+			g.drawImage(Application.images.numbers.getSubimage(30*(Game.pacman.getScore()/100000)%10, 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25*6, 35, 20, 20, null);
+
+		if(Game.pacman.getScore() >= 10000)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Game.pacman.getScore()/10000)%10), 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25*5, 35, 20, 20, null);
+
+		if(Game.pacman.getScore() >= 1000)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Game.pacman.getScore()/1000)%10), 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25*4, 35, 20, 20, null);
+
+		if(Game.pacman.getScore() >= 100)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Game.pacman.getScore()/100)%10), 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25*3, 35, 20, 20, null);
+
+		if(Game.pacman.getScore() >= 10)
+			g.drawImage(Application.images.numbers.getSubimage(30*((Game.pacman.getScore()/10)%10), 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25*2, 35, 20, 20, null);
+
+		if(Game.pacman.getScore() >= 1)
+			g.drawImage(Application.images.numbers.getSubimage(30*(Game.pacman.getScore()%10), 0, 30, 30), Game.mazeWidth*TILE_DIMENSION - 25, 35, 20, 20, null);	
 
 
-		if(game.getRedGhost().getAlive())
-		{
-			if(Game.pacman.getPower() == 0)
-				g.drawImage(Application.images.sprites.getSubimage(game.getRedGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*4, game.getRedGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-						game.getRedGhost().getX(), game.getRedGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			else if(Game.pacman.getPower() > 5 || Game.pacman.getPower() % 2 == 0)
-				g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*13, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-						game.getRedGhost().getX(), game.getRedGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-					game.getRedGhost().getX(), game.getRedGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-
-		}
-		else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getRedGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-				game.getRedGhost().getX(), game.getRedGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-
-
-		if(game.getPinkGhost().getAlive())
-		{
-			if(Game.pacman.getPower() == 0)
-				g.drawImage(Application.images.sprites.getSubimage(game.getPinkGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*8, game.getPinkGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-						game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			else if(Game.pacman.getPower() > 5 || Game.pacman.getPower() % 2 == 0)
-				g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*13, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-						game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-					game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-
-		}
-		else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getPinkGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-				game.getPinkGhost().getX(), game.getPinkGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-
-
-		if(game.getOrangeGhost().getAlive())
-		{
-			if(Game.pacman.getPower() == 0)
-				g.drawImage(Application.images.sprites.getSubimage(game.getOrangeGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*10, game.getOrangeGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-						game.getOrangeGhost().getX(), game.getOrangeGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			else if(Game.pacman.getPower() > 5 || Game.pacman.getPower() % 2 == 0)
-				g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*13, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-						game.getOrangeGhost().getX(), game.getOrangeGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-					game.getOrangeGhost().getX(), game.getOrangeGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-
-		}
-		else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getOrangeGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-				game.getPinkGhost().getX(), game.getOrangeGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-
-
-		if(game.getBlueGhost().getAlive())
-		{
-			if(Game.pacman.getPower() == 0)
-				g.drawImage(Application.images.sprites.getSubimage(game.getBlueGhost().getAnimation() * SPRITE_DIMENSION +SPRITE_DIMENSION*6, game.getBlueGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-						game.getBlueGhost().getX(), game.getBlueGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			else if(Game.pacman.getPower() > 5 || Game.pacman.getPower() % 2 == 0)
-				g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*13, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-						game.getBlueGhost().getX(), game.getBlueGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-			else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*15, 0, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-					game.getBlueGhost().getX(), game.getBlueGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-		}
-		else g.drawImage(Application.images.sprites.getSubimage(SPRITE_DIMENSION*12, game.getBlueGhost().getOrientation() * SPRITE_DIMENSION, SPRITE_DIMENSION, SPRITE_DIMENSION), 
-				game.getPinkGhost().getX(), game.getBlueGhost().getY(), TILE_DIMENSION, TILE_DIMENSION, null, null);
-
-		if(startAnimation <= 5)
-		{
-			g.drawImage(Application.images.startScreen, startAnimation * Application.frame.getContentPane().getWidth()/10, startAnimation * Application.frame.getContentPane().getHeight()/10, 
-					Application.frame.getContentPane().getWidth() - startAnimation * Application.frame.getContentPane().getWidth()/5, 
-					Application.frame.getContentPane().getHeight() - startAnimation * Application.frame.getContentPane().getHeight()/5, null);
-
-			startAnimation++;
-		}
 	}
+
 
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		if(!timer.isRunning())
-		{
-			Sound.clip.start();
-			Sound.clip.loop(10);
-			timer.start();
-		}
-		
+
 		if(e.getKeyCode() == KeyEvent.VK_UP )
 			inputKey = KeyEvent.VK_UP;
 		else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
+		{
 			inputKey = KeyEvent.VK_RIGHT;
+
+			if(!timer.isRunning())
+			{
+				timer.start();
+				chomp.clip.loop(Clip.LOOP_CONTINUOUSLY);
+				
+				if(intermission.clip.isOpen())
+					intermission.clip.start();
+			}
+		}
 		else if(e.getKeyCode() == KeyEvent.VK_DOWN)
 			inputKey = KeyEvent.VK_DOWN;
 		else if(e.getKeyCode() == KeyEvent.VK_LEFT)
+		{
 			inputKey = KeyEvent.VK_LEFT;
+			if(!timer.isRunning())
+			{
+				timer.start();
+				chomp.clip.loop(Clip.LOOP_CONTINUOUSLY);
+				
+				if(intermission.clip.isOpen())
+					intermission.clip.start();
+			}
+		}
 		else if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
 		{
 			if(timer.isRunning())
-			{
-				Sound.clip.stop();
+			{				
 				timer.stop();
 				repaint();
-				startAnimation = 0;
+				startAnimation = 6;
+
+				if(chomp.clip.isRunning())
+					chomp.clip.stop();
+
+				if(intermission.clip.isRunning())
+					intermission.clip.stop();
+			}
+			else 
+			{
+				try { this.finalize();}
+				catch (Throwable e1) {}
+
+				if(beginning.clip.isRunning())
+					beginning.clip.close();
+
+				if(intermission.clip.isRunning())
+					intermission.clip.close();
+
+				new MainMenu();
 			}
 
 		}

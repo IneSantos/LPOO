@@ -1,113 +1,98 @@
 package pacman.logic;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Maze {
 
-	public char maze[][] =  {
-		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' , ' ' , ' ', ' ', ' ' , ' ' , ' ' , ' ' , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' , ' ' , ' ', ' ', ' ' , ' ' , ' ' , ' ' , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' , ' ' , ' ', ' ', ' ' , ' ' , ' ' , ' ' , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-		{ 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , 'X' , 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-		{ 'X', '.', '.', '.', '.', '.', 'D', '.', '.', '.', '.', '.' , '.' , 'X', 'X', '.' , '.' , '.' , '.' , '.', '.', 'D', '.', '.', '.', '.', '.', 'X'},
-		{ 'X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X' , '.' , 'X', 'X', '.' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', 'P', 'X', ' ', ' ', 'X', '.', 'X', ' ', ' ', ' ', 'X' , '.' , 'X', 'X', '.' , 'X' , ' ' , ' ' , ' ', 'X', '.', 'X', ' ', ' ', 'X', 'P', 'X'},
-		{ 'X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X' , '.' , 'X', 'X', '.' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', 'D', '.', '.', '.', '.', 'D', '.', '.', 'D', '.', '.' , 'D' , '.', '.', 'D' , '.' , '.' , 'D' , '.', '.', 'D', '.', '.', '.', '.', 'D', 'X'},
-		{ 'X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , '.' , 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , '.' , 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', '.', '.', '.', '.', '.', 'D', 'X', 'X', '.', '.', '.' , '.' , 'X', 'X', '.' , '.' , '.' , '.' , 'X', 'X', 'D', '.', '.', '.', '.', '.', 'X'},
-		{ 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X' , ' ' , 'X', 'X', ' ' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X'},
-		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', 'X', 'X', 'X' , ' ' , 'X', 'X', ' ' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
-		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', ' ', ' ', ' ' , ' ' , 's', 's', ' ' , ' ' , ' ' , ' ' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
-		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', ' ', 'X', 'X' , 'X' , 'S', 'S', 'X' , 'X' , 'X' , ' ' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
-		{ 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', ' ', 'X', ' ' , ' ' , ' ', ' ', ' ' , ' ' , 'X' , ' ' , 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X'},
-		{ ' ', ' ', ' ', ' ', ' ', ' ', 'D', ' ', ' ', 'd', 'X', ' ' , ' ' , ' ', ' ', ' ' , ' ' , 'X' , 'd' , ' ', ' ', 'D', ' ', ' ', ' ', ' ', ' ', ' '},
-		{ 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', ' ', 'X', ' ' , ' ' , ' ', ' ', ' ' , ' ' , 'X' , ' ' , 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X'},
-		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', ' ', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , ' ' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
-		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', 'd', ' ', ' ' , ' ' , ' ', ' ', ' ' , ' ' , ' ' , 'd' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
-		{ ' ', ' ', ' ', ' ', ' ', 'X', '.', 'X', 'X', ' ', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , ' ' , 'X', 'X', '.', 'X', ' ', ' ', ' ', ' ', ' '},
-		{ 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', ' ', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , ' ' , 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X'},
-		{ 'X', '.', '.', '.', '.', '.', 'D', '.', '.', 'D', '.', '.' , '.' , 'X', 'X', '.' , '.' , '.' , '.' , '.', '.', '.', '.', '.', '.', '.', '.', 'X'},
-		{ 'X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X' , '.' , 'X', 'X', '.' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X' , '.' , 'X', 'X', '.' , 'X' , 'X' , 'X' , 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', 'P', '.', '.', 'X', 'X', 'D', '.', '.', 'D', '.', '.' , '.' , '.', '.', '.' , '.' , '.' , 'D' , '.', '.', 'D', 'X', 'X', '.', '.', 'P', 'X'},
-		{ 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , '.' , 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', 'X'},
-		{ 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , '.' , 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', 'X'},
-		{ 'X', '.', '.', 'D', '.', '.', '.', 'X', 'X', '.', '.', '.' , '.' , 'X', 'X', '.' , '.' , '.' , '.' , 'X', 'X', '.', '.', '.', 'D', '.', '.', 'X'},
-		{ 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' , '.' , 'X', 'X', '.' , 'X' , 'X' , 'X' , 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' , '.' , 'X', 'X', '.' , 'X' , 'X' , 'X' , 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X'},
-		{ 'X', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' , 'D' , '.', '.', 'D' , '.' , '.' , '.' , '.', '.', '.', '.', '.', '.', '.', '.', 'X'},
-		{ 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' , 'X' , 'X', 'X', 'X' , 'X' , 'X' , 'X' , 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' , ' ' , ' ', ' ', ' ' , ' ' , ' ' , ' ' , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' , ' ' , ' ', ' ', ' ' , ' ' , ' ' , ' ' , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}};
+	public ArrayList<char[]> maze;
 
 	int pills = 0;
-	
-	public Maze()
-	{
-		for(int i = 0; i < maze.length; ++i)
-			for (int j = 0; j < maze[0].length; ++j)
-				if(maze[i][j] == 'P' || maze[i][j] == '.' || maze[i][j] == 'D')
+
+	public Maze(int level)
+	{ 
+		loadMaze(level);
+
+		for(int i = 0; i < maze.size(); ++i)
+			for (int j = 0; j < maze.get(0).length; ++j)
+				if(maze.get(i)[j] == 'P' ||maze.get(i)[j] == '.' || maze.get(i)[j] == 'D')
 					this.pills++;
 	}
-	
+
+	private void loadMaze(int level) 
+	{
+		maze = new ArrayList<char[]>();
+
+		try 
+		{
+			Scanner scan = new Scanner(new File("maze" + level +".txt"));
+			while (scan.hasNextLine())
+				maze.add(scan.nextLine().toCharArray());
+
+			scan.close();
+		} 
+		catch (FileNotFoundException e) {e.printStackTrace();}
+
+	}
+
 	public boolean isWall(Position p)
 	{
 		if(p.x >= 0 && p.x < Game.mazeWidth)
-			if(maze[p.y][p.x] == 'X')
+			if(maze.get(p.y)[p.x] == 'X')
 				return true;
 		return false;
 	}
-	
+
 	public boolean isPoint(Position p)
 	{
-		if(p.x > 0 && p.x < Game.mazeWidth)
-			if(maze[p.y][p.x] == '.' || maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'I')
+		if(p.x >= 0 && p.x < Game.mazeWidth)
+			if(maze.get(p.y)[p.x] == '.' || maze.get(p.y)[p.x] == 'D')
 				return true;
 		return false;
 	}
-	
+
 	public boolean isPowerPoint(Position p)
 	{
 		if(p.x > 0 && p.x < Game.mazeWidth)
-			if(maze[p.y][p.x] == 'P')
+			if(maze.get(p.y)[p.x] == 'P')
 				return true;
 		return false;
 	}
-	
+
 	public boolean isDoor(Position p)
 	{
 		if(p.x > 0 && p.x < Game.mazeWidth)
-			if(maze[p.y][p.x] == 'S')
+			if(maze.get(p.y)[p.x] == 'S')
 				return true;
 		return false;
 	}
-	
-	//GHOST
-	
+
 	public boolean isDecisionPoint(Position p)
 	{
 		if(p.x > 0 && p.x < Game.mazeWidth)
-			if(maze[p.y][p.x] == 'D' || maze[p.y][p.x] == 'd')
+			if(maze.get(p.y)[p.x] == 'D' || maze.get(p.y)[p.x] == 'd')
 				return true;
-		
+
 		return false;
 	}
-	
-	public boolean isIntPoint(Position p)
-	{
-		if(p.x >= 0 && p.x < Game.mazeWidth)
-			if(maze[p.y][p.x] == 'I' || maze[p.y][p.x] == 'i')
-				return true;
-		
-		return false;
-	}
-	
+
 	public boolean isSpecial(Position p)
 	{
 		if(p.x >= 0 && p.x < Game.mazeWidth)
-			if(maze[p.y][p.x] == 's')
+			if(maze.get(p.y)[p.x] == 's')
 				return true;
-		
+
+		return false;
+	}
+
+	public boolean isFruit(Position p)
+	{
+		if(p.x >= 0 && p.x < Game.mazeWidth)
+			if(maze.get(p.y)[p.x] == 'F')
+				return true;
+
 		return false;
 	}
 

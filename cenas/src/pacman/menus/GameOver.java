@@ -9,8 +9,8 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 import pacman.GUI.Application;
-import pacman.GUI.Images;
 import pacman.menus.MainMenu;
+import resources.images.Images;
 
 @SuppressWarnings("serial")
 public class GameOver extends JPanel implements MouseListener , ActionListener{

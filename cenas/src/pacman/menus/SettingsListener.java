@@ -1,141 +1,176 @@
 package pacman.menus;
 
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
-import java.awt.Font;
-
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JRadioButton;
-import javax.swing.ImageIcon;
 
 import pacman.GUI.Application;
+import pacman.logic.Game;
 
 
-public class SettingsListener implements ActionListener {
+public class SettingsListener extends JPanel implements ActionListener {
 
-	public JPanel panel = new JPanel();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
+	public JPanel panel = new JPanel();
+	JButton btnCancel = new JButton("CANCEL");
+	JButton btnOk = new JButton("OK");
+	JLabel SETTINGS = new JLabel("SETTINGS");
+	JLabel GHOSTS = new JLabel("GHOSTS IN GAME:");
+	JLabel POWERS = new JLabel("NUMBER OF POWER UP:");
+	JLabel GENDER = new JLabel("GENDER : ");
+	JSpinner numPowerUps = new JSpinner();
+	JRadioButton male = new JRadioButton("PACMAN");
+	JRadioButton female = new JRadioButton("Ms.PACMAN");
+	JCheckBox red = new JCheckBox("RED");
+	JCheckBox pink = new JCheckBox("PINK");
+	JCheckBox blue = new JCheckBox("BLUE");
+	JCheckBox orange = new JCheckBox("ORANGE");
 	
 	public SettingsListener(){
-	
-		ButtonGroup group = new ButtonGroup();
-		ButtonGroup group1 = new ButtonGroup();
-		
-		Application.frame.getContentPane().removeAll();
 
+		ButtonGroup group1 = new ButtonGroup();
+
+		Application.frame.getContentPane().removeAll();
 		Application.frame.setBounds(100, 100, 476, 500);
-		
 		Application.frame.getContentPane().add(panel);
 
 		panel.setBackground(Color.BLACK);
 		panel.setLayout(null);
+
+
+		SETTINGS.setBackground(new Color(255, 255, 102));
+		SETTINGS.setFont(new Font("Cooper Black", Font.PLAIN, 40));
+		SETTINGS.setForeground(new Color(255, 255, 102));
+		SETTINGS.setBounds(125, 50, 300, 80);
+		panel.add(SETTINGS);
+
 		
-		JLabel lblNewLabel = new JLabel("LEVEL:");
-		lblNewLabel.setBackground(new Color(255, 255, 102));
-		lblNewLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		lblNewLabel.setForeground(new Color(255, 255, 102));
-		lblNewLabel.setBounds(25, 99, 102, 32);
-		panel.add(lblNewLabel);
+		GHOSTS.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		GHOSTS.setForeground(new Color(255, 255, 102));
+		GHOSTS.setBounds(25, 254, 136, 42);
+		panel.add(GHOSTS);
+
+
+		POWERS.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		POWERS.setForeground(new Color(255, 255, 102));
+		POWERS.setBounds(25, 344, 202, 42);
+		panel.add(POWERS);
+
+
+		numPowerUps.setModel(new SpinnerNumberModel(1, 1, 6, 1));
+		numPowerUps.setBounds(283, 355, 136, 23);
+		panel.add(numPowerUps);
+
+
+
+		GENDER.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		GENDER.setForeground(new Color(255, 255, 102));
+		GENDER.setBounds(25, 186, 102, 42);
+		panel.add(GENDER);
+
 		
-		JRadioButton level1 = new JRadioButton("LEVEL 1");
-		level1.setFont(new Font("Cooper Black", Font.PLAIN, 11));
-		level1.setSelected(true);
-		level1.setForeground(new Color(255, 255, 102));
-		level1.setBackground(new Color(0, 0, 0));
-		level1.setBounds(107, 102, 105, 29);
-		group.add(level1);
-		panel.add(level1);
+		male.setFont(new Font("Cooper Black", Font.PLAIN, 11));
+		male.setSelected(true);
+		male.setForeground(new Color(255, 255, 102));
+		male.setBackground(new Color(0, 0, 0));
+		male.setBounds(306, 197, 113, 23);
+		group1.add(male);
+		panel.add(male);
+
+
+
+		female.setFont(new Font("Cooper Black", Font.PLAIN, 11));
+		female.setSelected(false);
+		female.setForeground(new Color(255, 255, 102));
+		female.setBackground(new Color(0, 0, 0));
+		female.setBounds(151, 192, 122, 32);
+		group1.add(female);
+		panel.add(female);
+
+
+		red.setSelected(Game.redFlag);
+		red.setBackground(Color.BLACK);
+		red.setForeground(Color.YELLOW);
+		red.setFont(new Font("Cooper Black", Font.PLAIN, 11));
+		red.setBounds(202, 265, 56, 23);
+		panel.add(red);
+
+
 		
-		JRadioButton level2 = new JRadioButton("LEVEL 2");
-		level2.setFont(new Font("Cooper Black", Font.PLAIN, 11));
-		level2.setForeground(new Color(255, 255, 102));
-		level2.setBackground(new Color(0, 0, 0));
-		level2.setBounds(214, 100, 102, 32);
-		group.add(level2);
-		panel.add(level2);
+		pink.setSelected(Game.pinkFlag);
+		pink.setForeground(Color.YELLOW);
+		pink.setFont(new Font("Cooper Black", Font.PLAIN, 11));
+		pink.setBackground(Color.BLACK);
+		pink.setBounds(337, 265, 56, 23);
+		panel.add(pink);
+
+
+		blue.setSelected(Game.blueFlag);
+		blue.setForeground(Color.YELLOW);
+		blue.setFont(new Font("Cooper Black", Font.PLAIN, 11));
+		blue.setBackground(Color.BLACK);
+		blue.setBounds(202, 305, 71, 23);
+		panel.add(blue);
+
+	
+		orange.setSelected(Game.orangeFlag);
+		orange.setForeground(Color.YELLOW);
+		orange.setFont(new Font("Cooper Black", Font.PLAIN, 11));
+		orange.setBackground(Color.BLACK);
+		orange.setBounds(341, 305, 102, 23);
+		panel.add(orange);
+
+
+		btnOk.setBackground(Color.LIGHT_GRAY);
+		btnOk.setForeground(Color.YELLOW);
+		btnOk.setFont(new Font("Cooper Black", Font.PLAIN, 11));
+		btnOk.setBounds(/*122*/Application.frame.getWidth()-300, /*400*/Application.frame.getHeight() -90, 85, 25);
+		btnOk.addActionListener(this);
+		panel.add(btnOk);
+
+
+		btnCancel.setForeground(Color.YELLOW);
+		btnCancel.setFont(new Font("Cooper Black", Font.PLAIN, 11));
+		btnCancel.setBackground(Color.LIGHT_GRAY);
+		btnCancel.setBounds(Application.frame.getWidth()-200, Application.frame.getHeight() -90, 85, 25);
+		btnCancel.addActionListener(this);
+		panel.add(btnCancel);
+
 		
-		JRadioButton level3 = new JRadioButton("LEVEL 3");
-		level3.setFont(new Font("Cooper Black", Font.PLAIN, 11));
-		level3.setForeground(new Color(255, 255, 102));
-		level3.setBackground(new Color(0, 0, 0));
-		level3.setBounds(318, 100, 122, 32);
-		group.add(level3);
-		panel.add(level3);
-		
-		JLabel lblGhostsToFight = new JLabel("GHOSTS IN GAME:");
-		lblGhostsToFight.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		lblGhostsToFight.setForeground(new Color(255, 255, 102));
-		lblGhostsToFight.setBounds(25, 250, 136, 42);
-		panel.add(lblGhostsToFight);
-		
-		JSpinner spinner = new JSpinner();
-		spinner.setBackground(new Color(255, 255, 102));
-		spinner.setForeground(new Color(0, 0, 0));
-		spinner.setModel(new SpinnerNumberModel(4, 4, 12, 1));
-		spinner.setBounds(230, 261, 141, 23);
-		panel.add(spinner);
-		
-		JLabel lblNewLabel_2 = new JLabel("NUMBER OF POWER UP:");
-		lblNewLabel_2.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		lblNewLabel_2.setForeground(new Color(255, 255, 102));
-		lblNewLabel_2.setBounds(25, 315, 202, 42);
-		panel.add(lblNewLabel_2);
-		
-		JSpinner spinner_1 = new JSpinner();
-		spinner_1.setModel(new SpinnerNumberModel(1, 1, 6, 1));
-		spinner_1.setBounds(266, 326, 136, 23);
-		panel.add(spinner_1);
-		
-		JLabel lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setIcon(new ImageIcon(SettingsListener.class.getResource("/images/Set_menu.jpg")));
-		lblNewLabel_3.setBounds(130, 11, 202, 42);
-		panel.add(lblNewLabel_3);
-		
-		JLabel gender = new JLabel("GENDER : ");
-		gender.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		gender.setForeground(new Color(255, 255, 102));
-		gender.setBounds(25, 170, 102, 42);
-		panel.add(gender);
-		
-		JRadioButton pacman = new JRadioButton("PACMAN");
-		pacman.setFont(new Font("Cooper Black", Font.PLAIN, 11));
-		pacman.setSelected(true);
-		pacman.setForeground(new Color(255, 255, 102));
-		pacman.setBackground(new Color(0, 0, 0));
-		pacman.setBounds(305, 181, 113, 23);
-		group1.add(pacman);
-		panel.add(pacman);
-		
-		
-		JRadioButton pacman1 = new JRadioButton("Ms.PACMAN");
-		pacman1.setFont(new Font("Cooper Black", Font.PLAIN, 11));
-		pacman1.setSelected(false);
-		pacman1.setForeground(new Color(255, 255, 102));
-		pacman1.setBackground(new Color(0, 0, 0));
-		pacman1.setBounds(151, 176, 122, 32);
-		group1.add(pacman1);
-		panel.add(pacman1);
-		
-		
-		
-		//Application.frame.pack();
-		Application.frame.setVisible(true);
 	}
 
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent e) 
+	{
+
+		if(e.getSource() == btnOk){
 			
-		
+			Game.redFlag = red.isSelected();
+			Game.pinkFlag = pink.isSelected();
+			Game.blueFlag = blue.isSelected();
+			Game.orangeFlag = orange.isSelected();
+			Game.male = male.isSelected();
+			Game.powerUps = (Integer)numPowerUps.getValue();
+			
+			new MainMenu();
+		}
+		else if(e.getSource() == btnCancel)
+			new MainMenu();
 	}
 }
