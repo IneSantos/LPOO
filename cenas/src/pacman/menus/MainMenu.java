@@ -84,7 +84,7 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener, Mo
 		else if(currOption == 2)
 			new ScoresListener();
 		else if(currOption == 3)
-			System.exit(0);
+			new ExitListener();
 	}
 
 
@@ -129,7 +129,8 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener, Mo
 	public void mouseClicked(MouseEvent e) 
 	{
 
-		if(e.getX() >= 100 && e.getX() <= 200){
+		if(e.getX() >= 100 && e.getX() <= 200)
+		{
 
 			if(e.getY() >= 160 && e.getY() <= 175){
 				new GameEngine();
@@ -141,7 +142,7 @@ public class MainMenu extends JPanel implements KeyListener , ActionListener, Mo
 				new ScoresListener();
 			}
 			else if(e.getY() >= 280 && e.getY() <= 300){
-				System.exit(0);
+				new ExitListener();
 			}
 		}
 	}

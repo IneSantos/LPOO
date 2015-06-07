@@ -2,8 +2,6 @@ package resources.sounds;
 
 import java.net.URL;
 
-import pacman.GUI.MediaPlayer;
-
 public class Sounds {
 	
 	public URL chomp;

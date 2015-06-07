@@ -23,9 +23,8 @@ public class ScoresListener extends JPanel implements ActionListener, KeyListene
 	Timer  timer;
 	int refresh = 0;
 	int press = 1;
-	public int[] scores = {10000, 10000, 10000,10000,10000};
-	public String[] nomes = {"KLO", "ABC", "", "cen", "FCK"};
-
+	
+	
 	public ScoresListener(){
 
 		Application.frame.getContentPane().removeAll();
@@ -41,7 +40,7 @@ public class ScoresListener extends JPanel implements ActionListener, KeyListene
 		this.repaint();
 		setFocusable(true);
 		requestFocus();
-
+		timer.start();
 		Application.frame.setVisible(true);
 	}
 
@@ -66,7 +65,7 @@ public class ScoresListener extends JPanel implements ActionListener, KeyListene
 
 		if(refresh%3 == 0)
 		{
-			for(int i = 1; i <= scores.length; ++i)
+			for(int i = 1; i <= 5; ++i)
 			{
 				Random c = new Random();
 				int color = c.nextInt(4);
@@ -97,7 +96,7 @@ public class ScoresListener extends JPanel implements ActionListener, KeyListene
 
 				g.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 				g.setColor(cor[color]);
-				g.drawString(Integer.toString(scores[i-1]), 250, 140 + i*30);
+				g.drawString(Integer.toString(Application.scores.get(i-1)), 250, 140 + i*30);
 		
 			}
 		}
@@ -120,8 +119,6 @@ public class ScoresListener extends JPanel implements ActionListener, KeyListene
 			}
 		}
 
-
-		timer.start();
 
 
 	}

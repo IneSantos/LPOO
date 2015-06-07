@@ -18,130 +18,111 @@ import pacman.GUI.GameEngine;
 @SuppressWarnings("serial")
 public class GameOverAnimation extends JPanel implements ActionListener, KeyListener, MouseListener{
 
-
-	final int MILISSECONDS_TO_REFRESH = 10;
+	final int MILISSECONDS_TO_REFRESH = 20;
 	Timer  timer;
 	int refresh = 0;
-	int width;
-	int height;
 	int animation;
-	int pacx = 0;
-	int ghostx = -60;
-	int velx = 20;
-	int y = 300;
-	boolean passou = false;
+	int pacx = 140;
+	int velx = 10;
+	int orientation = 1;
+	int press=1;
 
-	public GameOverAnimation(int width, int height){
+	public GameOverAnimation(){
 
 		Application.frame.getContentPane().removeAll();
 		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
-		this.setPreferredSize(new Dimension(width, height));
-		Application.frame.getContentPane().add(this, null);
+		Application.frame.getContentPane().setPreferredSize(new Dimension(400, 500));
+		Application.frame.getContentPane().add(this);
 
 
-		this.width = width;
-		this.height = height;
+		timer.start();
 		addKeyListener(this);
 		addMouseListener(this);
 		setFocusable(true);
 		requestFocus();
 
 		Application.frame.pack();
-		Application.frame.setVisible(true);
 	}
 
 	@Override
 	public void paintComponent(Graphics g)
 	{
 
-		g.drawImage(Application.images.background1, 0, 0, this.width, this.height, null, null);
+		g.drawImage(Application.images.background1, 0, 0, 400, 500, null, null);
 
-		if(refresh%5 == 0)
-			g.drawImage(Application.images.background2, 30, 250, 329, 50, null, null);
 
-			if( pacx*24 + 24   <= this.width*24 && (ghostx - 30*3)*24 + 24  <= this.width*24 && !passou){
-				passou = false;
-				g.drawImage(Application.images.sprites.getSubimage(animation * 24, 1*24, 24, 24), 
-						pacx,y, 30, 30, null,  null);
+		if(press == 1)
+			g.drawImage(Application.images.background, 30, 250, 330, 50, null, null);
+		else g.drawImage(Application.images.background2, 30, 250, 330, 50, null, null);
 
-				g.drawImage(Application.images.sprites.getSubimage(animation *24 + 4 * 24, 1*24, 24, 24), 
-						ghostx, y, 30, 30, null, null);
-
-				g.drawImage(Application.images.sprites.getSubimage(animation *24 + 6 * 24, 1*24, 24, 24), 
-						ghostx-30, y, 30, 30, null, null);
-
-				g.drawImage(Application.images.sprites.getSubimage(animation *24 + 8 * 24, 1*24, 24, 24), 
-						ghostx-30*2, y, 30, 30, null, null);
-
-				g.drawImage(Application.images.sprites.getSubimage(animation *24 + 10 * 24, 1*24, 24, 24), 
-						ghostx-30*3, y, 30, 30, null, null);
+		if(refresh%50 == 0)
+		{
+			if(press == 1)
+			{
+				if(refresh%10 == 0)
+				press = 0;
 			}
-			else{
-				
-				passou = true;
-				System.out.println("Pacman x :" + pacx + " Ghost 1 :" + ghostx + "passou " + passou);
+			else press = 1;
+		}
 
-				g.drawImage(Application.images.sprites.getSubimage(animation *24 + 4 * 24, 3*24, 24, 24), 
-						ghostx, y, 30, 30, null, null);
 
-				g.drawImage(Application.images.sprites.getSubimage(animation *24 + 6 * 24, 3*24, 24, 24), 
-						ghostx-30, y, 30, 30, null, null);
 
-				g.drawImage(Application.images.sprites.getSubimage(animation *24 + 8 * 24, 3*24, 24, 24), 
-						ghostx-30*2, y, 30, 30, null, null);
+		g.drawImage(Application.images.sprites.getSubimage(animation*24, orientation * 24, 24, 24), 
+				pacx, 300,  30, 30, null);
 
-				g.drawImage(Application.images.sprites.getSubimage(animation *24 + 10 * 24, 3*24, 24, 24), 
-						ghostx-30*3, y, 30, 30, null, null);
+		if(velx > 0)
+		{
+			g.drawImage(Application.images.sprites.getSubimage(4*24, orientation * 24, 24, 24), 
+					pacx - 35, 300,  30, 30, null);
 
-				g.drawImage(Application.images.sprites.getSubimage(animation * 24, 3*24, 24, 24), 
-						pacx,y, 30, 30, null,  null);
+			g.drawImage(Application.images.sprites.getSubimage(6*24, orientation * 24, 24, 24), 
+					pacx - 35*2, 300,  30, 30, null);
 
-			}
-		
-		timer.start();
+			g.drawImage(Application.images.sprites.getSubimage(8*24, orientation * 24, 24, 24), 
+					pacx - 35*3, 300,  30, 30, null);
 
+			g.drawImage(Application.images.sprites.getSubimage(10*24, orientation * 24, 24, 24), 
+					pacx - 35*4, 300,  30, 30, null);
+		}
+		else 
+		{
+			g.drawImage(Application.images.sprites.getSubimage(4*24, orientation * 24, 24, 24), 
+					pacx + 35, 300,  30, 30, null);
+
+			g.drawImage(Application.images.sprites.getSubimage(6*24, orientation * 24, 24, 24), 
+					pacx + 35*2, 300,  30, 30, null);
+
+			g.drawImage(Application.images.sprites.getSubimage(8*24, orientation * 24, 24, 24), 
+					pacx + 35*3, 300,  30, 30, null);
+
+			g.drawImage(Application.images.sprites.getSubimage(10*24, orientation * 24, 24, 24), 
+					pacx + 35*4, 300,  30, 30, null);
+		}
 	}
 
 	public void updateMovement()
 	{
-		if(pacx + 24   == this.width){
-			pacx = this.width*60;
-		}
-		if((ghostx - 30) +24*3  == this.width){
-			ghostx = this.width;
-		}
-		if(!passou) {
-			pacx += velx;
-			ghostx += velx;
-		}
-		else{
-			pacx -= velx;
-			ghostx -= velx;
+		if(pacx <= -140 || pacx > 540)
+		{
+			velx *= -1;
+			if(orientation == 1)
+				orientation = 3;
+			else orientation = 1;
 		}
 
-		
-		
+		pacx += velx;
+
 	}
 
-	public int updateAnimation()
+	public void updateAnimation()
 	{
 		animation++;
 
 		if (animation > 3)
 			animation = 0;
 
-		return animation;
 	}
 
-	public int updateAnimationGhost()
-	{
-		animation++;
-
-		if (animation > 1)
-			animation = 0;
-
-		return animation;
-	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -166,12 +147,10 @@ public class GameOverAnimation extends JPanel implements ActionListener, KeyList
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
-		if(refresh++ > 4)
-			refresh = 0;
+		refresh++;
 
 		if(refresh%2 == 0)
 			updateAnimation();
-		updateAnimationGhost();
 
 		updateMovement();
 
@@ -182,8 +161,6 @@ public class GameOverAnimation extends JPanel implements ActionListener, KeyList
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("Mouse Clicked: ("+e.getX()+", "+e.getY() +")");
 		if(e.getX() >= 53 && e.getX() <= 343){
 			if(e.getY() >= 263 && e.getY() <= 280){
 				new MainMenu();
@@ -193,25 +170,21 @@ public class GameOverAnimation extends JPanel implements ActionListener, KeyList
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 }

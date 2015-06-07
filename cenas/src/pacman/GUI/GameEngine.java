@@ -14,7 +14,10 @@ import javax.swing.Timer;
 
 import pacman.logic.Game;
 import pacman.logic.Position;
+import pacman.menus.GameOverAnimation;
 import pacman.menus.MainMenu;
+import pacman.menus.WinAnimation;
+import resources.sounds.MediaPlayer;
 
 @SuppressWarnings("serial")
 public class GameEngine extends JPanel implements ActionListener, KeyListener
@@ -91,11 +94,12 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			{
 				if(game.getLevel() == 3)
 				{
+					Application.setNewScore(game.getPacman().getScore());
+					
 					try { this.finalize();}
 					catch (Throwable e1) {}
 
-					//new WinAnimation();
-					new MainMenu();
+					new WinAnimation();
 					chomp.clip.close();
 				}
 				else
@@ -116,11 +120,11 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			}
 			else if(Game.pacman.getLifes() == 0)
 			{
+				Application.setNewScore(game.getPacman().getScore());
 				try { this.finalize();}
 				catch (Throwable e1) {}
 
-				//new GameOverAnimation(0, 0);	
-				new MainMenu();
+				new GameOverAnimation();
 
 				chomp.clip.close();
 			}
@@ -142,7 +146,6 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			startAnimation--;
 
 	}
-
 
 	private void updateSound() 
 	{
@@ -186,7 +189,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener
 			power.clip.start();
 		}
 		
-		if(game.checkCharacterColision() && !ghost.clip.isOpen())
+		if(game.checkCharacterColision(false) && !ghost.clip.isOpen())
 		{
 			ghost.open();
 			ghost.clip.start();

@@ -131,7 +131,7 @@ public class Game {
 		return level;
 	}
 
-	public boolean checkCharacterColision()
+	public boolean checkCharacterColision(boolean killPacman)
 	{
 		boolean result = false;
 		
@@ -155,10 +155,10 @@ public class Game {
 
 		if(pacman.power_timer == 0)
 		{
-			if(pac.equals(r) && redGhost.getAlive()
+			if((pac.equals(r) && redGhost.getAlive()
 					|| pac.equals(p) && pinkGhost.getAlive()
 					|| pac.equals(b) && blueGhost.getAlive()
-					|| pac.equals(o) && orangeGhost.getAlive())
+					|| pac.equals(o) && orangeGhost.getAlive()) && killPacman)
 			{
 				pacman.lifes--;
 				pacman.alive = false;
@@ -263,7 +263,7 @@ public class Game {
 			updateBlueGhost();
 
 		if(pacman.getAlive())
-			checkCharacterColision();
+			checkCharacterColision(true);
 	}
 	
 	public void updatePacman()

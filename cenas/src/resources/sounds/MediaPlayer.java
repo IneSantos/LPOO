@@ -1,4 +1,4 @@
-package pacman.GUI;
+package resources.sounds;
 
 import java.io.IOException;
 import java.net.URL;

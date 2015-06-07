@@ -30,21 +30,17 @@ public class WinAnimation extends JPanel implements ActionListener, KeyListener,
 	int y = 300;
 	boolean passou = false;
 
-	public WinAnimation(int width, int height){
+	public WinAnimation(){
 
 		Application.frame.getContentPane().removeAll();
 		timer = new Timer(MILISSECONDS_TO_REFRESH, this);
-		this.setPreferredSize(new Dimension(width, height));
+		Application.frame.getContentPane().setPreferredSize(new Dimension(400, 500));
 		Application.frame.getContentPane().add(this, null);
 
-
-		this.width = width;
-		this.height = height;
 		addKeyListener(this);
 		addMouseListener(this);
 		setFocusable(true);
 		requestFocus();
-
 		
 		timer.start();
 		Application.frame.pack();
@@ -55,7 +51,7 @@ public class WinAnimation extends JPanel implements ActionListener, KeyListener,
 	public void paintComponent(Graphics g)
 	{
 
-		g.drawImage(Application.images.winbackground, 0, 0, this.width, this.height, null, null);
+		g.drawImage(Application.images.winbackground, 0, 0, 400, 500, null, null);
 
 		if(refresh%5 == 0)
 			g.drawImage(Application.images.win2, 40, 200, 300, 50, null, null);
