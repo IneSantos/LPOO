@@ -115,7 +115,7 @@ public class Ghost extends Character {
 			if(Game.ghostMode == Mode.CHASE)
 				updateOrientation(Game.pacman.position);
 			else if (Game.ghostMode == Mode.SCATTER)
-				updateOrientation(this.target);
+				updateOrientation(target);
 			else if(Game.ghostMode == Mode.FRIGHTENED)
 				updateOrientation(null);
 		}

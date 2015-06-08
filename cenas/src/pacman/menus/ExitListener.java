@@ -32,10 +32,10 @@ public class ExitListener implements ActionListener {
 	{
 		File outFile = new File ("src/resources/scores.txt");
 		FileWriter fWriter = new FileWriter (outFile);
-		PrintWriter pWriter = new PrintWriter (fWriter);
+		PrintWriter pWriter = new PrintWriter (fWriter); 
 
 		for(int i = 0; i < 5; i++)
-			pWriter.println (Application.scores.get(i));
+			pWriter.println(Application.scores.get(i));
 			
 		
 		pWriter.close();

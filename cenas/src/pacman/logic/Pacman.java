@@ -70,7 +70,7 @@ public class Pacman extends Character {
 		if(orientation == 0)
 			moveUp();			
 		else if (orientation == 1)
-			moveRight();
+			moveRight(); 
 		else if(orientation == 2)
 			moveDown();
 		else if(orientation == 3)

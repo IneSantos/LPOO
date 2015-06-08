@@ -48,11 +48,11 @@ public class Game {
 			mazeWidth = maze.maze.get(0).length;
 			mazeHeight = maze.maze.size();
 		}
-		
+
 		if(redFlag)
 		{
 			redGhost = new RedGhost();
-			
+
 			if(this.level == 1 || this.level == 3)
 				redGhost.setPosition(new Position(13*GameEngine.TILE_DIMENSION, 11*GameEngine.TILE_DIMENSION));
 			else if (this.level == 2)
@@ -62,7 +62,7 @@ public class Game {
 		if(pinkFlag)
 		{
 			pinkGhost = new PinkGhost();
-			
+
 			if(this.level == 1 || this.level == 3)
 				pinkGhost.setPosition(new Position(13*GameEngine.TILE_DIMENSION, 15*GameEngine.TILE_DIMENSION));
 			else if(this.level == 2)
@@ -72,7 +72,7 @@ public class Game {
 		if(orangeFlag)
 		{
 			orangeGhost = new OrangeGhost();
-			
+
 			if(this.level == 1 || this.level == 3)
 				orangeGhost.setPosition(new Position(14*GameEngine.TILE_DIMENSION, 13*GameEngine.TILE_DIMENSION));
 			else if(this.level == 2)
@@ -105,11 +105,6 @@ public class Game {
 		return pacman;
 	}
 
-	public Maze getMaze()
-	{
-		return maze;
-	}
-
 	public RedGhost getRedGhost(){
 		return redGhost;
 	}
@@ -134,22 +129,22 @@ public class Game {
 	public boolean checkCharacterColision(boolean killPacman)
 	{
 		boolean result = false;
-		
+
 		Position pac = new Position(pacman.position.x + 10, pacman.position.y + 10);
 		Position r = new Position(0,0);
 		Position p = new Position(0,0);
 		Position b = new Position(0,0);
 		Position o = new Position(0,0);
-		
+
 		if(redFlag)
-			 r = new Position(redGhost.position.x + 10, redGhost.position.y + 10);
-		
-		if(pinkFlag)
+			r = new Position(redGhost.position.x + 10, redGhost.position.y + 10);
+
+		if(pinkFlag) 
 			p = new Position(pinkGhost.position.x + 10, pinkGhost.position.y + 10);
-		
+
 		if(blueFlag)
 			b = new Position(blueGhost.position.x + 10, blueGhost.position.y + 10);
-		
+
 		if(orangeFlag)
 			o = new Position(orangeGhost.position.x + 10, orangeGhost.position.y + 10);
 
@@ -158,10 +153,13 @@ public class Game {
 			if((pac.equals(r) && redGhost.getAlive()
 					|| pac.equals(p) && pinkGhost.getAlive()
 					|| pac.equals(b) && blueGhost.getAlive()
-					|| pac.equals(o) && orangeGhost.getAlive()) && killPacman)
+					|| pac.equals(o) && orangeGhost.getAlive()))
 			{
-				pacman.lifes--;
-				pacman.alive = false;
+				if(killPacman)
+				{
+					pacman.lifes--;
+					pacman.alive = false;
+				}
 				result = true;
 			}
 		}
@@ -197,6 +195,7 @@ public class Game {
 			}
 		}
 
+
 		return result;
 	}
 
@@ -206,7 +205,7 @@ public class Game {
 
 		this.collected_pills = 0;
 	}
-	
+
 	public int getCollectedPills()
 	{
 		return collected_pills;
@@ -233,10 +232,10 @@ public class Game {
 		}
 	}
 
-	public void updateElements()
+	public void updateElements(int frameWidth)
 	{
-		updatePacman();
-		
+		updatePacman(frameWidth);
+
 		if(pacman.getPower() > 0 && GameEngine.refresh %  25 == 0)
 		{
 			pacman.decPower();
@@ -244,15 +243,15 @@ public class Game {
 			if(pacman.getPower() == 0)
 				ghostMode = Mode.CHASE;
 		}
-		
+
 		if(GameEngine.refresh == 50*7 || GameEngine.refresh == 50*34 || GameEngine.refresh == 50*59 || GameEngine.refresh == 50*84)
 			ghostMode = Mode.CHASE;
 		else if(GameEngine.refresh == 50*27 || GameEngine.refresh == 50*54 || GameEngine.refresh == 50*79)
 			ghostMode = Mode.SCATTER;
-		
+
 		if(getCollectedPills() >= maze.getPills()/3)
 			generateFruit();
-		
+
 		if(redFlag)
 			updateRedGhost();
 		if(pinkFlag)
@@ -265,27 +264,27 @@ public class Game {
 		if(pacman.getAlive())
 			checkCharacterColision(true);
 	}
-	
-	public void updatePacman()
+
+	public void updatePacman(int frameWidth)
 	{
 		if(GameEngine.refresh%4 == 0)
 			pacman.updateAnimation();
-		
+
 		if(pacman.getAlive())
 			pacman.updateMovement(GameEngine.inputKey);
 	}
 
-	
+
 	public void updateRedGhost()
 	{
 		getRedGhost().moveGhost();
 	}
-	
+
 	public void updatePinkGhost()
 	{
 		getPinkGhost().moveGhost();
 	}
-	
+
 	public void updateBlueGhost()
 	{
 		if(getCollectedPills() >= 30 && getBlueGhost().house)
@@ -293,10 +292,10 @@ public class Game {
 			getBlueGhost().setOrientation(0);
 			getBlueGhost().house = false;
 		}
-		
+
 		getBlueGhost().moveGhost();
 	}
-	
+
 	public void updateOrangeGhost()
 	{
 		if(getCollectedPills() >= maze.getPills()/3 && getOrangeGhost().house)
@@ -304,10 +303,10 @@ public class Game {
 			getOrangeGhost().setOrientation(0);
 			getOrangeGhost().house = false;
 		}
-		
+
 		getOrangeGhost().moveGhost();
 	}
-	
+
 }
 
 

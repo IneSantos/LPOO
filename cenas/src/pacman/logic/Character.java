@@ -1,6 +1,5 @@
 package pacman.logic;
 
-import pacman.GUI.Application;
 import pacman.GUI.GameEngine;
 
 public class Character {
@@ -71,7 +70,7 @@ public class Character {
 
 		if(p1.x >= Game.maze.maze.get(0).length)
 		{
-			if(position.x >= Application.frame.getContentPane().getWidth())
+			if(position.x >= Game.mazeWidth * GameEngine.TILE_DIMENSION)
 				position.x = -GameEngine.TILE_DIMENSION;
 		}
 		else
@@ -95,7 +94,7 @@ public class Character {
 		if(p1.x < 0)
 		{
 			if(position.x <= -24)
-				position.x = Application.frame.getContentPane().getWidth();
+				position.x = Game.mazeWidth * GameEngine.TILE_DIMENSION;
 		}	
 		else
 		{
@@ -137,4 +136,5 @@ public class Character {
 	{
 		this.velocity = vel;
 	}
+
 }

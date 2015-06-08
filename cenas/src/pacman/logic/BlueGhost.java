@@ -28,7 +28,7 @@ public class BlueGhost extends Ghost {
 		return animation;	
 	}
 
-	public void switchMode()
+	public void switchMode(int frameWidth)
 	{
 		if(this.alive)
 		{
@@ -63,10 +63,10 @@ public class BlueGhost extends Ghost {
 				else updateOrientation(Game.pacman.position);
 			}
 			else if (Game.ghostMode == Mode.SCATTER)
-				updateOrientation(this.target);
+				updateOrientation(target);
 			else if(Game.ghostMode == Mode.FRIGHTENED)
 				updateOrientation(null);
-		}
+		} 
 		else updateOrientation(new Position(12*GameEngine.TILE_DIMENSION, 15*GameEngine.TILE_DIMENSION));
 	}
 

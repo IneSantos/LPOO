@@ -63,7 +63,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 		fruit = new MediaPlayer(Application.sounds.fruit);
 
 		Application.frame.getContentPane().add(this, BorderLayout.CENTER);
-		Application.frame.getContentPane().setPreferredSize(new Dimension(game.getMaze().maze.get(0).length*TILE_DIMENSION, game.getMaze().maze.size()*TILE_DIMENSION + TOP_HUD_HEIGHT + BOTTOM_HUD_HEIGHT));
+		Application.frame.getContentPane().setPreferredSize(new Dimension(Game.maze.maze.get(0).length*TILE_DIMENSION, Game.maze.maze.size()*TILE_DIMENSION + TOP_HUD_HEIGHT + BOTTOM_HUD_HEIGHT));
 		Application.frame.pack();
 
 		addKeyListener(this);
@@ -105,7 +105,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 				
 		}
 
-		game.updateElements();
+		game.updateElements(Application.frame.getContentPane().getWidth());
 
 
 		if(game.getCollectedPills() == Game.maze.getPills() || (!Game.pacman.getAlive() && this.deathAnimation == 11))
@@ -124,7 +124,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 					catch (Throwable e1) {}
 
 					new WinAnimation();
-					if(sound)
+					if(sound) 
 						chomp.clip.close();
 				}
 				else
@@ -134,7 +134,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 					startAnimation = 7;
 					game.initLevel(true);
 
-					this.setPreferredSize(new Dimension(game.getMaze().maze.get(0).length*TILE_DIMENSION, game.getMaze().maze.size()*TILE_DIMENSION + TOP_HUD_HEIGHT + BOTTOM_HUD_HEIGHT));
+					this.setPreferredSize(new Dimension(Game.maze.maze.get(0).length*TILE_DIMENSION, Game.maze.maze.size()*TILE_DIMENSION + TOP_HUD_HEIGHT + BOTTOM_HUD_HEIGHT));
 					Application.frame.pack();
 					beginning.open();
 					if(sound)
@@ -244,7 +244,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 
 		for(int h = 0; h < Game.mazeHeight; h++)
 			for(int w = 0; w < Game.mazeWidth; w++)
-				if(game.getMaze().isWall(new Position(w, h)))
+				if(Game.maze.isWall(new Position(w, h)))
 				{
 					if(game.getLevel() == 1)
 						g.drawImage(Application.images.wallTile1, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
@@ -253,11 +253,11 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 					else
 						g.drawImage(Application.images.wallTile3, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 				}
-				else if(game.getMaze().isPoint(new Position(w, h)))
+				else if(Game.maze.isPoint(new Position(w, h)))
 					g.drawImage(Application.images.pointTile, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
-				else if(game.getMaze().isPowerPoint(new Position(w, h)))
+				else if(Game.maze.isPowerPoint(new Position(w, h)))
 					g.drawImage(Application.images.powerPointTile, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
-				else if(game.getMaze().isFruit(new Position(w, h)))
+				else if(Game.maze.isFruit(new Position(w, h)))
 					g.drawImage(Application.images.fruits.getSubimage(0, 0, 50, 50), TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 				else g.drawImage(Application.images.backgroundTile, TILE_DIMENSION*w, TOP_HUD_HEIGHT+TILE_DIMENSION*h, TILE_DIMENSION, TILE_DIMENSION, null, null);
 
@@ -299,7 +299,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 		g.drawImage(Application.images.letters.getSubimage(23*50, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25*2, 60 + Game.mazeHeight * TILE_DIMENSION + 15, 15, 15, null);
 		g.drawImage(Application.images.fruits.getSubimage(0, 0, 50, 50), Game.mazeWidth*TILE_DIMENSION - 25, 60 + Game.mazeHeight * TILE_DIMENSION + 10, 20, 20, null);
 
-	}
+	} 
 
 	private void paintGhosts(Graphics g) 
 	{
