@@ -2,6 +2,7 @@ package pacman.menus;
 
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,6 +48,8 @@ public class SettingsListener extends JPanel implements ActionListener {
 
 		Application.frame.getContentPane().removeAll();
 		Application.frame.setBounds(100, 100, 476, 500);
+		Application.frame.setLocation((Application.screenSize.width - 476)/ 2, 100);
+		Application.frame.getContentPane().setPreferredSize(new Dimension(476, 500));
 		Application.frame.getContentPane().add(panel);
 
 		panel.setBackground(Color.BLACK);
@@ -72,7 +75,7 @@ public class SettingsListener extends JPanel implements ActionListener {
 		panel.add(POWERS);
 
 
-		numPowerUps.setModel(new SpinnerNumberModel(1, 1, 6, 1));
+		numPowerUps.setModel(new SpinnerNumberModel(4, 1, 6, 1));
 		numPowerUps.setBounds(283, 355, 136, 23);
 		panel.add(numPowerUps);
 

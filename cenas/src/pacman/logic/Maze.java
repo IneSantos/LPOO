@@ -1,6 +1,7 @@
 package pacman.logic;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Maze {
@@ -28,6 +29,36 @@ public class Maze {
 			maze.add(scan.nextLine().toCharArray());
 
 		scan.close();
+
+		correctPowerUps();
+
+	}
+
+	private void correctPowerUps()
+	{
+		int p = 0; 
+		for(int i = 0 ; i < maze.size(); ++i)
+			for(int j = 0; j < maze.get(0).length; ++j)
+				if(maze.get(i)[j] == 'P')
+				{
+					if(p >= Game.powerUps)
+						maze.get(i)[j] = '.';
+					else p++;
+				}
+
+		while(p < Game.powerUps)
+		{
+			Random random = new Random();
+			int x = random.nextInt(maze.get(0).length);
+			int y = random.nextInt(maze.size());
+
+			if(maze.get(y)[x] == '.')
+				{
+					maze.get(y)[x] = 'P';
+					p++;
+				}
+		}
+
 
 	}
 
