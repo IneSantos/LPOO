@@ -3,16 +3,32 @@ package pacman.logic;
 import pacman.GUI.GameEngine;
 import pacman.logic.Game.Mode;
 
+/**  
+* 
+* PinkGhost.java - a simple class that represents a PinkGhost.
+* 
+* @see Ghost
+*/
 public class PinkGhost extends Ghost {
 
+	/**
+	 * animation related to sprite
+	 */
 	int animation;
 
+	/**
+	 * Constructor of Pink ghost, set his position, animation and house.
+	 */
 	public PinkGhost() {
 		super(new Position(0,33));
 		animation = 0;
 		house = false;
 	}
 
+	/**
+	 * Updates sprite animation
+	 * @return new animation
+	 */
 	public int updateAnimation()
 	{
 		animation++;
@@ -23,11 +39,19 @@ public class PinkGhost extends Ghost {
 		return animation;
 	}
 
+	/**
+	 * Returns animation
+	 * @return animation
+	 */
 	public int getAnimation()
 	{
 		return animation;
 	}
 
+	/**
+	 * Switches Orange ghost mode
+	 * @param frameWidth width of frame
+	 */
 	public void switchMode(int frameWidth)
 	{
 		if(this.alive)

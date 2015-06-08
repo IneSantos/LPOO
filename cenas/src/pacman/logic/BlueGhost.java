@@ -2,17 +2,32 @@ package pacman.logic;
 
 import pacman.GUI.GameEngine;
 import pacman.logic.Game.Mode;
-
+/**  
+* 
+* BlueGhost.java - a simple class that represents a BlueGhost.
+* 
+* @see Ghost
+*/
 public class BlueGhost extends Ghost {
 
+	/**
+	 * animation related to sprite
+	 */
 	int animation;
 
+	/**
+	 * Constructor of blue ghost, set his position, animation and house.
+	 */
 	public BlueGhost() {
 		super(new Position(28*GameEngine.TILE_DIMENSION,36*GameEngine.TILE_DIMENSION));
 		animation = 0;
 		house = true;
 	}
 
+	/**
+	 * Updates sprite animation
+	 * @return new animation
+	 */
 	public int updateAnimation()
 	{
 		animation++;
@@ -23,11 +38,19 @@ public class BlueGhost extends Ghost {
 		return animation;
 	}
 
+	/**
+	 * Returns animation
+	 * @return animation
+	 */
 	public int getAnimation()
 	{
 		return animation;	
 	}
 
+	/**
+	 * Switches Blue ghost mode
+	 * @param frameWidth width of frame
+	 */
 	public void switchMode(int frameWidth)
 	{
 		if(this.alive)

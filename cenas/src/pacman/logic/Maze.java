@@ -4,12 +4,32 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Maze {
 
+/**  
+* 
+* Maze.java - a simple class that represents the maze.
+* 
+*/
+public class Maze {
+	
+	
+	/**
+	 * maze representation.
+	 * 
+	 */
 	public ArrayList<char[]> maze;
 
+	/**
+	 * number of pills on the maze
+	 */
 	int pills = 0;
-
+	
+	
+/**
+ * Maze's Constructor of level level.
+ * 
+ * @param level level of maze to construct
+ */
 	public Maze(int level)
 	{ 
 		loadMaze(level);
@@ -20,6 +40,11 @@ public class Maze {
 					this.pills++;
 	}
 
+	/**
+	 * Loads the correspondent maze for each level
+	 * 
+	 * @param level level of maze to load
+	 */
 	private void loadMaze(int level) 
 	{
 		maze = new ArrayList<char[]>();
@@ -34,6 +59,9 @@ public class Maze {
 
 	}
 
+	/**
+	 * Generates Power ups according to what is established in settings
+	 */
 	private void correctPowerUps()
 	{
 		int p = 0; 
@@ -61,7 +89,13 @@ public class Maze {
 
 
 	}
-
+	
+	/**
+	 * Checks if a given position is a wall
+	 * 
+	 * @param p position position to test
+	 * @return <code>true</code> if the position is a wall.
+	 */
 	public boolean isWall(Position p)
 	{
 		if(p.x >= 0 && p.x < Game.mazeWidth)
@@ -70,6 +104,12 @@ public class Maze {
 		return false;
 	}
 
+	/**
+	 * Checks if a given position is a point
+	 * 
+	 * @param p position to test
+	 * @return <code>true</code> if the position is a point.
+	 */
 	public boolean isPoint(Position p)
 	{
 		if(p.x >= 0 && p.x < Game.mazeWidth)
@@ -78,6 +118,12 @@ public class Maze {
 		return false;
 	}
 
+	/**
+	 * Checks if a given position is a power up
+	 * 
+	 * @param p position to test
+	 * @return <code>true</code> if the position is a power up.
+	 */
 	public boolean isPowerPoint(Position p)
 	{
 		if(p.x > 0 && p.x < Game.mazeWidth)
@@ -86,6 +132,12 @@ public class Maze {
 		return false;
 	}
 
+	/**
+	 * Checks if a given position is the door to the ghost house
+	 * 
+	 * @param p position to test
+	 * @return <code>true</code> if the position is the door to the ghost house.
+	 */
 	public boolean isDoor(Position p)
 	{
 		if(p.x > 0 && p.x < Game.mazeWidth)
@@ -93,7 +145,13 @@ public class Maze {
 				return true;
 		return false;
 	}
-
+	
+	/**
+	 * Checks if a given position is a decision point
+	 * 
+	 * @param p position to test
+	 * @return <code>true</code> if the position is a decision point.
+	 */
 	public boolean isDecisionPoint(Position p)
 	{
 		if(p.x > 0 && p.x < Game.mazeWidth)
@@ -103,6 +161,12 @@ public class Maze {
 		return false;
 	}
 
+	/**
+	 * Checks if a given position is a special point
+	 *  
+	 * @param p position to test
+	 * @return <code>true</code> if the position is a special point.
+	 */
 	public boolean isSpecial(Position p)
 	{
 		if(p.x >= 0 && p.x < Game.mazeWidth)
@@ -112,6 +176,12 @@ public class Maze {
 		return false;
 	}
 
+	/**
+	 * Checks if a given position is a fruit point
+	 * 
+	 * @param p position to test
+	 * @return <code>true</code> if the position is a fruit point.
+	 */
 	public boolean isFruit(Position p)
 	{
 		if(p.x >= 0 && p.x < Game.mazeWidth)
@@ -121,6 +191,11 @@ public class Maze {
 		return false;
 	}
 
+	/**
+	 * Returns the number of pills in the maze
+	 * 
+	 * @return number of pills in the maze
+	 */
 	public int getPills() {
 		return pills;
 	}

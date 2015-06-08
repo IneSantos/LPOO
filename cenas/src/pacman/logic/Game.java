@@ -4,8 +4,25 @@ import java.util.Random;
 
 import pacman.GUI.GameEngine;
 
+/**  
+* 
+* Game.java - a simple class that represents the Game.
+* 
+* @see Pacman
+* @see RedGhost
+* @see BlueGhost
+* @see OrangeGhost
+* @see PinkGhost
+* @see Maze
+*/
 public class Game {
 
+	/**
+	 * Represents a {@link Ghost} behavior
+	 * 
+	 * @author Ines
+	 *
+	 */
 	public enum Mode {
 		CHASE , SCATTER , FRIGHTENED;
 	}
@@ -34,12 +51,20 @@ public class Game {
 
 	public static Mode ghostMode;
 
+	/**
+	 * Game Constructor 
+	 */
 	public Game()
 	{
 		pacman = new Pacman();
 		initLevel(true);
 	}
 
+	/**
+	 * 
+	 * Initializes the maze according with the boolean received, if true, which mean the player has won creates a new maze according to new level else creats the old maze
+	 * @param newMaze boolean that represents if player has won or not
+	 */
 	public void initLevel(boolean newMaze)
 	{
 		if(newMaze)
@@ -99,33 +124,62 @@ public class Game {
 
 		ghostMode = Mode.CHASE;
 	}
-
+	
+	/**
+	 * Returns Pacman in game
+	 * @return Pacman in game
+	 */
 	public Pacman getPacman()
 	{
 		return pacman;
 	}
 
+	/**
+	 * Returns RedGhost in game
+	 * @return RedGhost in game
+	 */
 	public RedGhost getRedGhost(){
 		return redGhost;
 	}
 
+	/**
+	 * Returns PinkGhost in game
+	 * @return PinkGhost in game
+	 */
 	public PinkGhost getPinkGhost(){
 		return pinkGhost;
 	}
 
+	/**
+	 * Returns OrangeGhost in game
+	 * @return OrangeGhost in game
+	 */
 	public OrangeGhost getOrangeGhost(){
 		return orangeGhost;
 	}
 
+	/**
+	 * Returns BlueGhost in game
+	 * @return BlueGhost in game
+	 */
 	public BlueGhost getBlueGhost(){
 		return blueGhost;
 	}
 
+	/**
+	 * Returns game level
+	 * @return game level
+	 */
 	public int getLevel()
 	{
 		return level;
 	}
 
+	/**
+	 * Checks collision between Pac-man and Ghost in game if killPacman is true else checks if a collision has occurred
+	 * @param killPacman boolean to know if the function is used to check collisions just between Pac-man and Ghosts 
+	 * @return <code>true</code> if a collision has occurred.
+	 */
 	public boolean checkCharacterColision(boolean killPacman)
 	{
 		boolean result = false;
@@ -199,6 +253,9 @@ public class Game {
 		return result;
 	}
 
+	/**
+	 * Updates to the next level
+	 */
 	public void nextLevel()
 	{
 		this.level++;
@@ -206,7 +263,9 @@ public class Game {
 		this.collected_pills = 0;
 	}
 
-
+	/**
+	 * generates fruit
+	 */
 	public void generateFruit() {
 
 		if(generatedFruits == level)
@@ -228,6 +287,10 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Updates elements in game
+	 * @param frameWidth Width of frame
+	 */
 	public void updateElements(int frameWidth)
 	{
 		updatePacman(frameWidth);
@@ -261,6 +324,10 @@ public class Game {
 			checkCharacterColision(true);
 	}
 
+	/**
+	 * Updates Pac-man movement and animation
+	 * @param frameWidth Wisth of frame
+	 */
 	public void updatePacman(int frameWidth)
 	{
 		if(GameEngine.refresh%4 == 0)
@@ -270,17 +337,25 @@ public class Game {
 			pacman.updateMovement(GameEngine.inputKey);
 	}
 
-
+/**
+ * Updates Red Ghosts movement
+ */
 	public void updateRedGhost()
 	{
 		getRedGhost().moveGhost();
 	}
 
+	/**
+	 * Updates Pink Ghosts movement
+	 */
 	public void updatePinkGhost()
 	{
 		getPinkGhost().moveGhost();
 	}
 
+	/**
+	 * Updates Blue Ghosts movement
+	 */
 	public void updateBlueGhost()
 	{
 		if(collected_pills  >= 30 && getBlueGhost().house)
@@ -292,6 +367,9 @@ public class Game {
 		getBlueGhost().moveGhost();
 	}
 
+	/**
+	 * Updates Orange Ghosts movement
+	 */
 	public void updateOrangeGhost()
 	{
 		if(collected_pills >= maze.getPills()/3 && getOrangeGhost().house)

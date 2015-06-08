@@ -6,18 +6,18 @@ import pacman.GUI.GameEngine;
 
 
 /**  
-* Coordenada.java - a simple class to create a coordinate that represents a location in (x,y) point in space,  specified in
+* Position.java - a simple class to create a coordinate that represents a location in (x,y) point in space,  specified in
 * integer precision.
 */
 
 public class Position implements Serializable
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-
+/**
+ * Override of equals - tests if two positions are equal
+ * @return <code>true</code> true if positions are equal
+ */
 	@Override
 	public boolean equals(Object o) 
 	{
@@ -40,9 +40,9 @@ public class Position implements Serializable
 	 * coordinate space.
 	 * 
 	 * @param first
-	 *            the X coordinate of the newly constructed Coordenada.
+	 *            the X coordinate of the newly constructed Position.
 	 * @param second
-	 *            the Y coordinate of the newly constructed Coordenada.
+	 *            the Y coordinate of the newly constructed Position.
 	 */
 	public Position (int first, int second) 
 	{ 

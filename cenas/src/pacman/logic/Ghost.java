@@ -4,14 +4,38 @@ import java.util.Random;
 
 import pacman.GUI.GameEngine;
 import pacman.logic.Game.Mode;
-
+/**  
+* 
+* Ghost.java - a simple class that represents a Ghost.
+* 
+* @see Pacman
+* @see RedGhost
+* @see BlueGhost
+* @see OrangeGhost
+* @see PinkGhost
+* @see Maze
+*/
 public class Ghost extends Character {
 
-
+/**
+ * Indicates Ghost state
+ */
 	int state;
+	
+/**
+ * Position of target Tile
+ */
 	public Position target;
+	/**
+	 * Indicates if Ghost is in the house or not
+	 */
 	public boolean house;
 	
+/**
+ * Constructor of Ghost
+ * @see Position
+ * @param target position of ghosts target tile
+ */
 	public Ghost(Position target)
 	{
 		super();
@@ -20,6 +44,10 @@ public class Ghost extends Character {
 		this.target = target;
 	}
 
+	/**
+	 * Generates random Orientation
+	 * @return orientation
+	 */
 	private int generateOrientation()
 	{
 		Random random = new Random();
@@ -27,6 +55,9 @@ public class Ghost extends Character {
 		return rand;
 	}
 
+	/**
+	 * Moves Ghost
+	 */
 	public void moveGhost()
 	{
 		if(house)
@@ -108,6 +139,9 @@ public class Ghost extends Character {
 		}
 	}
 
+	/**
+	 * Switches Ghost mode
+	 */
 	public void switchMode()
 	{
 		if(this.alive)
@@ -123,6 +157,9 @@ public class Ghost extends Character {
 
 	}
 
+	/**
+	 * Updates ghost in Frightened mode 
+	 */
 	private void updateFrightened() 
 	{
 		int new_orientation = generateOrientation();
@@ -157,6 +194,10 @@ public class Ghost extends Character {
 			}
 	}
 
+	/**
+	 * Updates orientation
+	 * @param target position of target tile
+	 */
 	public void updateOrientation(Position target)
 	{
 		if(target == null)
@@ -174,6 +215,10 @@ public class Ghost extends Character {
 		}
 	}
 
+	/**
+	 * Updates Orientation when the ghost is coming from the left
+	 * @param target position of target tile
+	 */
 	private void updateOrientationFromLeftMovement(Position target) 
 	{
 		float down = testDownMove(target);
@@ -243,6 +288,10 @@ public class Ghost extends Character {
 		}
 	}
 
+	/**
+	 * Updates Orientation when the ghost is coming from down
+	 * @param target position of target tile
+	 */
 	private void updateOrientationFromDownMovement(Position target)	
 	{
 		float left = testLeftMove(target);
@@ -311,6 +360,10 @@ public class Ghost extends Character {
 		}
 	}
 
+	/**
+	 * Updates Orientation when the ghost is coming from the right
+	 * @param target position of target tile
+	 */
 	private void updateOrientationFromRightMovement(Position target) 	
 	{
 		float down = testDownMove(target);
@@ -379,6 +432,10 @@ public class Ghost extends Character {
 		}
 	}
 
+	/**
+	 * Updates Orientation when the ghost is coming from up
+	 * @param target position of target tile
+	 */
 	private void updateOrientationFromUpMovement(Position target) 
 	{
 		float left = testLeftMove(target);
@@ -447,23 +504,50 @@ public class Ghost extends Character {
 		}
 	}
 
+	/**
+	 * Calculates distance between two tiles
+	 * @param x x coordinate of object
+	 * @param y y coordinate of object
+	 * @param target position of target tile
+	 * @return Distance between them 
+	 */
 	protected float calculateDistance(int x, int y, Position target)
 	{
 		return (float) Math.sqrt(Math.pow((x - target.x),2) + Math.pow((y - target.y),2));
 	}
 
+	/**
+	 * Tests to see if distance if he goes down
+	 * @param target position of target tile
+	 * @return distance 
+	 */
 	private float testDownMove(Position target) {
 		return calculateDistance(this.position.x, position.y + 1, target);
 	}
 
+	/**
+	 * Tests to see if distance if he goes up
+	 * @param target position of target tile
+	 * @return distance 
+	 */
 	private float testUpMove(Position target) {
 		return calculateDistance(this.position.x, this.position.y-1, target);
 	}
 
+	/**
+	 * Tests to see if distance if he goes to the left
+	 * @param target position of target tile
+	 * @return distance 
+	 */
 	private float testLeftMove(Position target) {
 		return calculateDistance(position.x - 1, this.position.y, target);
 	}
 
+	/**
+	 * Tests to see if distance if he goes to the right
+	 * @param target position of target tile
+	 * @return distance 
+	 */
 	private float testRightMove(Position target) {
 		return calculateDistance(position.x + 1, this.position.y, target);
 	}

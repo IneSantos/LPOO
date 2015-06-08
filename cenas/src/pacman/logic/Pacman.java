@@ -11,14 +11,30 @@ public class Pacman extends Character {
 	final int POINT_SCORE = 10;
 	final int POWER_POINT_SCORE = 50;
 	final int FRUIT_SCORE = 150;
-	
+	/**
+	 * Score of pac-man 
+	 */
 	int score;
+	/**
+	 * animation associated with sprite
+	 */
 	int animation;
+	/**
+	 * Time of power time
+	 */
 	int power_timer;
+	/**
+	 * number of lifes
+	 */
 	int lifes;
+	/**
+	 * number of fruits
+	 */
 	int fruits;
 	
-
+/**
+ * Constructor of Pac-man 
+ */
 	public Pacman()
 	{
 		super();
@@ -29,6 +45,10 @@ public class Pacman extends Character {
 		fruits = 0;
 	}
 
+	/**
+	 * updates animation
+	 * @return animation
+	 */
 	public int updateAnimation()
 	{
 		animation++;
@@ -39,6 +59,10 @@ public class Pacman extends Character {
 		return animation;
 	}
 
+	/**
+	 * updates movement acording to input key
+	 * @param inputKey input key
+	 */
 	public void updateMovement(int inputKey) 
 	{	
 		//Portal á direita no labirinto
@@ -108,39 +132,67 @@ public class Pacman extends Character {
 
 
 	}
-
+/**
+ * Returns animation
+ * @return animation
+ */
 	public int getAnimation()
 	{
 		return animation;	
 	}
 
+	/**
+	 * Returns power time
+	 * @return power time
+	 */
 	public int getPower(){
 		return power_timer;
 	}
 	
+	/**
+	 *  Decreases power time 
+	 */
 	public void decPower(){
 		power_timer--;
 	}
-	
+	/**
+	 * returns score
+	 * @return score
+	 */
 	public int getScore()
 	{
 		return score;
 	}
 
+	/**
+	 * returns number of lifes 
+	 * @return number of lifes
+	 */
 	public int getLifes()
 	{
 		return lifes;
 	}
 
+	/**
+	 * Sets boolean alive
+	 * @param b new boolean alive
+	 */
 	public void setAlive(boolean b) {
 		this.alive = b;
 		
 	}
 
+	/**
+	 * return fruits
+	 * @return fruits
+	 */ 
 	public int getFruits() {
 		return fruits;
 	}
 
+	/**
+	 * gives bonus life
+	 */
 	public void bonusLife() 
 	{
 		if(this.lifes < 3)
