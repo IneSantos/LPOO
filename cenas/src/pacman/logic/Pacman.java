@@ -52,7 +52,7 @@ public class Pacman extends Character {
 		{
 			if(position.x == -GameEngine.TILE_DIMENSION)
 				position.x = Game.maze.maze.get(0).length * GameEngine.TILE_DIMENSION;
-		}
+		} 
 		else if(position.x % GameEngine.TILE_DIMENSION == 0 && position.y % GameEngine.TILE_DIMENSION == 0 && inputKey != 0)
 		{
 			if(inputKey == KeyEvent.VK_UP && !Game.maze.isWall(getTilePosition(position.x, position.y - 1)))
@@ -85,7 +85,7 @@ public class Pacman extends Character {
 			else Game.maze.maze.get(tile.y)[tile.x] = ' ';
 
 			this.score += POINT_SCORE;
-			GameEngine.game.collected_pills++;
+			Game.collected_pills++;
 		}
 		else if(Game.maze.isPowerPoint(tile))
 		{
@@ -93,7 +93,7 @@ public class Pacman extends Character {
 
 			this.power_timer = 12;
 			this.score += POWER_POINT_SCORE;
-			GameEngine.game.collected_pills++;
+			Game.collected_pills++;
 			Game.ghostMode = Mode.FRIGHTENED;
 		}
 		else if(Game.maze.isFruit(tile))
@@ -101,7 +101,7 @@ public class Pacman extends Character {
 			Game.maze.maze.get(tile.y)[tile.x] = ' ';
 
 			this.score += POWER_POINT_SCORE;
-			GameEngine.game.collected_pills++;
+			Game.collected_pills++;
 			
 			
 		}
@@ -141,7 +141,6 @@ public class Pacman extends Character {
 		return fruits;
 	}
 
-	
 	public void bonusLife() 
 	{
 		if(this.lifes < 3)

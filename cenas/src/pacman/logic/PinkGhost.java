@@ -25,7 +25,7 @@ public class PinkGhost extends Ghost {
 
 	public int getAnimation()
 	{
-		return animation;	
+		return animation;
 	}
 
 	public void switchMode(int frameWidth)

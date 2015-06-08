@@ -51,8 +51,26 @@ public class GameTest {
 		Game.maze.maze.get(1)[1] = 'P';
 		GameEngine.game.getPacman().setPosition(new Position(20, 26));
 		GameEngine.game.getPacman().setOrientation(0);
+		GameEngine.game.getRedGhost().setPosition(new Position(20, 26));
+		GameEngine.game.getPinkGhost().setPosition(new Position(20, 26));
+		GameEngine.game.getBlueGhost().setPosition(new Position(20, 26));
+		GameEngine.game.getOrangeGhost().setPosition(new Position(20, 26));
 		GameEngine.game.updateElements(Game.mazeWidth * 20);
+		assertFalse(GameEngine.game.getRedGhost().getAlive());
+		assertFalse(GameEngine.game.getPinkGhost().getAlive());
+		assertFalse(GameEngine.game.getBlueGhost().getAlive());
+		assertFalse(GameEngine.game.getOrangeGhost().getAlive());
+		
 	
+		GameEngine.game.generateFruit();
+		assertEquals(Game.generatedFruits, 1);
+		
+		GameEngine.game.initLevel(false);
+		Game.collected_pills = Game.maze.getPills()/2;
+		GameEngine.game.updateElements(Game.mazeWidth * 20);
+		assertFalse(GameEngine.game.getBlueGhost().house);
+		assertFalse(GameEngine.game.getOrangeGhost().house);
+		
 		
 		
 	}

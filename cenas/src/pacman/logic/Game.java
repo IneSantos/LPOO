@@ -29,8 +29,8 @@ public class Game {
 	public static int mazeHeight;
 
 	int level = 1;
-	int collected_pills = 0;
-	int generatedFruits = 0;
+	public static int collected_pills = 0;
+	public static int generatedFruits = 0;
 
 	public static Mode ghostMode;
 
@@ -206,10 +206,6 @@ public class Game {
 		this.collected_pills = 0;
 	}
 
-	public int getCollectedPills()
-	{
-		return collected_pills;
-	}
 
 	public void generateFruit() {
 
@@ -249,7 +245,7 @@ public class Game {
 		else if(GameEngine.refresh == 50*27 || GameEngine.refresh == 50*54 || GameEngine.refresh == 50*79)
 			ghostMode = Mode.SCATTER;
 
-		if(getCollectedPills() >= maze.getPills()/3)
+		if(collected_pills >= maze.getPills()/3)
 			generateFruit();
 
 		if(redFlag)
@@ -287,7 +283,7 @@ public class Game {
 
 	public void updateBlueGhost()
 	{
-		if(getCollectedPills() >= 30 && getBlueGhost().house)
+		if(collected_pills  >= 30 && getBlueGhost().house)
 		{
 			getBlueGhost().setOrientation(0);
 			getBlueGhost().house = false;
@@ -298,7 +294,7 @@ public class Game {
 
 	public void updateOrangeGhost()
 	{
-		if(getCollectedPills() >= maze.getPills()/3 && getOrangeGhost().house)
+		if(collected_pills >= maze.getPills()/3 && getOrangeGhost().house)
 		{
 			getOrangeGhost().setOrientation(0);
 			getOrangeGhost().house = false;

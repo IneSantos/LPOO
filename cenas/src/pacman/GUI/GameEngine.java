@@ -85,7 +85,7 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 
 	@Override
 	public void actionPerformed(ActionEvent e) 
-	{
+	{ 
 		refresh++;
 
 		if(sound)
@@ -108,13 +108,13 @@ public class GameEngine extends JPanel implements ActionListener, KeyListener, M
 		game.updateElements(Application.frame.getContentPane().getWidth());
 
 
-		if(game.getCollectedPills() == Game.maze.getPills() || (!Game.pacman.getAlive() && this.deathAnimation == 11))
+		if(Game.collected_pills == Game.maze.getPills() || (!Game.pacman.getAlive() && this.deathAnimation == 11))
 		{
 			timer.stop();
 			deathAnimation = 0;
 			startAnimation = 7;
 
-			if(game.getCollectedPills() == Game.maze.getPills())
+			if(Game.collected_pills == Game.maze.getPills())
 			{
 				if(game.getLevel() == 3)
 				{
